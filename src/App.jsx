@@ -244,7 +244,7 @@ function App() {
     <Page>
       <TopBar>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <TopIcon> 8=> </TopIcon>
+          <TopIcon>8=&gt;</TopIcon>
           <h2> Poetry Cam </h2>
         </div>
         <LogoutButton onClick={handleLogout}>Log out</LogoutButton>
