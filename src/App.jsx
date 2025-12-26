@@ -30,6 +30,31 @@ const Page = styled.div`
   flex-direction: column;
 `;
 
+const TopBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 75%;
+  max-width: 900px;
+  margin-bottom: 50px;
+`;
+
+const TopIcon = styled.h1`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 30px;
+
+  width: 80px;
+  height: 80px;
+  background-color: #f4f2edff;
+
+  border: 3px solid #ddb999ff;
+  border-radius: 25%;
+`;
+
 const PoemHeading = styled.h2`
   font-size: 40px;
   font-weight: bold;
@@ -63,6 +88,8 @@ const Button = styled.button`
   padding: 10px;
   background: #333;
   color: white;
+  font-family: 'Libre Baskerville', serif;
+  font-weight: 600;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -73,9 +100,14 @@ const Button = styled.button`
 
 const LogoutButton = styled(Button)`
   margin-top: 20px;
-  background: #d9534f;
+  background: #f4f2edff;
+  box-shadow: 0 2px 35px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  transition: background 0.3s ease;
+  color: #333;
+
   &:hover {
-    background: #c9302c;
+    background: #eae7e0ff;
   }
 `;
 
@@ -210,12 +242,18 @@ function App() {
 
   return (
     <Page>
+      <TopBar>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <TopIcon> 8=> </TopIcon>
+          <h2> Poetry Cam </h2>
+        </div>
+        <LogoutButton onClick={handleLogout}>Log out</LogoutButton>
+      </TopBar>
       <Card backgroundcolor={'#f4f2edff'}>
         <PoemHeading>{title}</PoemHeading>
         <PoemText>{poem}</PoemText>
         <ColorCollection colors={colors} />
       </Card>
-      <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </Page>
   );

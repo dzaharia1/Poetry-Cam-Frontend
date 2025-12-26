@@ -7,7 +7,7 @@ const CardContainer = styled.div`
   align-items: flex-start;
 
   width: 75%;
-  max-width: 700px;
+  max-width: 900px;
   padding: 36px 44px;
   border: 1px solid #ccc;
   border-radius: 24px;
