@@ -8,7 +8,7 @@ const CardContainer = styled.div`
 
   width: 75%;
   max-width: 900px;
-  padding: 36px 44px;
+  padding: 50px 44px;
   border: 1px solid #ccc;
   border-radius: 24px;
 

@@ -12,7 +12,7 @@ const ColorSwatch = styled.div`
 const ColorSwatchSet = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 10px;
 
   width: 100%;

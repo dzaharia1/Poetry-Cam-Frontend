@@ -58,13 +58,13 @@ const TopIcon = styled.h1`
 const PoemHeading = styled.h2`
   font-size: 40px;
   font-weight: bold;
-  margin-bottom: 16px;
+  margin-bottom: 44px;
 `;
 
 const PoemText = styled.pre`
   font-size: 28px;
   font-weight: 300;
-  margin-bottom: 16px;
+  margin-bottom: 46px;
   white-space: pre-wrap;
 `;
 
@@ -88,7 +88,7 @@ const Button = styled.button`
   padding: 10px;
   background: #333;
   color: white;
-  font-family: 'Libre Baskerville', serif;
+  font-family: 'Young Serif', serif;
   font-weight: 600;
   border: none;
   border-radius: 4px;
