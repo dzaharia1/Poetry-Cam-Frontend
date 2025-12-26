@@ -99,7 +99,6 @@ const Button = styled.button`
 `;
 
 const LogoutButton = styled(Button)`
-  margin-top: 20px;
   background: #f4f2edff;
   box-shadow: 0 2px 35px rgba(0, 0, 0, 0.1);
   border: 1px solid #ccc;
