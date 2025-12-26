@@ -64,7 +64,7 @@ const PoemHeading = styled.h2`
 const PoemText = styled.pre`
   font-size: 28px;
   font-weight: 300;
-  margin-bottom: 46px;
+  // margin-bottom: 46px;
   white-space: pre-wrap;
 `;
 
