@@ -13,7 +13,7 @@ const CardContainer = styled.div`
   border-radius: 24px;
 
   background-color: ${(props) => props.backgroundcolor || '#fff'};
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 35px rgba(0, 0, 0, 0.1), 0 0px 2px rgba(0, 0, 0, 0.21);
 `;
 
 const Card = ({ backgroundcolor, children }) => {

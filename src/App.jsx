@@ -13,7 +13,14 @@ const Page = styled.div`
 `;
 
 const PoemHeading = styled.h2`
-  font-size: 24px;
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 16px;
+`;
+
+const PoemText = styled.pre`
+  font-size: 28px;
+  font-weight: 300;
   margin-bottom: 16px;
 `;
 
@@ -65,8 +72,8 @@ function App() {
   return (
     <Page>
       <Card backgroundcolor={'#f4f2edff'}>
-        <h2>{title}</h2>
-        <pre>{poem}</pre>
+        <PoemHeading>{title}</PoemHeading>
+        <PoemText>{poem}</PoemText>
         <ColorCollection colors={colors} />
       </Card>
     </Page>

@@ -1,11 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&display=swap');
 
 body {
   margin: 0;
-  font-family: 'Noto Serif', serif;
+  font-family: 'Libre Baskerville', serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #eaeae4;
+  background-color: #eae7e4;
 }
 
 code {
@@ -20,6 +21,9 @@ h4,
 h5,
 h6,
 p,
+pre,
 span {
+  font-family: 'Libre Baskerville', serif;
   margin: 0;
+  color: #444444;
 }
