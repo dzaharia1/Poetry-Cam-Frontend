@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
-import Card from './components/Card';
-import ColorCollection from './components/ColorCollection';
+import Poem from './components/Poem';
+import TopBar from './components/TopBar';
+import Button from './components/Button';
+import PageNavigation from './components/PageNavigation';
 import { auth, db } from './firebase';
 import {
   signInWithPopup,
@@ -22,50 +24,15 @@ import {
 
 const Page = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-size: 24px;
-  color: #333;
   flex-direction: column;
-`;
-
-const TopBar = styled.div`
-  display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 100vh;
 
-  width: 75%;
-  max-width: 900px;
-  margin-bottom: 50px;
-`;
+  padding: 2rem 0;
 
-const TopIcon = styled.h1`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  font-size: 30px;
-
-  width: 80px;
-  height: 80px;
-  background-color: #f4f2edff;
-
-  border: 3px solid #ddb999ff;
-  border-radius: 25%;
-`;
-
-const PoemHeading = styled.h2`
-  font-size: 40px;
-  font-weight: bold;
-  margin-bottom: 44px;
-`;
-
-const PoemText = styled.pre`
-  font-size: 28px;
-  font-weight: 300;
-  // margin-bottom: 46px;
-  white-space: pre-wrap;
+  font-size: 24px;
+  color: #333;
 `;
 
 const AuthContainer = styled.div`
@@ -84,40 +51,28 @@ const Input = styled.input`
   border-radius: 4px;
 `;
 
-const Button = styled.button`
-  padding: 10px;
-  background: #333;
-  color: white;
-  font-family: 'Young Serif', serif;
-  font-weight: 600;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  &:hover {
-    background: #555;
-  }
-`;
-
-const LogoutButton = styled(Button)`
-  background: #f4f2edff;
-  box-shadow: 0 2px 35px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ccc;
-  transition: background 0.3s ease;
-  color: #333;
-
-  &:hover {
-    background: #eae7e0ff;
-  }
-`;
+const formatPoem = (poem) => {
+  return poem.split('\n').map((line, i) => (
+    <React.Fragment key={i}>
+      {line}
+      <br />
+    </React.Fragment>
+  ));
+};
 
 function App() {
   const [user, setUser] = useState(null);
-  const [poem, setPoem] = useState('');
+  const [currentPoem, setCurrentPoem] = useState('');
+  /* Pagination State */
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [nextPoem, setNextPoem] = useState(null); // Newer
+  const [previousPoem, setPreviousPoem] = useState(null); // Older
   const [colors, setColors] = useState([]);
   const [title, setTitle] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
+  const [hasUnreadPoem, setHasUnreadPoem] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -127,13 +82,53 @@ function App() {
     return () => unsubscribe();
   }, []);
 
+  // Helper to fetch poem data from backend
+  const fetchPoem = useCallback(
+    async (index) => {
+      if (!user) return;
+      try {
+        // Assuming backend is on localhost:3109 given the context
+        const res = await fetch(
+          `http://localhost:3109/getPoem?userid=${user.uid}&index=${index}`,
+        );
+        if (!res.ok) throw new Error('Failed to fetch poem');
+        const data = await res.json();
+
+        // Update current poem if it exists in the API response
+        if (data.currentPoem) {
+          setCurrentPoem(formatPoem(data.currentPoem.poem || ''));
+          setColors(data.currentPoem.palette || []);
+          setTitle(data.currentPoem.title || '');
+        } else {
+          if (index === 0) {
+            setCurrentPoem('No poems yet. Generate one!');
+            setTitle('Welcome');
+            setColors([]);
+          }
+        }
+
+        // Update neighbors
+        setNextPoem(data.nextPoem);
+        setPreviousPoem(data.previousPoem);
+      } catch (err) {
+        console.error('Error fetching poem:', err);
+      }
+    },
+    [user],
+  );
+
+  // Initial fetch on load
   useEffect(() => {
-    if (!user) {
-      setPoem('');
-      setTitle('');
-      setColors([]);
-      return;
+    if (user && currentIndex === 0) {
+      fetchPoem(0);
     }
+  }, [user, fetchPoem]);
+
+  // Sync with Firestore for latest poem (Index 0) to detect new poems
+  const isInitialLoad = useRef(true);
+  useEffect(() => {
+    if (!user) return;
+    isInitialLoad.current = true;
 
     const q = query(
       collection(db, 'poems'),
@@ -146,19 +141,21 @@ function App() {
       q,
       (snapshot) => {
         if (!snapshot.empty) {
-          const data = snapshot.docs[0].data();
-          setPoem(data.poem || '');
-          setColors(data.palette || []);
-          setTitle(data.title || '');
-        } else {
-          setPoem('No poems yet. Generate one!');
-          setTitle('Welcome');
-          setColors([]);
+          if (isInitialLoad.current) {
+            isInitialLoad.current = false;
+          } else {
+            // A new poem has arrived!
+            setHasUnreadPoem(true);
+
+            // If we are viewing the latest poem (index 0), update with real-time data from API
+            if (currentIndex === 0) {
+              fetchPoem(0);
+            }
+          }
         }
       },
       (err) => {
         console.error('Error fetching poems:', err);
-        // Fallback for when indexes are building or other errors
         if (err.code === 'failed-precondition') {
           setError(
             'Firestore index might be building or missing. Check console.',
@@ -168,7 +165,33 @@ function App() {
     );
 
     return () => unsubscribe();
-  }, [user]);
+  }, [user, currentIndex, fetchPoem]);
+
+  const handleNext = () => {
+    // Going to Newer (lower index)
+    if (nextPoem && currentIndex > 0) {
+      setCurrentPoem(formatPoem(nextPoem.poem || ''));
+      setColors(nextPoem.palette || []);
+      setTitle(nextPoem.title || '');
+
+      const newIndex = currentIndex - 1;
+      setCurrentIndex(newIndex);
+      fetchPoem(newIndex);
+    }
+  };
+
+  const handlePrev = () => {
+    // Going to Older (higher index)
+    if (previousPoem) {
+      setCurrentPoem(formatPoem(previousPoem.poem || ''));
+      setColors(previousPoem.palette || []);
+      setTitle(previousPoem.title || '');
+
+      const newIndex = currentIndex + 1;
+      setCurrentIndex(newIndex);
+      fetchPoem(newIndex);
+    }
+  };
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -241,18 +264,14 @@ function App() {
 
   return (
     <Page>
-      <TopBar>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <TopIcon>8=&gt;</TopIcon>
-          <h2> Poetry Cam </h2>
-        </div>
-        <LogoutButton onClick={handleLogout}>Log out</LogoutButton>
-      </TopBar>
-      <Card backgroundcolor={'#f4f2edff'}>
-        <PoemHeading>{title}</PoemHeading>
-        <PoemText>{poem}</PoemText>
-        <ColorCollection colors={colors} />
-      </Card>
+      <TopBar onLogout={handleLogout} />
+      <Poem title={title} text={currentPoem} colors={colors} />
+      <PageNavigation
+        onNext={handleNext}
+        onPrev={handlePrev}
+        hasNext={!!nextPoem}
+        hasPrev={!!previousPoem}
+      />
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </Page>
   );
