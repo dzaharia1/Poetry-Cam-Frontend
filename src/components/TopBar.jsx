@@ -1,14 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import Button from './Button';
+import MenuButton from './navigation/MenuButton';
 
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  width: 75%;
-  max-width: 900px;
+  width: 80%;
+  max-width: 800px;
   margin-bottom: 50px;
 `;
 
@@ -33,18 +34,14 @@ const LogoContainer = styled.div`
   gap: 20px;
 `;
 
-const TopBar = ({ onLogout }) => {
+const TopBar = ({ onLogout, handleMenuClick }) => {
   return (
     <Container>
       <LogoContainer>
-        <TopIcon>8=&gt;</TopIcon>
+        <MenuButton handleMenuClick={handleMenuClick} />
+        {/* <TopIcon>8=&gt;</TopIcon> */}
         <h2> Poetry Cam </h2>
       </LogoContainer>
-      {onLogout && (
-        <Button variant="secondary" onClick={onLogout}>
-          Log out
-        </Button>
-      )}
     </Container>
   );
 };

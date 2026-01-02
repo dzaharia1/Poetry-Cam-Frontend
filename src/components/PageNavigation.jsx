@@ -10,29 +10,11 @@ const PageNavigationContainer = styled.div`
   align-items: center;
   gap: 10px;
 
-  width: 75%;
-  max-width: 900px;
-`;
+  width: 80%;
+  max-width: 800px;
 
-const NavButton = styled.button`
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  text-decoration: none;
-  color: #333;
-  background: none;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: all 0.2s;
-
-  &:hover:not(:disabled) {
-    background: #f0f0f0;
-  }
-
-  &:disabled {
-    color: #aeaeae;
-    cursor: not-allowed;
-    border-color: #eee;
+  @media (max-width: 768px) {
+    width: 90%;
   }
 `;
 

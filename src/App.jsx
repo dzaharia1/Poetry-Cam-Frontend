@@ -2,8 +2,9 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import Poem from './components/Poem';
 import TopBar from './components/TopBar';
-import Button from './components/Button';
 import PageNavigation from './components/PageNavigation';
+import NavBar from './components/navigation/NavBar';
+import Button from './components/Button';
 import { auth, db } from './firebase';
 import {
   signInWithPopup,
@@ -24,12 +25,21 @@ import {
 
 const Page = styled.div`
   display: flex;
+  flex-direction: row;
+  // padding: 0 0 2rem 0;
+  width: 100%;
+`;
+
+const PrimaryPageContents = styled.div`
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   height: 100vh;
+  width: 75%;
+  // max-width: 900px;
 
-  padding: 2rem 0;
+  padding: 1rem 0;
 
   font-size: 24px;
   color: #333;
@@ -74,6 +84,7 @@ function App() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [hasUnreadPoem, setHasUnreadPoem] = useState(false);
   const [error, setError] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -99,6 +110,9 @@ function App() {
           setCurrentPoem(formatPoem(data.currentPoem.poem || ''));
           setColors(data.currentPoem.palette || []);
           setTitle(data.currentPoem.title || '');
+          if (data.currentPoem.index !== undefined) {
+            setCurrentIndex(data.currentPoem.index);
+          }
         } else {
           if (index === 0) {
             setCurrentPoem('No poems yet. Generate one!');
@@ -169,12 +183,12 @@ function App() {
 
   const handleNext = () => {
     // Going to Newer (lower index)
-    if (nextPoem && currentIndex > 0) {
+    if (nextPoem && nextPoem.index !== undefined) {
       setCurrentPoem(formatPoem(nextPoem.poem || ''));
       setColors(nextPoem.palette || []);
       setTitle(nextPoem.title || '');
 
-      const newIndex = currentIndex - 1;
+      const newIndex = nextPoem.index;
       setCurrentIndex(newIndex);
       fetchPoem(newIndex);
     }
@@ -182,15 +196,20 @@ function App() {
 
   const handlePrev = () => {
     // Going to Older (higher index)
-    if (previousPoem) {
+    if (previousPoem && previousPoem.index !== undefined) {
       setCurrentPoem(formatPoem(previousPoem.poem || ''));
       setColors(previousPoem.palette || []);
       setTitle(previousPoem.title || '');
 
-      const newIndex = currentIndex + 1;
+      const newIndex = previousPoem.index;
       setCurrentIndex(newIndex);
       fetchPoem(newIndex);
     }
+  };
+
+  const handleNavigateToPoem = (index) => {
+    setCurrentIndex(index);
+    fetchPoem(index);
   };
 
   const handleAuth = async (e) => {
@@ -218,6 +237,10 @@ function App() {
 
   const handleLogout = async () => {
     await signOut(auth);
+  };
+
+  const handleMenuClick = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   if (!user) {
@@ -264,15 +287,22 @@ function App() {
 
   return (
     <Page>
-      <TopBar onLogout={handleLogout} />
-      <Poem title={title} text={currentPoem} colors={colors} />
-      <PageNavigation
-        onNext={handleNext}
-        onPrev={handlePrev}
-        hasNext={!!nextPoem}
-        hasPrev={!!previousPoem}
+      <NavBar
+        currentIndex={currentIndex}
+        handleNavigateToPoem={handleNavigateToPoem}
+        user={user}
       />
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <PrimaryPageContents>
+        <TopBar onLogout={handleLogout} handleMenuClick={handleMenuClick} />
+        <Poem title={title} text={currentPoem} colors={colors} />
+        <PageNavigation
+          onNext={handleNext}
+          onPrev={handlePrev}
+          hasNext={!!nextPoem}
+          hasPrev={!!previousPoem}
+        />
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+      </PrimaryPageContents>
     </Page>
   );
 }

@@ -1,0 +1,88 @@
+import React from 'react';
+import styled from 'styled-components';
+
+const NavItemItself = styled.button`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 0 0.75rem;
+  margin: 0.25rem 0.25rem;
+  transition: all 0.3s ease-out;
+
+  overflow: hidden;
+
+  ${(props) =>
+    props.active &&
+    `cursor: pointer;
+    border: 1px solid #ccc;
+    padding-top: .5rem;
+    padding-bottom: 1rem;`}
+
+  &:hover {
+    cursor: pointer;
+    border: 1px solid #ccc;
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
+  }
+`;
+
+const NavItemTitle = styled.p`
+  width: 100%;
+  padding: 0;
+  margin: 0;
+
+  font-family: 'Young Serif', serif;
+  font-weight: 500;
+  font-size: 1.125rem;
+  letter-spacing: unset;
+  text-align: left;
+
+  color: #494949ff;
+`;
+
+const NavItemColorCollection = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  text-align: left;
+  width: 100%;
+  max-height: 0px;
+  transition: max-height 0.3s ease-out;
+  overflow: hidden;
+
+  ${(props) => props.active && `max-height: 10px; margin-top: 0.125rem;`}
+`;
+const NavItemColor = styled.div`
+  flex: 1;
+  height: 10px;
+`;
+
+const NavItem = ({ title, active, colors, onClick }) => {
+  const [hovered, setHovered] = React.useState('false');
+
+  return (
+    <NavItemItself
+      onClick={onClick}
+      onMouseEnter={() => setHovered('true')}
+      onMouseLeave={() => setHovered('false')}
+      active={hovered === 'true' || active}>
+      <NavItemTitle>{title}</NavItemTitle>
+      <NavItemColorCollection active={hovered === 'true' || active}>
+        {colors.map((color, index) => (
+          <NavItemColor key={index} style={{ backgroundColor: color }} />
+        ))}
+      </NavItemColorCollection>
+    </NavItemItself>
+  );
+};
+
+export default NavItem;
