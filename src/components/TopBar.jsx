@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from './Button';
 import MenuButton from './navigation/MenuButton';
 
 const Container = styled.div`

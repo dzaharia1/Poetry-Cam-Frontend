@@ -1,30 +1,31 @@
-import react from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { PanelLeft } from 'lucide-react';
 
 const MenuButtonItself = styled.button`
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: 8px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  text-decoration: none;
+  background: transparent;
+  border: none;
   color: #333;
-  background: none;
-  border: 1px solid #ccc;
-  border-radius: 4px;
   transition: all 0.2s;
+  border-radius: 4px;
 
-  &:hover:not(:disabled) {
-    background: #f0f0f0;
-  }
-
-  &:disabled {
-    color: #aeaeae;
-    cursor: not-allowed;
-    border-color: #eee;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
   }
 `;
 
 const MenuButton = ({ handleMenuClick }) => {
-  return <MenuButtonItself onClick={handleMenuClick}>Menu</MenuButtonItself>;
+  return (
+    <MenuButtonItself onClick={handleMenuClick} aria-label="Toggle Menu">
+      <PanelLeft size={24} />
+    </MenuButtonItself>
+  );
 };
 
 export default MenuButton;

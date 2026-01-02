@@ -6,12 +6,14 @@ const NavItemItself = styled.button`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  height: 24px;
+  width: calc(100% - 0.5rem);
 
   background: none;
   border: 1px solid transparent;
   border-radius: 12px;
   padding: 0 0.75rem;
-  margin: 0.25rem 0.25rem;
+  margin: 0.25rem 0.25rem 0.5rem 0.25rem;
   transition: all 0.3s ease-out;
 
   overflow: hidden;
@@ -21,13 +23,15 @@ const NavItemItself = styled.button`
     `cursor: pointer;
     border: 1px solid #ccc;
     padding-top: .5rem;
-    padding-bottom: 1rem;`}
+    padding-bottom: 1rem;
+    height: 48px;`}
 
   &:hover {
     cursor: pointer;
     border: 1px solid #ccc;
     padding-top: 0.5rem;
     padding-bottom: 1rem;
+    height: 48px;
   }
 `;
 

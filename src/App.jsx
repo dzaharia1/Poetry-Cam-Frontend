@@ -27,7 +27,7 @@ const Page = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   // padding: 0 0 2rem 0;
   width: 100%;
 `;

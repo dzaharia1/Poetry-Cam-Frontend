@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import Button from './Button';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const PageNavigationContainer = styled.div`
   display: flex;
@@ -22,10 +23,18 @@ const PageNavigationContainer = styled.div`
 const PageNavigation = ({ onNext, onPrev, hasNext, hasPrev }) => {
   return (
     <PageNavigationContainer>
-      <Button variant="secondary" disabled={!hasPrev} onClick={onPrev}>
+      <Button
+        variant="secondary"
+        disabled={!hasPrev}
+        onClick={onPrev}
+        startIcon={<ArrowLeft />}>
         Previous (Older)
       </Button>
-      <Button variant="secondary" disabled={!hasNext} onClick={onNext}>
+      <Button
+        variant="secondary"
+        disabled={!hasNext}
+        onClick={onNext}
+        endIcon={<ArrowRight />}>
         Next (Newer)
       </Button>
     </PageNavigationContainer>

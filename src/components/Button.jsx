@@ -1,6 +1,10 @@
 import styled, { css } from 'styled-components';
 
 const StyledButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
   padding: 10px 16px;
   background: #333;
   color: white;
@@ -34,8 +38,14 @@ const StyledButton = styled.button`
   }
 `;
 
-const Button = ({ variant = 'primary', ...props }) => {
-  return <StyledButton variant={variant} {...props} />;
+const Button = ({ variant = 'primary', startIcon, endIcon, ...props }) => {
+  return (
+    <StyledButton variant={variant} {...props}>
+      {startIcon}
+      {props.children}
+      {endIcon}
+    </StyledButton>
+  );
 };
 
 export default Button;

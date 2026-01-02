@@ -1,25 +1,30 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import NavItem from './NavItem';
+import { LogOut } from 'lucide-react';
 
 const NavBarContainer = styled.nav`
+  position: relative;
   display: flex;
   flex-direction: column;
-  // padding: 1rem;
+  height: calc(100vh - 2rem);
+
   background-color: #f4f2edff;
   border: 1px solid #ccc;
-  box-shadow: 0 2px 35px rgba(0, 0, 0, 0.1), 0 0px 2px rgba(0, 0, 0, 0.21);
   border-radius: 24px;
+  // padding-bottom: 12rem;
   margin: 1rem 0 0 1rem;
-  height: calc(100vh - 2rem);
-  overflow-y: scroll;
+
+  box-shadow: 0 2px 35px rgba(0, 0, 0, 0.1), 0 0px 2px rgba(0, 0, 0, 0.21);
+  overflow: hidden;
 
   @media (max-width: 1120px) {
-    position: fixed;
+    position: absolute;
     top: 1rem;
     left: 1rem;
     bottom: 1rem;
     width: calc(100% - 4rem);
+    max-width: 400px;
     z-index: 1000;
 
     ${(props) => !props.isMenuOpen && `left: calc(0px - (100% + 2rem));`}
@@ -44,6 +49,14 @@ const Scrim = styled.div`
   }
 `;
 
+const ScrollArea = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  // overscroll-behavior: contain;
+  width: 100%;
+`;
+
 const NavBarTitle = styled.h3`
   padding: 1.75rem 1rem 1rem 1rem;
 `;
@@ -54,9 +67,16 @@ const BottomControls = styled.div`
 
   border-top: 1px solid #ccc;
   padding: 1rem;
+
+  background-color: #f4f2edff;
 `;
 
 const LogoutButton = styled.a`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  // justify-content: center;
   color: #494949ff;
   text-decoration: none;
 `;
@@ -90,18 +110,21 @@ const NavBar = ({
     <>
       {isMenuOpen && <Scrim onClick={() => setIsMenuOpen(false)} />}
       <NavBarContainer isMenuOpen={isMenuOpen}>
-        {isMenuOpen && <NavBarTitle>Your Poems</NavBarTitle>}
-        {poems.map((poem, index) => (
-          <NavItem
-            key={index}
-            onClick={() => handleNavigateToPoem(index)}
-            title={poem.title}
-            colors={poem.palette}
-            active={index === currentIndex}
-          />
-        ))}
+        <ScrollArea>
+          <NavBarTitle>Your Poems</NavBarTitle>
+          {poems.map((poem, index) => (
+            <NavItem
+              key={index}
+              onClick={() => handleNavigateToPoem(index)}
+              title={poem.title}
+              colors={poem.palette}
+              active={index === currentIndex}
+            />
+          ))}
+        </ScrollArea>
         <BottomControls>
           <LogoutButton href="" onClick={onLogout}>
+            <LogOut size={18} />
             Log out
           </LogoutButton>
         </BottomControls>
