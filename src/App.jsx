@@ -26,6 +26,8 @@ import {
 const Page = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
   // padding: 0 0 2rem 0;
   width: 100%;
 `;
@@ -43,6 +45,10 @@ const PrimaryPageContents = styled.div`
 
   font-size: 24px;
   color: #333;
+
+  @media (max-width: 1120px) {
+    width: 100%;
+  }
 `;
 
 const AuthContainer = styled.div`
@@ -210,6 +216,7 @@ function App() {
   const handleNavigateToPoem = (index) => {
     setCurrentIndex(index);
     fetchPoem(index);
+    setIsMenuOpen(false);
   };
 
   const handleAuth = async (e) => {
@@ -291,6 +298,9 @@ function App() {
         currentIndex={currentIndex}
         handleNavigateToPoem={handleNavigateToPoem}
         user={user}
+        onLogout={handleLogout}
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
       />
       <PrimaryPageContents>
         <TopBar onLogout={handleLogout} handleMenuClick={handleMenuClick} />

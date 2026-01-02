@@ -11,6 +11,11 @@ const Container = styled.div`
   width: 80%;
   max-width: 800px;
   margin-bottom: 50px;
+
+  @media (max-width: 768px) {
+    width: 90%;
+    max-width: unset;
+  }
 `;
 
 const TopIcon = styled.h1`
@@ -34,11 +39,19 @@ const LogoContainer = styled.div`
   gap: 20px;
 `;
 
+const MenuButtonContainer = styled.div`
+  @media (min-width: 1120px) {
+    display: none;
+  }
+`;
+
 const TopBar = ({ onLogout, handleMenuClick }) => {
   return (
     <Container>
       <LogoContainer>
-        <MenuButton handleMenuClick={handleMenuClick} />
+        <MenuButtonContainer>
+          <MenuButton handleMenuClick={handleMenuClick} />
+        </MenuButtonContainer>
         {/* <TopIcon>8=&gt;</TopIcon> */}
         <h2> Poetry Cam </h2>
       </LogoContainer>
