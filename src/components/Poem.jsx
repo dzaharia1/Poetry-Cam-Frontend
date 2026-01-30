@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import Card from './Card';
 import ColorCollection from './ColorCollection';
-import { MoreVertical, Trash2 } from 'lucide-react';
+import { MoreVertical, Trash2, Download } from 'lucide-react';
+import { toPng } from 'html-to-image';
 
 const PoemHeading = styled.div`
   width: 100%;
@@ -92,9 +93,78 @@ const PoemText = styled.p`
   }
 `;
 
+const ExportWrapper = styled.div`
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+`;
+
+const InstagramPost = styled.div`
+  width: 1080px;
+  height: 1080px;
+  background-color: #f4f2ed;
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+  padding: 70px;
+  box-sizing: border-box;
+  color: #1a1a1a;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    right: 40px;
+    bottom: 40px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    pointer-events: none;
+  }
+
+  h2 {
+    width: 100%;
+    font-size: 72px;
+    margin-bottom: 48px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    width: 100%;
+    font-size: 44px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    margin-bottom: 60px;
+    font-weight: 400;
+    max-width: 900px;
+  }
+`;
+
 const Poem = ({ title, text, colors, onDelete }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const exportRef = useRef(null);
+
+  const handleDownload = async () => {
+    if (!exportRef.current) return;
+    setIsMenuOpen(false);
+
+    try {
+      const dataUrl = await toPng(exportRef.current, {
+        width: 1080,
+        height: 1080,
+        cacheBust: true,
+      });
+      const link = document.createElement('a');
+      link.download = `poem-${title.toLowerCase().replace(/\s+/g, '-')}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('Failed to download poem image', err);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -121,6 +191,11 @@ const Poem = ({ title, text, colors, onDelete }) => {
         {isMenuOpen && (
           <MenuContainer>
             <MenuItem
+              onClick={handleDownload}>
+              <Download size={18} />
+              Download
+            </MenuItem>
+            <MenuItem
               className="delete"
               onClick={() => {
                 if (window.confirm('Are you sure you want to delete this poem?')) {
@@ -136,6 +211,14 @@ const Poem = ({ title, text, colors, onDelete }) => {
       </PoemHeading>
       <PoemText>{text}</PoemText>
       <ColorCollection colors={colors} />
+
+      <ExportWrapper>
+        <InstagramPost ref={exportRef}>
+          <h2>{title}</h2>
+          <p>{text}</p>
+          <ColorCollection colors={colors} />
+        </InstagramPost>
+      </ExportWrapper>
     </Card>
   );
 };
