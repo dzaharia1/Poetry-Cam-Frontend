@@ -88,6 +88,7 @@ const NavBar = ({
   onLogout,
   isMenuOpen,
   setIsMenuOpen,
+  refreshTrigger,
 }) => {
   const [poems, setPoems] = useState([]);
 
@@ -103,8 +104,10 @@ const NavBar = ({
         console.error('Error fetching poems:', error);
       }
     };
-    fetchPoems();
-  }, []);
+    if (user) {
+      fetchPoems();
+    }
+  }, [user, refreshTrigger]);
 
   return (
     <>

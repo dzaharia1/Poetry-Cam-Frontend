@@ -91,6 +91,8 @@ function App() {
   const [hasUnreadPoem, setHasUnreadPoem] = useState(false);
   const [error, setError] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentPoemId, setCurrentPoemId] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -115,6 +117,7 @@ function App() {
           setCurrentPoem(formatPoem(data.currentPoem.poem || ''));
           setColors(data.currentPoem.palette || []);
           setTitle(data.currentPoem.title || '');
+          setCurrentPoemId(data.currentPoem.id || null);
           if (data.currentPoem.index !== undefined) {
             setCurrentIndex(data.currentPoem.index);
           }
@@ -123,6 +126,7 @@ function App() {
             setCurrentPoem('No poems yet. Generate one!');
             setTitle('Welcome');
             setColors([]);
+            setCurrentPoemId(null);
           }
         }
 
@@ -170,6 +174,8 @@ function App() {
             if (currentIndex === 0) {
               fetchPoem(0);
             }
+            // Trigger navbar refresh
+            setRefreshTrigger((prev) => prev + 1);
           }
         }
       },
@@ -192,6 +198,7 @@ function App() {
       setCurrentPoem(formatPoem(nextPoem.poem || ''));
       setColors(nextPoem.palette || []);
       setTitle(nextPoem.title || '');
+      setCurrentPoemId(nextPoem.id || null);
 
       const newIndex = nextPoem.index;
       setCurrentIndex(newIndex);
@@ -205,6 +212,7 @@ function App() {
       setCurrentPoem(formatPoem(previousPoem.poem || ''));
       setColors(previousPoem.palette || []);
       setTitle(previousPoem.title || '');
+      setCurrentPoemId(previousPoem.id || null);
 
       const newIndex = previousPoem.index;
       setCurrentIndex(newIndex);
@@ -243,6 +251,24 @@ function App() {
 
   const handleLogout = async () => {
     await signOut(auth);
+  };
+
+  const handleDelete = async () => {
+    if (!currentPoemId || !user) return;
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/deletePoem?id=${currentPoemId}&userid=${user.uid}`,
+        { method: 'DELETE' },
+      );
+      if (!res.ok) throw new Error('Failed to delete poem');
+      // Refresh the current index (or the previous one if possible)
+      fetchPoem(currentIndex);
+      // Trigger navbar refresh
+      setRefreshTrigger((prev) => prev + 1);
+    } catch (err) {
+      console.error('Error deleting poem:', err);
+      setError('Failed to delete poem');
+    }
   };
 
   const handleMenuClick = () => {
@@ -300,10 +326,16 @@ function App() {
         onLogout={handleLogout}
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
+        refreshTrigger={refreshTrigger}
       />
       <PrimaryPageContents>
         <TopBar onLogout={handleLogout} handleMenuClick={handleMenuClick} />
-        <Poem title={title} text={currentPoem} colors={colors} />
+        <Poem
+          title={title}
+          text={currentPoem}
+          colors={colors}
+          onDelete={handleDelete}
+        />
         <PageNavigation
           onNext={handleNext}
           onPrev={handlePrev}
