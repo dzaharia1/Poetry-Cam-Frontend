@@ -52,7 +52,7 @@ const TopBar = ({ onLogout, handleMenuClick }) => {
           <MenuButton handleMenuClick={handleMenuClick} />
         </MenuButtonContainer>
         {/* <TopIcon>8=&gt;</TopIcon> */}
-        <h2> Polarude </h2>
+        <h2>Limerick Cam</h2>
       </LogoContainer>
     </Container>
   );
