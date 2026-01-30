@@ -104,9 +104,8 @@ function App() {
     async (index) => {
       if (!user) return;
       try {
-        // Assuming backend is on localhost:3109 given the context
         const res = await fetch(
-          `http://localhost:3109/getPoem?userid=${user.uid}&index=${index}`,
+          `${import.meta.env.VITE_BACKEND_URL}/getPoem?userid=${user.uid}&index=${index}`,
         );
         if (!res.ok) throw new Error('Failed to fetch poem');
         const data = await res.json();
