@@ -18,6 +18,9 @@ const NavBarContainer = styled.nav`
   box-shadow: 0 2px 35px rgba(0, 0, 0, 0.1), 0 0px 2px rgba(0, 0, 0, 0.21);
   overflow: hidden;
 
+  width: 20%;
+  max-width: 400px;
+
   @media (max-width: 1120px) {
     position: absolute;
     top: 1rem;
