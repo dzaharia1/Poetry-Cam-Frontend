@@ -25,17 +25,17 @@ const PageNavigation = ({ onNext, onPrev, hasNext, hasPrev }) => {
     <PageNavigationContainer>
       <Button
         variant="secondary"
-        disabled={!hasPrev}
-        onClick={onPrev}
+        disabled={!hasNext}
+        onClick={onNext}
         startIcon={<ArrowLeft />}>
-        Previous (Older)
+        Newer
       </Button>
       <Button
         variant="secondary"
-        disabled={!hasNext}
-        onClick={onNext}
+        disabled={!hasPrev}
+        onClick={onPrev}
         endIcon={<ArrowRight />}>
-        Next (Newer)
+        Older
       </Button>
     </PageNavigationContainer>
   );
