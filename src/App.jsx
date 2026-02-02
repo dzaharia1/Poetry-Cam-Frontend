@@ -78,6 +78,10 @@ function App() {
   const [previousPoem, setPreviousPoem] = useState(null); // Older
   const [colors, setColors] = useState([]);
   const [title, setTitle] = useState('');
+  const [dayOfWeek, setDayOfWeek] = useState('');
+  const [date, setDate] = useState(null);
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
@@ -121,6 +125,10 @@ function App() {
           setCurrentPoem(data.currentPoem.poem || '');
           setColors(data.currentPoem.palette || []);
           setTitle(data.currentPoem.title || '');
+          setDayOfWeek(data.currentPoem.dayOfWeek || '');
+          setDate(data.currentPoem.date || null);
+          setMonth(data.currentPoem.month || '');
+          setYear(data.currentPoem.year || null);
           setCurrentPoemId(data.currentPoem.id || null);
           if (data.currentPoem.index !== undefined) {
             setCurrentIndex(data.currentPoem.index);
@@ -132,6 +140,10 @@ function App() {
             );
             setTitle('Welcome');
             setColors([]);
+            setDayOfWeek('');
+            setDate(null);
+            setMonth('');
+            setYear(null);
             setCurrentPoemId(null);
           }
         }
@@ -204,6 +216,10 @@ function App() {
       setCurrentPoem(nextPoem.poem || '');
       setColors(nextPoem.palette || []);
       setTitle(nextPoem.title || '');
+      setDayOfWeek(nextPoem.dayOfWeek || '');
+      setDate(nextPoem.date || null);
+      setMonth(nextPoem.month || '');
+      setYear(nextPoem.year || null);
       setCurrentPoemId(nextPoem.id || null);
 
       const newIndex = nextPoem.index;
@@ -218,6 +234,10 @@ function App() {
       setCurrentPoem(previousPoem.poem || '');
       setColors(previousPoem.palette || []);
       setTitle(previousPoem.title || '');
+      setDayOfWeek(previousPoem.dayOfWeek || '');
+      setDate(previousPoem.date || null);
+      setMonth(previousPoem.month || '');
+      setYear(previousPoem.year || null);
       setCurrentPoemId(previousPoem.id || null);
 
       const newIndex = previousPoem.index;
@@ -344,6 +364,10 @@ function App() {
           title={title}
           text={currentPoem}
           colors={colors}
+          dayOfWeek={dayOfWeek}
+          date={date}
+          month={month}
+          year={year}
           onDelete={handleDelete}
         />
         <PageNavigation

@@ -109,14 +109,13 @@ const PoemLine = styled.p`
 
 const DateStamp = styled.p`
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 600;
   color: #666;
   margin-top: 32px;
   margin-bottom: 0;
-  font-style: italic;
 
   @media (max-width: 768px) {
-    font-size: 14px;
+    font-size: 12px;
     margin-top: 24px;
   }
 `;
@@ -159,6 +158,16 @@ const InstagramPost = styled.div`
     text-indent: -1.5rem;
     padding-left: 1.5rem;
     text-align: left;
+  }
+
+  .date-stamp {
+    font-size: 32px;
+    font-weight: 600;
+    color: #666;
+    margin-top: 64px;
+    margin-bottom: 0;
+    text-indent: 0;
+    padding-left: 0;
   }
 `;
 
@@ -266,6 +275,11 @@ const Poem = ({
               <p key={i}>{line}</p>
             ))}
           </PoemExportText>
+          {dayOfWeek && date && month && year && (
+            <p className="date-stamp">
+              {dayOfWeek}, {month} {date}, {year}
+            </p>
+          )}
           <ColorCollection colors={colors} />
         </InstagramPost>
       </ExportWrapper>
