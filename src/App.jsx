@@ -42,7 +42,7 @@ const PrimaryPageContents = styled.div`
   width: 75%;
   // max-width: 900px;
 
-  padding: 2rem 0 1rem 0;
+  padding: 2rem 0 3rem 0;
 
   font-size: 24px;
   color: #333;

@@ -22,7 +22,7 @@ const TopIcon = styled.img`
   width: auto;
 
   @media (max-width: 768px) {
-    height: 70px;
+    height: 90px;
   }
 `;
 
@@ -59,7 +59,6 @@ const TopBar = ({ onLogout, handleMenuClick }) => {
     <Container>
       <LogoContainer>
         <TopIcon src="logo.svg" />
-        <h1>Poetry Cam</h1>
         <MenuButtonContainer>
           <MenuButton handleMenuClick={handleMenuClick} />
         </MenuButtonContainer>

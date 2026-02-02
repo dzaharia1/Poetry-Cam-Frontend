@@ -7,15 +7,17 @@ const NavBarContainer = styled.nav`
   position: relative;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 2rem);
+  height: calc(100vh - 6rem);
 
   background-color: #f4f2edff;
   border: 1px solid #ccc;
   border-radius: 24px;
   // padding-bottom: 12rem;
-  margin: 1rem 0 0 1rem;
+  margin: 3rem 0 0 1rem;
 
-  box-shadow: 0 2px 35px rgba(0, 0, 0, 0.1), 0 0px 2px rgba(0, 0, 0, 0.21);
+  box-shadow:
+    0 2px 35px rgba(0, 0, 0, 0.1),
+    0 0px 2px rgba(0, 0, 0, 0.21);
   overflow: hidden;
 
   width: 20%;
@@ -29,6 +31,9 @@ const NavBarContainer = styled.nav`
     width: calc(100% - 4rem);
     max-width: 400px;
     z-index: 1000;
+    box-shadow:
+      8px 0px 0px rgba(0, 221, 99, 0.33),
+      -8px 0px 0px rgba(247, 0, 78, 0.25);
 
     ${(props) => !props.isMenuOpen && `left: calc(0px - (100% + 2rem));`}
   }
@@ -61,6 +66,7 @@ const ScrollArea = styled.div`
 `;
 
 const NavBarTitle = styled.h3`
+  letter-spacing: 1px;
   padding: 1.75rem 1rem 1rem 1rem;
 `;
 

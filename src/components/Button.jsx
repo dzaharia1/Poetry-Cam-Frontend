@@ -13,28 +13,42 @@ const StyledButton = styled.button`
   border: none;
   border-radius: 12px;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow:
+    0px 0px 0px rgba(0, 221, 99, 0.33),
+    0px 0px 0px rgba(247, 0, 78, 0.25);
+
   &:hover {
     background: #555;
+    box-shadow:
+      4px 0px 0px rgba(0, 221, 99, 0.33),
+      -4px 0px 0px rgba(247, 0, 78, 0.25);
   }
 
   ${(props) =>
     props.variant === 'secondary' &&
     css`
       background: #f4f2edff;
-      box-shadow: 0 2px 35px rgba(0, 0, 0, 0.1);
       border: 1px solid #ccc;
-      transition: background 0.3s ease;
+      transition: all 0.3s ease;
       color: #333;
 
       &:hover {
-        background: #eae7e0ff;
+        background: #f9f7f3ff;
+        box-shadow:
+          4px 0px 0px rgba(0, 221, 99, 0.33),
+          -4px 0px 0px rgba(247, 0, 78, 0.25);
       }
     `}
 
   &:disabled {
     opacity: 0.5;
-    drop-shadow: none;
+    box-shadow: none;
     cursor: not-allowed;
+
+    &:hover {
+      box-shadow: none;
+    }
   }
 `;
 

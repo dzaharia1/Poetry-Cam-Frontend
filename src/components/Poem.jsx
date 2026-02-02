@@ -107,6 +107,20 @@ const PoemLine = styled.p`
   }
 `;
 
+const DateStamp = styled.p`
+  font-size: 16px;
+  font-weight: 400;
+  color: #666;
+  margin-top: 32px;
+  margin-bottom: 0;
+  font-style: italic;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    margin-top: 24px;
+  }
+`;
+
 const ExportWrapper = styled.div`
   position: absolute;
   left: -9999px;
@@ -155,7 +169,16 @@ const PoemExportText = styled.div`
   align-items: flex-start;
 `;
 
-const Poem = ({ title, text, colors, onDelete }) => {
+const Poem = ({
+  title,
+  text,
+  colors,
+  dayOfWeek,
+  date,
+  month,
+  year,
+  onDelete,
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const exportRef = useRef(null);
@@ -228,6 +251,11 @@ const Poem = ({ title, text, colors, onDelete }) => {
           <PoemLine key={i}>{line}</PoemLine>
         ))}
       </PoemText>
+      {dayOfWeek && date && month && year && (
+        <DateStamp>
+          {dayOfWeek}, {month} {date}, {year}
+        </DateStamp>
+      )}
       <ColorCollection colors={colors} />
 
       <ExportWrapper>
