@@ -123,7 +123,9 @@ function App() {
           }
         } else {
           if (index === 0) {
-            setCurrentPoem('No poems yet. Generate one!');
+            setCurrentPoem(
+              'No poems yet. Get out there with your poetry cam and capture one!',
+            );
             setTitle('Welcome');
             setColors([]);
             setCurrentPoemId(null);
