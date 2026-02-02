@@ -13,16 +13,19 @@ const PoemHeading = styled.div`
   align-items: flex-start;
   gap: 10px;
   position: relative;
+  margin-bottom: 44px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 24px;
+  }
 `;
 
 const PoemTitle = styled.h2`
   font-size: 40px;
   font-weight: bold;
-  margin-bottom: 44px;
 
   @media (max-width: 768px) {
     font-size: 28px;
-    margin-bottom: 24px;
   }
 `;
 
@@ -43,6 +46,10 @@ const PoemMenuButton = styled.button`
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 4px;
   }
 `;
 
@@ -89,7 +96,7 @@ const PoemText = styled.p`
   white-space: pre-wrap;
 
   @media (max-width: 768px) {
-    font-size: 24px;
+    font-size: 18px;
   }
 `;
 

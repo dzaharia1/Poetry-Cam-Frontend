@@ -18,14 +18,32 @@ const Container = styled.div`
 `;
 
 const TopIcon = styled.img`
-  height: 80px;
+  height: 124px;
+  width: auto;
+
+  @media (max-width: 768px) {
+    height: 70px;
+  }
 `;
 
 const LogoContainer = styled.div`
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
+  gap: 24px;
+
+  h1 {
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    gap: 16px;
+
+    h1 {
+      font-size: 28px;
+    }
+  }
 `;
 
 const MenuButtonContainer = styled.div`
@@ -38,7 +56,8 @@ const TopBar = ({ onLogout, handleMenuClick }) => {
   return (
     <Container>
       <LogoContainer>
-        <TopIcon src="wordmark.svg" />
+        <TopIcon src="logo.svg" />
+        <h1>Poetry Cam</h1>
         <MenuButtonContainer>
           <MenuButton handleMenuClick={handleMenuClick} />
         </MenuButtonContainer>
