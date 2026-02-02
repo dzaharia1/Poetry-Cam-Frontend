@@ -90,10 +90,17 @@ const MenuItem = styled.button`
   }
 `;
 
-const PoemText = styled.p`
+const PoemText = styled.div`
+  width: 100%;
+`;
+
+const PoemLine = styled.p`
   font-size: 28px;
   font-weight: 300;
-  white-space: pre-wrap;
+  text-indent: -1rem;
+  padding-left: 1rem;
+  margin: 0;
+  line-height: 1.4;
 
   @media (max-width: 768px) {
     font-size: 18px;
@@ -117,7 +124,9 @@ const InstagramPost = styled.div`
   padding: 70px;
   box-sizing: border-box;
   color: #1a1a1a;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
   position: relative;
 
   &::before {
@@ -143,10 +152,11 @@ const InstagramPost = styled.div`
     width: 100%;
     font-size: 44px;
     line-height: 1.6;
-    white-space: pre-wrap;
-    margin-bottom: 60px;
+    margin-bottom: 20px;
     font-weight: 400;
     max-width: 900px;
+    text-indent: -2rem;
+    padding-left: 2rem;
   }
 `;
 
@@ -198,15 +208,16 @@ const Poem = ({ title, text, colors, onDelete }) => {
         </PoemMenuButton>
         {isMenuOpen && (
           <MenuContainer>
-            <MenuItem
-              onClick={handleDownload}>
+            <MenuItem onClick={handleDownload}>
               <Download size={18} />
               Download
             </MenuItem>
             <MenuItem
               className="delete"
               onClick={() => {
-                if (window.confirm('Are you sure you want to delete this poem?')) {
+                if (
+                  window.confirm('Are you sure you want to delete this poem?')
+                ) {
                   onDelete();
                 }
                 setIsMenuOpen(false);
@@ -217,13 +228,21 @@ const Poem = ({ title, text, colors, onDelete }) => {
           </MenuContainer>
         )}
       </PoemHeading>
-      <PoemText>{text}</PoemText>
+      <PoemText>
+        {text.split('\n').map((line, i) => (
+          <PoemLine key={i}>{line}</PoemLine>
+        ))}
+      </PoemText>
       <ColorCollection colors={colors} />
 
       <ExportWrapper>
         <InstagramPost ref={exportRef}>
           <h2>{title}</h2>
-          <p>{text}</p>
+          <div>
+            {text.split('\n').map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
+          </div>
           <ColorCollection colors={colors} />
         </InstagramPost>
       </ExportWrapper>

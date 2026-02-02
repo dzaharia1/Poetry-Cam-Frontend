@@ -67,15 +67,6 @@ const Input = styled.input`
   border-radius: 4px;
 `;
 
-const formatPoem = (poem) => {
-  return poem.split('\n').map((line, i) => (
-    <React.Fragment key={i}>
-      {line}
-      <br />
-    </React.Fragment>
-  ));
-};
-
 function App() {
   const [user, setUser] = useState(null);
   const [currentPoem, setCurrentPoem] = useState('');
@@ -114,7 +105,7 @@ function App() {
 
         // Update current poem if it exists in the API response
         if (data.currentPoem) {
-          setCurrentPoem(formatPoem(data.currentPoem.poem || ''));
+          setCurrentPoem(data.currentPoem.poem || '');
           setColors(data.currentPoem.palette || []);
           setTitle(data.currentPoem.title || '');
           setCurrentPoemId(data.currentPoem.id || null);
@@ -197,7 +188,7 @@ function App() {
   const handleNext = () => {
     // Going to Newer (lower index)
     if (nextPoem && nextPoem.index !== undefined) {
-      setCurrentPoem(formatPoem(nextPoem.poem || ''));
+      setCurrentPoem(nextPoem.poem || '');
       setColors(nextPoem.palette || []);
       setTitle(nextPoem.title || '');
       setCurrentPoemId(nextPoem.id || null);
@@ -211,7 +202,7 @@ function App() {
   const handlePrev = () => {
     // Going to Older (higher index)
     if (previousPoem && previousPoem.index !== undefined) {
-      setCurrentPoem(formatPoem(previousPoem.poem || ''));
+      setCurrentPoem(previousPoem.poem || '');
       setColors(previousPoem.palette || []);
       setTitle(previousPoem.title || '');
       setCurrentPoemId(previousPoem.id || null);
