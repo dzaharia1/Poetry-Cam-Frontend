@@ -121,7 +121,7 @@ const InstagramPost = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 70px;
+  padding: 100px;
   box-sizing: border-box;
   color: #1a1a1a;
   font-family:
@@ -129,35 +129,30 @@ const InstagramPost = styled.div`
     sans-serif;
   position: relative;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 40px;
-    left: 40px;
-    right: 40px;
-    bottom: 40px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    pointer-events: none;
-  }
-
   h2 {
     width: 100%;
     font-size: 72px;
     margin-bottom: 48px;
     font-weight: 800;
-    letter-spacing: -0.02em;
   }
 
   p {
     width: 100%;
     font-size: 44px;
     line-height: 1.6;
-    margin-bottom: 20px;
     font-weight: 400;
     max-width: 900px;
-    text-indent: -2rem;
-    padding-left: 2rem;
+    text-indent: -1.5rem;
+    padding-left: 1.5rem;
+    text-align: left;
   }
+`;
+
+const PoemExportText = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
 const Poem = ({ title, text, colors, onDelete }) => {
@@ -238,11 +233,11 @@ const Poem = ({ title, text, colors, onDelete }) => {
       <ExportWrapper>
         <InstagramPost ref={exportRef}>
           <h2>{title}</h2>
-          <div>
+          <PoemExportText>
             {text.split('\n').map((line, i) => (
               <p key={i}>{line}</p>
             ))}
-          </div>
+          </PoemExportText>
           <ColorCollection colors={colors} />
         </InstagramPost>
       </ExportWrapper>

@@ -15,7 +15,9 @@ const CardContainer = styled.div`
   margin-bottom: 2rem;
 
   background-color: ${(props) => props.backgroundcolor || '#fff'};
-  box-shadow: 0 2px 35px rgba(0, 0, 0, 0.1), 0 0px 2px rgba(0, 0, 0, 0.21);
+  box-shadow:
+    0 2px 35px rgba(0, 0, 0, 0.1),
+    0 0px 2px rgba(0, 0, 0, 0.21);
   overflow: hidden;
 
   @media (max-width: 768px) {
