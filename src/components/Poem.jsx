@@ -25,7 +25,7 @@ const PoemTitle = styled.h2`
   font-weight: bold;
 
   @media (max-width: 768px) {
-    font-size: 28px;
+    font-size: 22px;
   }
 `;
 
@@ -49,7 +49,7 @@ const PoemMenuButton = styled.button`
   }
 
   @media (max-width: 768px) {
-    margin-top: 4px;
+    margin-top: 0;
   }
 `;
 

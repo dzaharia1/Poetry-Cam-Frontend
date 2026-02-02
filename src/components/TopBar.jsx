@@ -31,10 +31,12 @@ const LogoContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  gap: 24px;
+  gap: 36px;
 
   h1 {
     width: 100%;
+    font-weight: 400;
+    letter-spacing: 0.025em;
   }
 
   @media (max-width: 768px) {
