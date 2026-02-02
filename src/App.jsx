@@ -5,6 +5,7 @@ import TopBar from './components/TopBar';
 import PageNavigation from './components/PageNavigation';
 import NavBar from './components/navigation/NavBar';
 import Button from './components/Button';
+import SplashScreen from './components/SplashScreen';
 import { auth, db } from './firebase';
 import {
   signInWithPopup,
@@ -69,6 +70,7 @@ const Input = styled.input`
 
 function App() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [currentPoem, setCurrentPoem] = useState('');
   /* Pagination State */
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -86,9 +88,20 @@ function App() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
+    const startTime = Date.now();
+    const minLoadTime = 1000; // 1 second minimum
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, minLoadTime - elapsedTime);
+
+      setTimeout(() => {
+        setLoading(false);
+      }, remainingTime);
     });
+
     return () => unsubscribe();
   }, []);
 
@@ -267,6 +280,10 @@ function App() {
   const handleMenuClick = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  if (loading) {
+    return <SplashScreen />;
+  }
 
   if (!user) {
     return (
