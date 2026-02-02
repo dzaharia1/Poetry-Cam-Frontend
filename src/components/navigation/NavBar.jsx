@@ -31,9 +31,6 @@ const NavBarContainer = styled.nav`
     width: calc(100% - 4rem);
     max-width: 400px;
     z-index: 1000;
-    box-shadow:
-      8px 0px 0px rgba(0, 221, 99, 0.33),
-      -8px 0px 0px rgba(247, 0, 78, 0.25);
 
     ${(props) => !props.isMenuOpen && `left: calc(0px - (100% + 2rem));`}
   }
