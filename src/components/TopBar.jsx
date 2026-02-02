@@ -17,25 +17,15 @@ const Container = styled.div`
   }
 `;
 
-const TopIcon = styled.h1`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  font-size: 30px;
-
-  width: 80px;
+const TopIcon = styled.img`
   height: 80px;
-  background-color: #f4f2edff;
-
-  border: 3px solid #ddb999ff;
-  border-radius: 25%;
 `;
 
 const LogoContainer = styled.div`
   display: flex;
-  align-items: center;
-  gap: 20px;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const MenuButtonContainer = styled.div`
@@ -48,11 +38,10 @@ const TopBar = ({ onLogout, handleMenuClick }) => {
   return (
     <Container>
       <LogoContainer>
+        <TopIcon src="wordmark.svg" />
         <MenuButtonContainer>
           <MenuButton handleMenuClick={handleMenuClick} />
         </MenuButtonContainer>
-        {/* <TopIcon>8=&gt;</TopIcon> */}
-        <h2>Limerick Cam</h2>
       </LogoContainer>
     </Container>
   );
