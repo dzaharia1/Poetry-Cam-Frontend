@@ -107,17 +107,36 @@ const PoemLine = styled.p`
   }
 `;
 
+const FooterContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  margin-top: 24px;
+
+  @media (max-width: 800px) {
+    margin-top: 16px;
+  }
+`;
+
 const DateStamp = styled.p`
   font-size: 16px;
   font-weight: 600;
   color: #666;
-  margin-top: 32px;
-  margin-bottom: 0;
+  margin: 0;
 
   @media (max-width: 800px) {
     font-size: 12px;
-    margin-top: 24px;
   }
+`;
+
+const FooterLogo = styled.img`
+  width: 56px;
+  height: 56px;
+  margin: 0;
 `;
 
 const ExportWrapper = styled.div`
@@ -267,11 +286,16 @@ const Poem = ({
           <PoemLine key={i}>{line}</PoemLine>
         ))}
       </PoemText>
-      {dayOfWeek && date && month && year && (
-        <DateStamp>
-          {dayOfWeek}, {month} {date}, {year}
-        </DateStamp>
-      )}
+      <FooterContainer>
+        {dayOfWeek && date && month && year && (
+          <DateStamp>
+            {dayOfWeek}, {month} {date}, {year}
+          </DateStamp>
+        )}
+        {webDisplayPlacement && (
+          <FooterLogo src="../logo.svg" alt="Poetry Cam Logo" />
+        )}
+      </FooterContainer>
       <ColorCollection colors={colors} />
 
       <ExportWrapper>
@@ -282,11 +306,16 @@ const Poem = ({
               <p key={i}>{line}</p>
             ))}
           </PoemExportText>
-          {dayOfWeek && date && month && year && (
-            <p className="date-stamp">
-              {dayOfWeek}, {month} {date}, {year}
-            </p>
-          )}
+          <FooterContainer>
+            {dayOfWeek && date && month && year && (
+              <p className="date-stamp">
+                {dayOfWeek}, {month} {date}, {year}
+              </p>
+            )}
+            {webDisplayPlacement && (
+              <FooterLogo src="logo.png" alt="Poetry Cam Logo" />
+            )}
+          </FooterContainer>
           <ColorCollection colors={colors} />
         </InstagramPost>
       </ExportWrapper>
