@@ -15,7 +15,7 @@ const PoemHeading = styled.div`
   position: relative;
   margin-bottom: 44px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     margin-bottom: 24px;
   }
 `;
@@ -24,7 +24,7 @@ const PoemTitle = styled.h2`
   font-size: 40px;
   font-weight: bold;
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     font-size: 22px;
   }
 `;
@@ -48,7 +48,7 @@ const PoemMenuButton = styled.button`
     background-color: rgba(0, 0, 0, 0.05);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     margin-top: 0;
   }
 `;
@@ -102,7 +102,7 @@ const PoemLine = styled.p`
   margin: 0;
   line-height: 1.4;
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     font-size: 18px;
   }
 `;
@@ -114,7 +114,7 @@ const DateStamp = styled.p`
   margin-top: 32px;
   margin-bottom: 0;
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     font-size: 12px;
     margin-top: 24px;
   }
@@ -187,6 +187,7 @@ const Poem = ({
   month,
   year,
   onDelete,
+  webDisplayPlacement = false,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -227,31 +228,37 @@ const Poem = ({
   }, [isMenuOpen]);
 
   return (
-    <Card backgroundcolor={'#f4f2edff'}>
+    <Card
+      backgroundcolor={'#f4f2edff'}
+      marginBottom={webDisplayPlacement ? '0' : '4rem'}>
       <PoemHeading ref={menuRef}>
         <PoemTitle>{title}</PoemTitle>
-        <PoemMenuButton onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          <MoreVertical size={24} />
-        </PoemMenuButton>
+        {!webDisplayPlacement && (
+          <PoemMenuButton onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <MoreVertical size={24} />
+          </PoemMenuButton>
+        )}
         {isMenuOpen && (
           <MenuContainer>
             <MenuItem onClick={handleDownload}>
               <Download size={18} />
               Download
             </MenuItem>
-            <MenuItem
-              className="delete"
-              onClick={() => {
-                if (
-                  window.confirm('Are you sure you want to delete this poem?')
-                ) {
-                  onDelete();
-                }
-                setIsMenuOpen(false);
-              }}>
-              <Trash2 size={18} />
-              Delete
-            </MenuItem>
+            {onDelete && (
+              <MenuItem
+                className="delete"
+                onClick={() => {
+                  if (
+                    window.confirm('Are you sure you want to delete this poem?')
+                  ) {
+                    onDelete();
+                  }
+                  setIsMenuOpen(false);
+                }}>
+                <Trash2 size={18} />
+                Delete
+              </MenuItem>
+            )}
           </MenuContainer>
         )}
       </PoemHeading>
