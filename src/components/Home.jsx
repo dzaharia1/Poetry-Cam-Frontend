@@ -50,6 +50,10 @@ const PrimaryPageContents = styled.div`
   @media (max-width: 1120px) {
     width: 100%;
   }
+
+  @media (max-width: 768px) {
+    padding: 1rem 0 1rem 0;
+  }
 `;
 
 const AuthContainer = styled.div`

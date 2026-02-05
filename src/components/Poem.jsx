@@ -49,7 +49,9 @@ const PoemMenuButton = styled.button`
   }
 
   @media (max-width: 800px) {
-    margin-top: 0;
+    width: 28px;
+    height: 28px;
+    margin-top: 2px;
   }
 `;
 
@@ -260,14 +262,15 @@ const Poem = ({
               onClick={() => onToggleFavorite && onToggleFavorite()}
               style={{
                 color: isFavorite ? '#00dd63' : '#ccc',
-                backgroundColor: isFavorite
-                  ? 'rgba(0, 221, 99, 0.33)'
-                  : 'transparent',
+                backgroundColor: isFavorite ? '#444' : 'transparent',
+                boxShadow: isFavorite
+                  ? '4px 0px 0px rgba(0, 221, 99, 0.33), -4px 0px 0px rgba(247, 0, 78, 0.25)'
+                  : 'none',
               }}>
               <Star
                 size={24}
-                fill={isFavorite ? '#00dd63' : 'none'}
-                stroke={isFavorite ? '#00dd63' : 'currentColor'}
+                fill={isFavorite ? '#eae7e4' : '#444'}
+                stroke={isFavorite ? '#eae7e4' : '#444'}
               />
             </PoemMenuButton>
             <PoemMenuButton onClick={() => setIsMenuOpen(!isMenuOpen)}>

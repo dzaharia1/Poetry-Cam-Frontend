@@ -22,7 +22,7 @@ const TopIcon = styled.img`
   width: auto;
 
   @media (max-width: 768px) {
-    height: 90px;
+    height: 60px;
   }
 `;
 
