@@ -4,6 +4,7 @@ import Card from './Card';
 import ColorCollection from './ColorCollection';
 import { MoreVertical, Trash2, Download, Star } from 'lucide-react';
 import { toPng } from 'html-to-image';
+import IconButton from './IconButton';
 
 const PoemHeading = styled.div`
   width: 100%;
@@ -26,32 +27,6 @@ const PoemTitle = styled.h2`
 
   @media (max-width: 800px) {
     font-size: 22px;
-  }
-`;
-
-const PoemMenuButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  width: 36px;
-  height: 36px;
-  margin-top: 10px;
-  border-radius: 50%;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-
-  @media (max-width: 800px) {
-    width: 28px;
-    height: 28px;
-    margin-top: 2px;
   }
 `;
 
@@ -257,25 +232,17 @@ const Poem = ({
       <PoemHeading ref={menuRef}>
         <PoemTitle>{title}</PoemTitle>
         {!webDisplayPlacement && (
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <PoemMenuButton
+          <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+            <IconButton
+              icon={Star}
+              active={isFavorite}
               onClick={() => onToggleFavorite && onToggleFavorite()}
-              style={{
-                color: isFavorite ? '#00dd63' : '#ccc',
-                backgroundColor: isFavorite ? '#444' : 'transparent',
-                boxShadow: isFavorite
-                  ? '4px 0px 0px rgba(0, 221, 99, 0.33), -4px 0px 0px rgba(247, 0, 78, 0.25)'
-                  : 'none',
-              }}>
-              <Star
-                size={24}
-                fill={isFavorite ? '#eae7e4' : '#444'}
-                stroke={isFavorite ? '#eae7e4' : '#444'}
-              />
-            </PoemMenuButton>
-            <PoemMenuButton onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              <MoreVertical size={24} />
-            </PoemMenuButton>
+            />
+            <IconButton
+              icon={MoreVertical}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              active={isMenuOpen}
+            />
           </div>
         )}
         {isMenuOpen && (

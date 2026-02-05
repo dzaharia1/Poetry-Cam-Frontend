@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import MenuButton from './navigation/MenuButton';
+import IconButton from './IconButton';
+import { PanelLeft } from 'lucide-react';
 
 const Container = styled.div`
   display: flex;
@@ -60,7 +61,7 @@ const TopBar = ({ onLogout, handleMenuClick }) => {
       <LogoContainer>
         <TopIcon src="logo.svg" />
         <MenuButtonContainer>
-          <MenuButton handleMenuClick={handleMenuClick} />
+          <IconButton icon={PanelLeft} onClick={handleMenuClick} />
         </MenuButtonContainer>
       </LogoContainer>
     </Container>
