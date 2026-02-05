@@ -23,6 +23,9 @@ const StyledButton = styled.button`
   &:hover {
     background-color: ${(props) =>
       props.$active ? '#444' : 'rgba(0, 0, 0, 0.05)'};
+    box-shadow:
+      4px 0px 0px rgba(0, 221, 99, 0.33),
+      -4px 0px 0px rgba(247, 0, 78, 0.25);
   }
 
   @media (max-width: 800px) {
