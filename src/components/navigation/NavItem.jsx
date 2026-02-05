@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Star } from 'lucide-react';
 
 const NavItemItself = styled.button`
   position: relative;
@@ -47,6 +48,17 @@ const NavItemTitle = styled.p`
   text-align: left;
 
   color: #494949ff;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  overflow: hidden;
+`;
+
+const TitleText = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
 `;
 
 const NavItemColorCollection = styled.div`
@@ -70,7 +82,7 @@ const NavItemColor = styled.div`
   height: 10px;
 `;
 
-const NavItem = ({ title, active, colors, onClick }) => {
+const NavItem = ({ title, active, colors, onClick, isFavorite = false }) => {
   const [hovered, setHovered] = React.useState('false');
 
   return (
@@ -79,7 +91,17 @@ const NavItem = ({ title, active, colors, onClick }) => {
       onMouseEnter={() => setHovered('true')}
       onMouseLeave={() => setHovered('false')}
       active={hovered === 'true' || active}>
-      <NavItemTitle>{title}</NavItemTitle>
+      <NavItemTitle>
+        <TitleText>{title}</TitleText>
+        {isFavorite && (
+          <Star
+            size={14}
+            fill="#444444"
+            stroke="#444444"
+            style={{ flexShrink: 0, marginRight: '0.25rem' }}
+          />
+        )}
+      </NavItemTitle>
       <NavItemColorCollection active={hovered === 'true' || active}>
         {colors.map((color, index) => (
           <NavItemColor key={index} style={{ backgroundColor: color }} />

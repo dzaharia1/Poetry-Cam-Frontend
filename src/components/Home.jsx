@@ -82,6 +82,7 @@ function Home() {
   const [date, setDate] = useState(null);
   const [month, setMonth] = useState('');
   const [year, setYear] = useState(null);
+  const [isFavorite, setIsFavorite] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
@@ -129,6 +130,7 @@ function Home() {
           setDate(data.currentPoem.date || null);
           setMonth(data.currentPoem.month || '');
           setYear(data.currentPoem.year || null);
+          setIsFavorite(data.currentPoem.isFavorite || false);
           setCurrentPoemId(data.currentPoem.id || null);
           if (data.currentPoem.index !== undefined) {
             setCurrentIndex(data.currentPoem.index);
@@ -144,6 +146,7 @@ function Home() {
             setDate(null);
             setMonth('');
             setYear(null);
+            setIsFavorite(false);
             setCurrentPoemId(null);
           }
         }
@@ -220,6 +223,7 @@ function Home() {
       setDate(nextPoem.date || null);
       setMonth(nextPoem.month || '');
       setYear(nextPoem.year || null);
+      setIsFavorite(nextPoem.isFavorite || false);
       setCurrentPoemId(nextPoem.id || null);
 
       const newIndex = nextPoem.index;
@@ -238,6 +242,7 @@ function Home() {
       setDate(previousPoem.date || null);
       setMonth(previousPoem.month || '');
       setYear(previousPoem.year || null);
+      setIsFavorite(previousPoem.isFavorite || false);
       setCurrentPoemId(previousPoem.id || null);
 
       const newIndex = previousPoem.index;
@@ -294,6 +299,40 @@ function Home() {
     } catch (err) {
       console.error('Error deleting poem:', err);
       setError('Failed to delete poem');
+    }
+  };
+
+  const handleToggleFavorite = async () => {
+    if (!currentPoemId || !user) return;
+    try {
+      // Optimistic update
+      const newStatus = !isFavorite;
+      setIsFavorite(newStatus);
+
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/toggleFavorite`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: currentPoemId,
+            userid: user.uid,
+            status: newStatus,
+          }),
+        },
+      );
+
+      if (!res.ok) {
+        // Revert on failure
+        setIsFavorite(!newStatus);
+        throw new Error('Failed to toggle favorite');
+      }
+
+      // Refresh navbar to update order and favorite icon
+      setRefreshTrigger((prev) => prev + 1);
+    } catch (err) {
+      console.error(err);
+      setError('Failed to update favorite status');
     }
   };
 
@@ -368,6 +407,8 @@ function Home() {
           date={date}
           month={month}
           year={year}
+          isFavorite={isFavorite}
+          onToggleFavorite={handleToggleFavorite}
           onDelete={handleDelete}
         />
         <PageNavigation

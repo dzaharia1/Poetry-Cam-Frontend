@@ -34,7 +34,7 @@ const WebDisplay = () => {
     const fetchPoem = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/getPoem?userid=${userId}&index=0`,
+          `${import.meta.env.VITE_BACKEND_URL}/getPoem?userid=${userId}&index=0&favoritesOnly=true`,
         );
         if (!res.ok) throw new Error('Failed to fetch poem');
         const data = await res.json();
@@ -88,6 +88,7 @@ const WebDisplay = () => {
           month={poemData.month || ''}
           year={poemData.year || null}
           webDisplayPlacement={true}
+          isFavorite={true}
         />
       </ContentContainer>
     </Page>

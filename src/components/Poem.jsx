@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import Card from './Card';
 import ColorCollection from './ColorCollection';
-import { MoreVertical, Trash2, Download } from 'lucide-react';
+import { MoreVertical, Trash2, Download, Star } from 'lucide-react';
 import { toPng } from 'html-to-image';
 
 const PoemHeading = styled.div`
@@ -207,6 +207,8 @@ const Poem = ({
   year,
   onDelete,
   webDisplayPlacement = false,
+  isFavorite = false,
+  onToggleFavorite,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -253,9 +255,25 @@ const Poem = ({
       <PoemHeading ref={menuRef}>
         <PoemTitle>{title}</PoemTitle>
         {!webDisplayPlacement && (
-          <PoemMenuButton onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            <MoreVertical size={24} />
-          </PoemMenuButton>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <PoemMenuButton
+              onClick={() => onToggleFavorite && onToggleFavorite()}
+              style={{
+                color: isFavorite ? '#00dd63' : '#ccc',
+                backgroundColor: isFavorite
+                  ? 'rgba(0, 221, 99, 0.33)'
+                  : 'transparent',
+              }}>
+              <Star
+                size={24}
+                fill={isFavorite ? '#00dd63' : 'none'}
+                stroke={isFavorite ? '#00dd63' : 'currentColor'}
+              />
+            </PoemMenuButton>
+            <PoemMenuButton onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              <MoreVertical size={24} />
+            </PoemMenuButton>
+          </div>
         )}
         {isMenuOpen && (
           <MenuContainer>
@@ -296,7 +314,7 @@ const Poem = ({
           <FooterLogo src="../logo.svg" alt="Poetry Cam Logo" />
         )}
       </FooterContainer>
-      <ColorCollection colors={colors} />
+      {webDisplayPlacement ? null : <ColorCollection colors={colors} />}
 
       <ExportWrapper>
         <InstagramPost ref={exportRef}>
