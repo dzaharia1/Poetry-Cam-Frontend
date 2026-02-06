@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import Button from './basecomponents/Button';
-import { ArrowLeft, ArrowRight, Eye } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Aperture } from 'lucide-react';
 
 const PageNavigationContainer = styled.div`
   display: flex;
@@ -92,7 +92,7 @@ const PageNavigation = ({ onNext, onPrev, hasNext, hasPrev, onCapture }) => {
       </Button>
 
       <CameraButton onClick={handleCameraClick} aria-label="Take Photo">
-        <Eye size={32} />
+        <Aperture size={32} />
       </CameraButton>
       <HiddenInput
         type="file"
