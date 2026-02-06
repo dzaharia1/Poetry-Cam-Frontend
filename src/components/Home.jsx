@@ -95,6 +95,35 @@ function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentPoemId, setCurrentPoemId] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [poems, setPoems] = useState([]);
+
+  useEffect(() => {
+    const fetchPoems = async () => {
+      if (!user) return;
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/poemList?userid=${user.uid}`,
+        );
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          setPoems(data);
+        }
+      } catch (error) {
+        console.error('Error fetching poems:', error);
+      }
+    };
+    fetchPoems();
+  }, [user, refreshTrigger]);
+
+  // Sync currentIndex if the current poem's position in the list changes (e.g., when favorited)
+  useEffect(() => {
+    if (currentPoemId && poems.length > 0) {
+      const newIndex = poems.findIndex((p) => p.id === currentPoemId);
+      if (newIndex !== -1 && newIndex !== currentIndex) {
+        setCurrentIndex(newIndex);
+      }
+    }
+  }, [poems, currentPoemId, currentIndex]);
 
   useEffect(() => {
     const startTime = Date.now();
@@ -160,6 +189,9 @@ function Home() {
         setPreviousPoem(data.previousPoem);
       } catch (err) {
         console.error('Error fetching poem:', err);
+        setError(
+          'Failed to fetch poem. This is likely while the Firestore index is building.',
+        );
       }
     },
     [user],
@@ -399,7 +431,7 @@ function Home() {
         onLogout={handleLogout}
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
-        refreshTrigger={refreshTrigger}
+        poems={poems}
       />
       <PrimaryPageContents>
         <TopBar onLogout={handleLogout} handleMenuClick={handleMenuClick} />

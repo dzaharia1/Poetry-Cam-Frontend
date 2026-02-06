@@ -94,50 +94,24 @@ const NavBar = ({
   onLogout,
   isMenuOpen,
   setIsMenuOpen,
-  refreshTrigger,
+  poems = [],
 }) => {
-  const [poems, setPoems] = useState([]);
-
-  useEffect(() => {
-    const fetchPoems = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/poemList?userid=${user.uid}`,
-        );
-        const data = await response.json();
-        setPoems(data);
-      } catch (error) {
-        console.error('Error fetching poems:', error);
-      }
-    };
-    if (user) {
-      fetchPoems();
-    }
-  }, [user, refreshTrigger]);
-
   return (
     <>
       {isMenuOpen && <Scrim onClick={() => setIsMenuOpen(false)} />}
       <NavBarContainer isMenuOpen={isMenuOpen}>
         <ScrollArea>
           <NavBarTitle>Your Poems</NavBarTitle>
-          {poems
-            .map((poem, index) => ({ ...poem, originalIndex: index }))
-            .sort((a, b) => {
-              if (a.isFavorite && !b.isFavorite) return -1;
-              if (!a.isFavorite && b.isFavorite) return 1;
-              return 0;
-            })
-            .map((poem) => (
-              <NavItem
-                key={poem.id}
-                onClick={() => handleNavigateToPoem(poem.originalIndex)}
-                title={poem.title}
-                colors={poem.palette}
-                active={poem.originalIndex === currentIndex}
-                isFavorite={poem.isFavorite}
-              />
-            ))}
+          {poems.map((poem, index) => (
+            <NavItem
+              key={poem.id}
+              onClick={() => handleNavigateToPoem(index)}
+              title={poem.title}
+              colors={poem.palette}
+              active={index === currentIndex}
+              isFavorite={poem.isFavorite}
+            />
+          ))}
         </ScrollArea>
         <BottomControls>
           <LogoutButton href="" onClick={onLogout}>
