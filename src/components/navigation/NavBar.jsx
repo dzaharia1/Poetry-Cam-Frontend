@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import NavItem from './NavItem';
-import { LogOut } from 'lucide-react';
+import { LogOut, Sparkles, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../../contexts/ThemeContext';
+import IconButton from '../IconButton';
 
 const NavBarContainer = styled.nav`
   position: relative;
@@ -69,7 +71,10 @@ const NavBarTitle = styled.h3`
 
 const BottomControls = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${(props) => props.theme.spacing[3]};
 
   border-top: 1px solid ${(props) => props.theme.colors.border};
   padding: 1rem;
@@ -77,11 +82,18 @@ const BottomControls = styled.div`
   background-color: ${(props) => props.theme.colors.secondary};
 `;
 
+const ButtonDivider = styled.div`
+  width: 1px;
+  height: 100%;
+  background-color: ${(props) => props.theme.colors.border};
+`;
+
 const LogoutButton = styled.a`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 0.5rem;
+  flex: 1;
   // justify-content: center;
   color: ${(props) => props.theme.colors.text.primary};
   text-decoration: none;
@@ -96,6 +108,22 @@ const NavBar = ({
   setIsMenuOpen,
   poems = [],
 }) => {
+  const { themeMode, toggleThemeMode } = useTheme();
+
+  // Determine which icon to show based on mode
+  const getThemeIcon = () => {
+    if (themeMode === 'auto') return Sparkles;
+    if (themeMode === 'dark') return Moon;
+    return Sun;
+  };
+
+  // Determine tooltip text
+  const getTooltipText = () => {
+    if (themeMode === 'auto') return 'Theme: Auto (click for Light)';
+    if (themeMode === 'dark') return 'Theme: Dark (click for Auto)';
+    return 'Theme: Light (click for Dark)';
+  };
+
   return (
     <>
       {isMenuOpen && <Scrim onClick={() => setIsMenuOpen(false)} />}
@@ -118,6 +146,13 @@ const NavBar = ({
             <LogOut size={18} />
             Log out
           </LogoutButton>
+          <ButtonDivider />
+          <IconButton
+            icon={getThemeIcon()}
+            onClick={toggleThemeMode}
+            title={getTooltipText()}
+            size={20}
+          />
         </BottomControls>
       </NavBarContainer>
     </>

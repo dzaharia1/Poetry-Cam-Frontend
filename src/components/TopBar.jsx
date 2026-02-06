@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import IconButton from './IconButton';
-import { PanelLeft, Sun, Moon } from 'lucide-react';
+import { PanelLeft } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 const Container = styled.div`
@@ -63,18 +63,13 @@ const MenuButtonContainer = styled.div`
 `;
 
 const TopBar = ({ onLogout, handleMenuClick }) => {
-  const { isDarkMode, toggleTheme } = useTheme();
+  const { isDarkMode } = useTheme();
 
   return (
     <Container>
       <LogoContainer>
         <TopIcon src={isDarkMode ? 'logodark.svg' : 'logo.svg'} />
         <MenuButtonContainer>
-          <IconButton
-            icon={isDarkMode ? Sun : Moon}
-            onClick={toggleTheme}
-            title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-          />
           <IconButton
             className="mobile-menu"
             icon={PanelLeft}

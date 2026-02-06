@@ -69,16 +69,16 @@ export const lightTheme = {
 export const darkTheme = {
   ...sharedTheme,
   colors: {
-    primary: '#e8e6e3',
+    primary: '#EFDDCC',
     primaryHover: '#f4f2ed',
     secondary: '#2d2d2d',
     secondaryHover: '#3a3a3a',
     background: '#1a1a1a',
     paper: '#2d2d2d',
     text: {
-      primary: '#e8e6e3',
+      primary: '#EFDDCC',
       secondary: '#b0b0b0',
-      headings: '#f4f2ed',
+      headings: '#EFDDCC',
       light: '#ffffff',
       error: '#ff6b6b',
       delete: '#ff6b6b',

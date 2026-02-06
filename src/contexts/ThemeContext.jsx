@@ -12,13 +12,14 @@ export const useTheme = () => {
 };
 
 export const ThemeContextProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Check localStorage first
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      return savedTheme === 'dark';
-    }
-    // Fall back to system preference
+  // Three modes: 'light', 'dark', 'auto'
+  const [themeMode, setThemeMode] = useState(() => {
+    const savedMode = localStorage.getItem('themeMode');
+    return savedMode || 'auto'; // Default to auto
+  });
+
+  // Track system preference
+  const [systemPrefersDark, setSystemPrefersDark] = useState(() => {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
@@ -27,15 +28,16 @@ export const ThemeContextProvider = ({ children }) => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
     const handleChange = (e) => {
-      // Only update if user hasn't manually set a preference
-      if (!localStorage.getItem('theme')) {
-        setIsDarkMode(e.matches);
-      }
+      setSystemPrefersDark(e.matches);
     };
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
+
+  // Determine if we should show dark mode
+  const isDarkMode =
+    themeMode === 'auto' ? systemPrefersDark : themeMode === 'dark';
 
   // Update CSS custom properties when theme changes
   useEffect(() => {
@@ -50,11 +52,19 @@ export const ThemeContextProvider = ({ children }) => {
     );
   }, [isDarkMode]);
 
-  const toggleTheme = () => {
-    setIsDarkMode((prev) => {
-      const newValue = !prev;
-      localStorage.setItem('theme', newValue ? 'dark' : 'light');
-      return newValue;
+  const toggleThemeMode = () => {
+    setThemeMode((prev) => {
+      // Cycle: light -> dark -> auto -> light
+      let newMode;
+      if (prev === 'light') {
+        newMode = 'dark';
+      } else if (prev === 'dark') {
+        newMode = 'auto';
+      } else {
+        newMode = 'light';
+      }
+      localStorage.setItem('themeMode', newMode);
+      return newMode;
     });
   };
 
@@ -62,7 +72,12 @@ export const ThemeContextProvider = ({ children }) => {
 
   return (
     <ThemeContext.Provider
-      value={{ theme: currentTheme, isDarkMode, toggleTheme }}>
+      value={{
+        theme: currentTheme,
+        isDarkMode,
+        themeMode,
+        toggleThemeMode,
+      }}>
       {children}
     </ThemeContext.Provider>
   );
