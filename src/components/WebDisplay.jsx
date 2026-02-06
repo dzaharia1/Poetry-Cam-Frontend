@@ -48,7 +48,7 @@ const PoemHeading = styled.div`
 `;
 
 const PoemTitle = styled.h2`
-  font-size: 28px;
+  font-size: 32px;
   font-weight: bold;
 `;
 
@@ -102,7 +102,7 @@ const Logo = styled.img`
   margin: 0;
 `;
 
-const Poem = ({ title, text, dayOfWeek, date, month, year }) => {
+const Poem = ({ title, text, dayOfWeek, date, month, year, penName }) => {
   const theme = useTheme();
 
   return (
@@ -113,6 +113,7 @@ const Poem = ({ title, text, dayOfWeek, date, month, year }) => {
         </PoemHeading>
         {dayOfWeek && date && month && year && (
           <DateStamp>
+            {penName && penName + ' • '}
             {dayOfWeek}, {month} {date}, {year}
           </DateStamp>
         )}
@@ -134,16 +135,32 @@ const WebDisplay = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchPoem = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/getPoem?userid=${userId}&index=0`,
-        );
-        if (!res.ok) throw new Error('Failed to fetch poem');
-        const data = await res.json();
+        // Fetch poem and settings in parallel
+        const [poemRes, settingsRes] = await Promise.all([
+          fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/getPoem?userid=${userId}&index=0`,
+          ),
+          fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/get-settings?userid=${userId}`,
+          ),
+        ]);
 
-        if (data.currentPoem) {
-          setPoemData(data.currentPoem);
+        if (!poemRes.ok) throw new Error('Failed to fetch poem');
+        const poemDataJson = await poemRes.json();
+
+        let settings = {};
+        if (settingsRes.ok) {
+          settings = await settingsRes.json();
+        }
+
+        if (poemDataJson.currentPoem) {
+          // Merge penName from settings if it's not in the poem data
+          setPoemData({
+            ...poemDataJson.currentPoem,
+            penName: poemDataJson.currentPoem.penName || settings.penName || '',
+          });
         } else {
           setError('No poems found for this user.');
         }
@@ -156,7 +173,7 @@ const WebDisplay = () => {
     };
 
     if (userId) {
-      fetchPoem();
+      fetchData();
     } else {
       setError('Invalid User ID');
       setLoading(false);
@@ -189,6 +206,7 @@ const WebDisplay = () => {
           date={poemData.date || null}
           month={poemData.month || ''}
           year={poemData.year || null}
+          penName={poemData.penName || ''}
         />
       </ContentContainer>
     </Page>
