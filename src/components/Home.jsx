@@ -6,15 +6,9 @@ import PageNavigation from './PageNavigation';
 import NavBar from './navigation/NavBar';
 import Button from './Button';
 import SplashScreen from './SplashScreen';
+import Auth from './Auth';
 import { auth, db } from '../firebase';
-import {
-  signInWithPopup,
-  GoogleAuthProvider,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
-} from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import {
   collection,
   query,
@@ -28,9 +22,10 @@ const Page = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   // padding: 0 0 2rem 0;
   width: 100%;
+  height: 100vh;
 `;
 
 const PrimaryPageContents = styled.div`
@@ -56,22 +51,6 @@ const PrimaryPageContents = styled.div`
   }
 `;
 
-const AuthContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-`;
-
-const Input = styled.input`
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
 function Home() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -87,9 +66,6 @@ function Home() {
   const [month, setMonth] = useState('');
   const [year, setYear] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isRegistering, setIsRegistering] = useState(false);
   const [hasUnreadPoem, setHasUnreadPoem] = useState(false);
   const [error, setError] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -293,29 +269,6 @@ function Home() {
     setIsMenuOpen(false);
   };
 
-  const handleAuth = async (e) => {
-    e.preventDefault();
-    setError('');
-    try {
-      if (isRegistering) {
-        await createUserWithEmailAndPassword(auth, email, password);
-      } else {
-        await signInWithEmailAndPassword(auth, email, password);
-      }
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
   const handleLogout = async () => {
     await signOut(auth);
   };
@@ -383,41 +336,7 @@ function Home() {
   if (!user) {
     return (
       <Page>
-        <AuthContainer>
-          <h2>{isRegistering ? 'Register' : 'Login'}</h2>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
-          <form
-            onSubmit={handleAuth}
-            style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <Button type="submit">
-              {isRegistering ? 'Register' : 'Login'}
-            </Button>
-          </form>
-          <Button onClick={handleGoogleLogin} style={{ background: '#4285F4' }}>
-            Sign in with Google
-          </Button>
-          <p
-            onClick={() => setIsRegistering(!isRegistering)}
-            style={{ cursor: 'pointer', textAlign: 'center' }}>
-            {isRegistering
-              ? 'Already have an account? Login'
-              : 'Need an account? Register'}
-          </p>
-        </AuthContainer>
+        <Auth />
       </Page>
     );
   }

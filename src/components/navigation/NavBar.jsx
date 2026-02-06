@@ -13,7 +13,7 @@ const NavBarContainer = styled.nav`
   border: 1px solid #ccc;
   border-radius: 24px;
   // padding-bottom: 12rem;
-  margin: 3rem 0 0 1rem;
+  margin: 0 0 0 1rem;
 
   box-shadow:
     0 2px 35px rgba(0, 0, 0, 0.1),

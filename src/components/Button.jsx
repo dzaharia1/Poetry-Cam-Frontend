@@ -4,6 +4,7 @@ const StyledButton = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   padding: 10px 16px;
   background: #333;
@@ -19,7 +20,7 @@ const StyledButton = styled.button`
     0px 0px 0px rgba(247, 0, 78, 0.25);
 
   &:hover {
-    background: #555;
+    background: #222;
     box-shadow:
       4px 0px 0px rgba(0, 221, 99, 0.33),
       -4px 0px 0px rgba(247, 0, 78, 0.25);
