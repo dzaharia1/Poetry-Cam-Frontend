@@ -137,7 +137,7 @@ const WebDisplay = () => {
     const fetchPoem = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/getPoem?userid=${userId}&index=0`,
+          `${import.meta.env.VITE_BACKEND_URL}/getPoem?userid=${encodeURIComponent(userId)}&index=0`,
         );
         if (!res.ok) throw new Error('Failed to fetch poem');
         const data = await res.json();
