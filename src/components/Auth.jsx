@@ -28,13 +28,13 @@ const WordMark = styled.img`
 
 const Input = styled.input`
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid ${(props) => props.theme.colors.border};
   border-radius: 4px;
   width: 100%;
 `;
 
 const ErrorText = styled.p`
-  color: red;
+  color: ${(props) => props.theme.colors.text.error};
   margin: 0;
   font-size: 14px;
   width: 100%;
@@ -44,13 +44,13 @@ const ToggleText = styled.p`
   cursor: pointer;
   textalign: center;
   font-size: 14px;
-  color: #666;
+  color: ${(props) => props.theme.colors.text.secondary};
   margin-top: 10px;
   width: 100%;
   text-align: center;
 
   &:hover {
-    color: #333;
+    color: ${(props) => props.theme.colors.text.primary};
   }
 `;
 

@@ -9,21 +9,21 @@ const NavBarContainer = styled.nav`
   flex-direction: column;
   height: calc(100vh - 6rem);
 
-  background-color: #f4f2edff;
-  border: 1px solid #ccc;
+  background-color: ${(props) => props.theme.colors.secondary};
+  border: 1px solid ${(props) => props.theme.colors.border};
   border-radius: 24px;
   // padding-bottom: 12rem;
   margin: 0 0 0 1rem;
 
   box-shadow:
-    0 2px 35px rgba(0, 0, 0, 0.1),
-    0 0px 2px rgba(0, 0, 0, 0.21);
+    ${(props) => props.theme.colors.shadows.nav1},
+    ${(props) => props.theme.colors.shadows.nav2};
   overflow: hidden;
 
   width: 20%;
   max-width: 400px;
 
-  @media (max-width: 1120px) {
+  @media (max-width: ${(props) => props.theme.breakpoints.tablet}) {
     position: absolute;
     top: 1rem;
     left: 1rem;
@@ -48,7 +48,7 @@ const Scrim = styled.div`
   opacity: 1;
   transition: opacity 0.3s ease-in-out;
 
-  @media (min-width: 1120px) {
+  @media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
     opacity: 0;
     visibility: hidden;
   }
@@ -71,10 +71,10 @@ const BottomControls = styled.div`
   display: flex;
   flex-direction: column;
 
-  border-top: 1px solid #ccc;
+  border-top: 1px solid ${(props) => props.theme.colors.border};
   padding: 1rem;
 
-  background-color: #f4f2edff;
+  background-color: ${(props) => props.theme.colors.secondary};
 `;
 
 const LogoutButton = styled.a`
@@ -83,7 +83,7 @@ const LogoutButton = styled.a`
   align-items: center;
   gap: 0.5rem;
   // justify-content: center;
-  color: #494949ff;
+  color: ${(props) => props.theme.colors.text.primary};
   text-decoration: none;
 `;
 

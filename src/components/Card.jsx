@@ -12,9 +12,9 @@ const CardContainer = styled.div`
   padding: 2.25rem 2rem 3rem 2rem;
   border: 1px solid #ccc;
   border-radius: 24px;
-  margin-bottom: ${(props) => props.marginBottom || '0'};
+  margin-bottom: ${(props) => props.$marginBottom || '0'};
 
-  background-color: ${(props) => props.backgroundcolor || '#fff'};
+  background-color: ${(props) => props.$backgroundcolor || '#fff'};
   box-shadow:
     0 2px 35px rgba(0, 0, 0, 0.1),
     0 0px 2px rgba(0, 0, 0, 0.21);
@@ -30,8 +30,8 @@ const CardContainer = styled.div`
 const Card = ({ backgroundcolor, children, marginBottom }) => {
   return (
     <CardContainer
-      backgroundcolor={backgroundcolor}
-      marginBottom={marginBottom}>
+      $backgroundcolor={backgroundcolor}
+      $marginBottom={marginBottom}>
       {children}
     </CardContainer>
   );

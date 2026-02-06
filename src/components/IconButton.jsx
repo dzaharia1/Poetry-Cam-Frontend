@@ -1,8 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 const StyledButton = styled.button`
-  background: ${(props) => (props.$active ? '#444' : 'none')};
+  background: ${(props) =>
+    props.$active ? props.theme.colors.primary : 'none'};
   border: none;
   cursor: pointer;
   display: flex;
@@ -17,19 +18,19 @@ const StyledButton = styled.button`
   // color: ${(props) => (props.$active ? '#00dd63' : '#444')};
   box-shadow: ${(props) =>
     props.$active
-      ? '4px 0px 0px rgba(0, 221, 99, 0.33), -4px 0px 0px rgba(247, 0, 78, 0.25)'
+      ? `4px 0px 0px ${props.theme.colors.shadows.green}, -4px 0px 0px ${props.theme.colors.shadows.red}`
       : 'none'};
 
   &:hover {
     background-color: ${(props) =>
-      props.$active ? '#444' : 'rgba(0, 0, 0, 0.05)'};
+      props.$active ? props.theme.colors.primary : 'rgba(0, 0, 0, 0.05)'};
     box-shadow:
-      4px 0px 0px rgba(0, 221, 99, 0.33),
-      -4px 0px 0px rgba(247, 0, 78, 0.25);
+      4px 0px 0px ${(props) => props.theme.colors.shadows.green},
+      -4px 0px 0px ${(props) => props.theme.colors.shadows.red};
     transform: scale(1.03);
   }
 
-  @media (max-width: 800px) {
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     width: 28px;
     height: 28px;
   }
@@ -42,14 +43,14 @@ const IconButton = ({
   size = 24,
   ...props
 }) => {
+  const theme = useTheme();
+
   return (
     <StyledButton $active={active} onClick={onClick} {...props}>
       {Icon && (
         <Icon
           size={size}
-          // fill={active ? '#eae7e4' : '#444'}
-          // stroke={active ? '#eae7e4' : '#444'}
-          color={active ? '#eae7e4' : '#444'}
+          color={active ? theme.colors.secondary : theme.colors.text.headings}
         />
       )}
     </StyledButton>

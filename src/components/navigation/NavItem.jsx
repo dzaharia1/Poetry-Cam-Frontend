@@ -22,14 +22,14 @@ const NavItemItself = styled.button`
   ${(props) =>
     props.active &&
     `cursor: pointer;
-    border: 1px solid #ccc;
+    border: 1px solid ${props.theme.colors.border};
     padding-top: .5rem;
     padding-bottom: 1rem;
     height: 48px;`}
 
   &:hover {
     cursor: pointer;
-    border: 1px solid #ccc;
+    border: 1px solid ${(props) => props.theme.colors.border};
     padding-top: 0.5rem;
     padding-bottom: 1rem;
     height: 48px;
@@ -41,13 +41,13 @@ const NavItemTitle = styled.p`
   padding: 0;
   margin: 0;
 
-  font-family: 'Young Serif', serif;
+  font-family: ${(props) => props.theme.typography.fontFamily.heading};
   font-weight: 500;
   font-size: 1.125rem;
   letter-spacing: unset;
   text-align: left;
 
-  color: #494949ff;
+  color: ${(props) => props.theme.colors.text.headings};
   display: flex;
   align-items: center;
   gap: 0.25rem;

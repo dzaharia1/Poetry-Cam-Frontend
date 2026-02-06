@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import Card from './Card';
 import ColorCollection from './ColorCollection';
 import { MoreVertical, Trash2, Download, Star } from 'lucide-react';
@@ -14,19 +14,19 @@ const PoemHeading = styled.div`
   align-items: flex-start;
   gap: 10px;
   position: relative;
-  margin-bottom: 44px;
+  margin-bottom: ${(props) => props.theme.spacing[5]};
 
-  @media (max-width: 800px) {
-    margin-bottom: 24px;
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
+    margin-bottom: ${(props) => props.theme.spacing[4]};
   }
 `;
 
 const PoemTitle = styled.h2`
-  font-size: 40px;
+  font-size: ${(props) => props.theme.typography.size.h2};
   font-weight: bold;
 
-  @media (max-width: 800px) {
-    font-size: 22px;
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
+    font-size: ${(props) => props.theme.typography.size.h2Mobile};
   }
 `;
 
@@ -35,7 +35,7 @@ const PoemControlsContainer = styled.div`
   gap: 8px;
   margin-top: 10px;
 
-  @media (max-width: 800px) {
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     margin-top: 2px;
   }
 `;
@@ -47,7 +47,7 @@ const MenuContainer = styled.div`
   background: white;
   border: 1px solid #ddd;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: ${(props) => props.theme.colors.shadows.card};
   z-index: 100;
   overflow: hidden;
   min-width: 150px;
@@ -65,7 +65,7 @@ const MenuItem = styled.button`
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #333;
+  color: ${(props) => props.theme.colors.text.primary};
   transition: background-color 0.2s;
 
   &:hover {
@@ -73,7 +73,7 @@ const MenuItem = styled.button`
   }
 
   &.delete {
-    color: #ff4d4f;
+    color: ${(props) => props.theme.colors.text.delete};
   }
 `;
 
@@ -82,15 +82,15 @@ const PoemText = styled.div`
 `;
 
 const PoemLine = styled.p`
-  font-size: 28px;
+  font-size: ${(props) => props.theme.typography.size.poemLine};
   font-weight: 300;
   text-indent: -1rem;
   padding-left: 1rem;
   margin: 0;
   line-height: 1.4;
 
-  @media (max-width: 800px) {
-    font-size: 18px;
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
+    font-size: ${(props) => props.theme.typography.size.poemLineMobile};
   }
 `;
 
@@ -235,9 +235,11 @@ const Poem = ({
     };
   }, [isMenuOpen]);
 
+  const theme = useTheme();
+
   return (
     <Card
-      backgroundcolor={'#f4f2edff'}
+      backgroundcolor={theme.colors.secondary}
       marginBottom={webDisplayPlacement ? '0' : '4rem'}>
       <PoemHeading ref={menuRef}>
         <PoemTitle>{title}</PoemTitle>

@@ -5,7 +5,7 @@ const ColorSwatch = styled.div`
   width: 20px;
   flex: 1;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     height: 20px;
   }
 

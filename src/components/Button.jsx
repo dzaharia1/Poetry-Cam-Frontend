@@ -7,36 +7,36 @@ const StyledButton = styled.button`
   justify-content: center;
   gap: 10px;
   padding: 10px 16px;
-  background: #333;
-  color: white;
-  font-family: 'Young Serif', serif;
+  background: ${(props) => props.theme.colors.primary};
+  color: ${(props) => props.theme.colors.text.light};
+  font-family: ${(props) => props.theme.typography.fontFamily.heading};
   font-weight: 600;
   border: none;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow:
-    0px 0px 0px rgba(0, 221, 99, 0.33),
-    0px 0px 0px rgba(247, 0, 78, 0.25);
+    0px 0px 0px ${(props) => props.theme.colors.shadows.green},
+    0px 0px 0px ${(props) => props.theme.colors.shadows.red};
 
   &:hover {
-    background: #222;
+    background: ${(props) => props.theme.colors.primaryHover};
     box-shadow:
-      4px 0px 0px rgba(0, 221, 99, 0.33),
-      -4px 0px 0px rgba(247, 0, 78, 0.25);
+      4px 0px 0px ${(props) => props.theme.colors.shadows.green},
+      -4px 0px 0px ${(props) => props.theme.colors.shadows.red};
     transform: scale(1.015);
   }
 
   ${(props) =>
     props.variant === 'secondary' &&
     css`
-      background: #f4f2edff;
-      border: 1px solid #ccc;
+      background: ${(props) => props.theme.colors.secondary};
+      border: 1px solid ${(props) => props.theme.colors.border};
       transition: all 0.3s ease;
-      color: #333;
+      color: ${(props) => props.theme.colors.text.primary};
 
       &:hover {
-        background: #f9f7f3ff;
+        background: ${(props) => props.theme.colors.secondaryHover};
       }
     `}
 

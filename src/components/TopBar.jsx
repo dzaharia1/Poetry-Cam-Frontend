@@ -12,7 +12,7 @@ const Container = styled.div`
   max-width: 800px;
   margin-bottom: 50px;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     width: 90%;
     max-width: unset;
   }
@@ -22,7 +22,7 @@ const TopIcon = styled.img`
   height: 124px;
   width: auto;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     height: 60px;
   }
 `;
@@ -40,7 +40,7 @@ const LogoContainer = styled.div`
     letter-spacing: 0.025em;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     gap: 16px;
 
     h1 {
@@ -50,7 +50,7 @@ const LogoContainer = styled.div`
 `;
 
 const MenuButtonContainer = styled.div`
-  @media (min-width: 1120px) {
+  @media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
     display: none;
   }
 `;

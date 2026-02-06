@@ -14,7 +14,7 @@ const PageNavigationContainer = styled.div`
   width: 80%;
   max-width: 800px;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     width: 90%;
     max-width: unset;
   }
