@@ -26,7 +26,7 @@ const SectionTitle = styled.h4`
 
 const Link = styled.a`
   font-size: 0.8rem;
-  color: ${(props) => props.theme.colors.primary};
+  color: ${(props) => props.theme.colors.text.link};
   text-decoration: none;
   align-self: flex-start;
   margin-top: -0.5rem;
@@ -34,6 +34,10 @@ const Link = styled.a`
 
   &:hover {
     text-decoration: underline;
+  }
+
+  &:visited {
+    color: ${(props) => props.theme.colors.text.link};
   }
 `;
 
@@ -207,7 +211,7 @@ const Settings = ({ isOpen, onClose, missingApiKey }) => {
           href="https://ai.google.dev/gemini-api/docs/api-key"
           target="_blank"
           rel="noopener noreferrer">
-          Get an API key
+          Get an API key from Google AI Studio
         </Link>
 
         {msg && (
