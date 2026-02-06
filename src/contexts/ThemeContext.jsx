@@ -39,9 +39,11 @@ export const ThemeContextProvider = ({ children }) => {
   const isDarkMode =
     themeMode === 'auto' ? systemPrefersDark : themeMode === 'dark';
 
-  // Update CSS custom properties when theme changes
+  // Update CSS custom properties and PWA theme-color when theme changes
   useEffect(() => {
     const theme = isDarkMode ? darkTheme : lightTheme;
+
+    // Update CSS custom properties
     document.documentElement.style.setProperty(
       '--background-color',
       theme.colors.background,
@@ -50,6 +52,15 @@ export const ThemeContextProvider = ({ children }) => {
       '--text-color',
       theme.colors.text.headings,
     );
+
+    // Update PWA theme-color meta tag for status bar
+    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (!metaThemeColor) {
+      metaThemeColor = document.createElement('meta');
+      metaThemeColor.name = 'theme-color';
+      document.head.appendChild(metaThemeColor);
+    }
+    metaThemeColor.content = theme.colors.background;
   }, [isDarkMode]);
 
   const toggleThemeMode = () => {
