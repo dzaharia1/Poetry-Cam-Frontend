@@ -9,6 +9,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
+import { mapAuthError } from '../utils/errorMapping';
 
 const AuthContainer = styled.div`
   display: flex;
@@ -89,7 +90,7 @@ function Auth() {
         await signInWithEmailAndPassword(auth, email, password);
       }
     } catch (err) {
-      setError(err.message);
+      setError(mapAuthError(err));
     }
   };
 
@@ -98,7 +99,7 @@ function Auth() {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
     } catch (err) {
-      setError(err.message);
+      setError(mapAuthError(err));
     }
   };
 
