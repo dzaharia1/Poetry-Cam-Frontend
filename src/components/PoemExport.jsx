@@ -16,41 +16,49 @@ const InstagramPost = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 100px;
+  padding: 50px;
   box-sizing: border-box;
   color: #1a1a1a;
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
     sans-serif;
   position: relative;
+`;
 
-  h2 {
+const PoemItelf = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex: 1;
+`;
+
+const PoemTitle = styled.h2`
     width: 100%;
-    font-size: 72px;
-    margin-bottom: 48px;
+    font-size: 64px;
+    margin-bottom: 40px;
     font-weight: 800;
-  }
+`;
 
-  p {
+const PoemExportLine = styled.p`
     width: 100%;
-    font-size: 44px;
+    font-size: 40px;
     line-height: 1.6;
     font-weight: 400;
     max-width: 900px;
     text-indent: -1.5rem;
     padding-left: 1.5rem;
     text-align: left;
-  }
+`;
 
-  .date-stamp {
+const DateStamp = styled.p`
     font-size: 32px;
     font-weight: 600;
     color: #666;
-    margin-top: 64px;
-    margin-bottom: 0;
+    margin: 0;
     text-indent: 0;
     padding-left: 0;
-  }
 `;
 
 const PoemExportText = styled.div`
@@ -71,6 +79,11 @@ const FooterContainer = styled.div`
   margin-top: 24px;
 `;
 
+const FooterLogo = styled.img`
+  width: 144px;
+  height: 144px;
+  margin: 0;
+`;
 
 
 const PoemExport = forwardRef(({
@@ -85,18 +98,21 @@ const PoemExport = forwardRef(({
   return (
     <ExportWrapper>
       <InstagramPost ref={ref}>
-        <h2>{title}</h2>
-        <PoemExportText>
-          {text.split('\n').map((line, i) => (
-            <p key={i}>{line}</p>
-          ))}
-        </PoemExportText>
+        <PoemItelf>
+          <PoemTitle>{title}</PoemTitle>
+          <PoemExportText>
+            {text.split('\n').map((line, i) => (
+              <PoemExportLine key={i}>{line}</PoemExportLine>
+            ))}
+          </PoemExportText>
+        </PoemItelf>
         <FooterContainer>
           {dayOfWeek && date && month && year && (
-            <p className="date-stamp">
+            <DateStamp>
               {dayOfWeek}, {month} {date}, {year}
-            </p>
+            </DateStamp>
           )}
+          <FooterLogo src="/logo.svg" alt="Poetry Cam" />
         </FooterContainer>
         <ColorCollection colors={colors} />
       </InstagramPost>
