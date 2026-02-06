@@ -5,6 +5,7 @@ import ColorCollection from './ColorCollection';
 import { MoreVertical, Trash2, Download, Star } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import IconButton from './IconButton';
+import PoemExport from './PoemExport';
 
 const PoemHeading = styled.div`
   width: 100%;
@@ -121,69 +122,9 @@ const DateStamp = styled.p`
   }
 `;
 
-const FooterLogo = styled.img`
-  width: 56px;
-  height: 56px;
-  margin: 0;
-`;
 
-const ExportWrapper = styled.div`
-  position: absolute;
-  left: -9999px;
-  top: -9999px;
-`;
 
-const InstagramPost = styled.div`
-  width: 1080px;
-  height: 1080px;
-  background-color: #f4f2ed;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 100px;
-  box-sizing: border-box;
-  color: #1a1a1a;
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
-    sans-serif;
-  position: relative;
 
-  h2 {
-    width: 100%;
-    font-size: 72px;
-    margin-bottom: 48px;
-    font-weight: 800;
-  }
-
-  p {
-    width: 100%;
-    font-size: 44px;
-    line-height: 1.6;
-    font-weight: 400;
-    max-width: 900px;
-    text-indent: -1.5rem;
-    padding-left: 1.5rem;
-    text-align: left;
-  }
-
-  .date-stamp {
-    font-size: 32px;
-    font-weight: 600;
-    color: #666;
-    margin-top: 64px;
-    margin-bottom: 0;
-    text-indent: 0;
-    padding-left: 0;
-  }
-`;
-
-const PoemExportText = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
 
 const Poem = ({
   title,
@@ -194,7 +135,6 @@ const Poem = ({
   month,
   year,
   onDelete,
-  webDisplayPlacement = false,
   isFavorite = false,
   onToggleFavorite,
 }) => {
@@ -241,23 +181,21 @@ const Poem = ({
   return (
     <Card
       backgroundcolor={theme.colors.secondary}
-      marginBottom={webDisplayPlacement ? '0' : '4rem'}>
+      marginBottom="4rem" >
       <PoemHeading ref={menuRef}>
         <PoemTitle>{title}</PoemTitle>
-        {!webDisplayPlacement && (
-          <PoemControlsContainer>
-            <IconButton
-              icon={Star}
-              active={isFavorite}
-              onClick={() => onToggleFavorite && onToggleFavorite()}
-            />
-            <IconButton
-              icon={MoreVertical}
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              active={isMenuOpen}
-            />
-          </PoemControlsContainer>
-        )}
+        <PoemControlsContainer>
+          <IconButton
+            icon={Star}
+            active={isFavorite}
+            onClick={() => onToggleFavorite && onToggleFavorite()}
+          />
+          <IconButton
+            icon={MoreVertical}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            active={isMenuOpen}
+          />
+        </PoemControlsContainer>
         {isMenuOpen && (
           <MenuContainer>
             <MenuItem onClick={handleDownload}>
@@ -293,33 +231,19 @@ const Poem = ({
             {dayOfWeek}, {month} {date}, {year}
           </DateStamp>
         )}
-        {webDisplayPlacement && (
-          <FooterLogo src="../logo.svg" alt="Poetry Cam Logo" />
-        )}
       </FooterContainer>
-      {webDisplayPlacement ? null : <ColorCollection colors={colors} />}
+      <ColorCollection colors={colors} />
 
-      <ExportWrapper>
-        <InstagramPost ref={exportRef}>
-          <h2>{title}</h2>
-          <PoemExportText>
-            {text.split('\n').map((line, i) => (
-              <p key={i}>{line}</p>
-            ))}
-          </PoemExportText>
-          <FooterContainer>
-            {dayOfWeek && date && month && year && (
-              <p className="date-stamp">
-                {dayOfWeek}, {month} {date}, {year}
-              </p>
-            )}
-            {webDisplayPlacement && (
-              <FooterLogo src="logo.png" alt="Poetry Cam Logo" />
-            )}
-          </FooterContainer>
-          <ColorCollection colors={colors} />
-        </InstagramPost>
-      </ExportWrapper>
+      <PoemExport
+        ref={exportRef}
+        title={title}
+        text={text}
+        colors={colors}
+        dayOfWeek={dayOfWeek}
+        date={date}
+        month={month}
+        year={year}
+      />
     </Card>
   );
 };
