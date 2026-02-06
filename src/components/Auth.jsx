@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useTheme } from '../contexts/ThemeContext';
 import Button from './Button';
 import { auth } from '../firebase';
 import {
@@ -31,6 +32,13 @@ const Input = styled.input`
   border: 1px solid ${(props) => props.theme.colors.border};
   border-radius: 4px;
   width: 100%;
+  background-color: ${(props) => props.theme.colors.paper};
+  color: ${(props) => props.theme.colors.text.primary};
+  transition: all 0.3s ease;
+
+  &::placeholder {
+    color: ${(props) => props.theme.colors.text.secondary};
+  }
 `;
 
 const ErrorText = styled.p`
@@ -69,6 +77,7 @@ function Auth() {
   const [password, setPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [error, setError] = useState('');
+  const { isDarkMode } = useTheme();
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -95,7 +104,10 @@ function Auth() {
 
   return (
     <AuthContainer>
-      <WordMark src="/wordmark.svg" alt="Poetry Cam" />
+      <WordMark
+        src={isDarkMode ? 'wordmarkdark.svg' : 'wordmark.svg'}
+        alt="Poetry Cam"
+      />
       {error && <ErrorText>{error}</ErrorText>}
       <Form onSubmit={handleAuth}>
         <h2>{isRegistering ? 'Register' : 'Login'}</h2>

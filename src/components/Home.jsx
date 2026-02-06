@@ -39,14 +39,14 @@ const PrimaryPageContents = styled.div`
 
   padding: 2rem 0 3rem 0;
 
-  font-size: 24px;
-  color: #333;
+  font-size: ${(props) => props.theme.typography.size.body};
+  color: ${(props) => props.theme.colors.text.primary};
 
-  @media (max-width: 1120px) {
+  @media (max-width: ${(props) => props.theme.breakpoints.tablet}) {
     width: 100%;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     padding: 1rem 0 1rem 0;
   }
 `;

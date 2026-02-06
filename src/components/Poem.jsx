@@ -44,14 +44,15 @@ const MenuContainer = styled.div`
   position: absolute;
   top: 50px;
   right: 0;
-  background: white;
-  border: 1px solid #ddd;
+  background: ${(props) => props.theme.colors.paper};
+  border: 1px solid ${(props) => props.theme.colors.border};
   border-radius: 12px;
   box-shadow: ${(props) => props.theme.colors.shadows.card};
   z-index: 100;
   overflow: hidden;
   min-width: 150px;
   padding: 8px 0;
+  transition: all 0.3s ease;
 `;
 
 const MenuItem = styled.button`
@@ -69,7 +70,7 @@ const MenuItem = styled.button`
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #f5f5f5;
+    background-color: ${(props) => props.theme.colors.secondaryHover};
   }
 
   &.delete {
@@ -112,7 +113,7 @@ const FooterContainer = styled.div`
 const DateStamp = styled.p`
   font-size: 16px;
   font-weight: 600;
-  color: #666;
+  color: ${(props) => props.theme.colors.text.secondary};
   margin: 0;
 
   @media (max-width: 800px) {

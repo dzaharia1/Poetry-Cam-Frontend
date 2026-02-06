@@ -8,7 +8,7 @@ const StyledButton = styled.button`
   gap: 10px;
   padding: 10px 16px;
   background: ${(props) => props.theme.colors.primary};
-  color: ${(props) => props.theme.colors.text.light};
+  color: ${(props) => props.theme.colors.background};
   font-family: ${(props) => props.theme.typography.fontFamily.heading};
   font-weight: 600;
   border: none;

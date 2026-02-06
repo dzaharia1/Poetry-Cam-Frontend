@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { Star } from 'lucide-react';
 
 const NavItemItself = styled.button`
@@ -84,6 +84,7 @@ const NavItemColor = styled.div`
 
 const NavItem = ({ title, active, colors, onClick, isFavorite = false }) => {
   const [hovered, setHovered] = React.useState('false');
+  const theme = useTheme();
 
   return (
     <NavItemItself
@@ -96,8 +97,8 @@ const NavItem = ({ title, active, colors, onClick, isFavorite = false }) => {
         {isFavorite && (
           <Star
             size={14}
-            fill="#444444"
-            stroke="#444444"
+            fill={theme.colors.text.headings}
+            stroke={theme.colors.text.headings}
             style={{ flexShrink: 0, marginRight: '0.25rem' }}
           />
         )}

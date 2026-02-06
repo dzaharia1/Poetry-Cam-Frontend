@@ -1,11 +1,13 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import theme from './theme';
+import { ThemeContextProvider, useTheme } from './contexts/ThemeContext';
 import Home from './components/Home';
 import WebDisplay from './components/WebDisplay';
 
-function App() {
+function AppContent() {
+  const { theme } = useTheme();
+
   return (
     <ThemeProvider theme={theme}>
       <Routes>
@@ -13,6 +15,14 @@ function App() {
         <Route path="/web-display/:userId" element={<WebDisplay />} />
       </Routes>
     </ThemeProvider>
+  );
+}
+
+function App() {
+  return (
+    <ThemeContextProvider>
+      <AppContent />
+    </ThemeContextProvider>
   );
 }
 

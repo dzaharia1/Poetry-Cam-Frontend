@@ -10,15 +10,17 @@ const CardContainer = styled.div`
   width: 80%;
   max-width: 800px;
   padding: 2.25rem 2rem 3rem 2rem;
-  border: 1px solid #ccc;
+  border: 1px solid ${(props) => props.theme.colors.border};
   border-radius: 24px;
   margin-bottom: ${(props) => props.$marginBottom || '0'};
 
-  background-color: ${(props) => props.$backgroundcolor || '#fff'};
+  background-color: ${(props) =>
+    props.$backgroundcolor || props.theme.colors.paper};
   box-shadow:
     0 2px 35px rgba(0, 0, 0, 0.1),
     0 0px 2px rgba(0, 0, 0, 0.21);
   overflow: hidden;
+  transition: all 0.3s ease;
 
   @media (max-width: 768px) {
     width: 90%;

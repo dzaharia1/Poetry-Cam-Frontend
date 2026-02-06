@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import IconButton from './IconButton';
-import { PanelLeft } from 'lucide-react';
+import { PanelLeft, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 const Container = styled.div`
   display: flex;
@@ -50,18 +51,35 @@ const LogoContainer = styled.div`
 `;
 
 const MenuButtonContainer = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
   @media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
-    display: none;
+    .mobile-menu {
+      display: none;
+    }
   }
 `;
 
 const TopBar = ({ onLogout, handleMenuClick }) => {
+  const { isDarkMode, toggleTheme } = useTheme();
+
   return (
     <Container>
       <LogoContainer>
-        <TopIcon src="logo.svg" />
+        <TopIcon src={isDarkMode ? 'logodark.svg' : 'logo.svg'} />
         <MenuButtonContainer>
-          <IconButton icon={PanelLeft} onClick={handleMenuClick} />
+          <IconButton
+            icon={isDarkMode ? Sun : Moon}
+            onClick={toggleTheme}
+            title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+          />
+          <IconButton
+            className="mobile-menu"
+            icon={PanelLeft}
+            onClick={handleMenuClick}
+          />
         </MenuButtonContainer>
       </LogoContainer>
     </Container>
