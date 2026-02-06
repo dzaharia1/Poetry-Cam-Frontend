@@ -29,7 +29,10 @@ const NavItemItself = styled.button`
 
   &:hover {
     cursor: pointer;
-    border: 1px solid ${(props) => props.theme.colors.border};
+    // border: 1px solid ${(props) => props.theme.colors.border};
+    box-shadow:
+      3px 0px 1px ${(props) => props.theme.colors.shadows.green},
+      -3px 0px 1px ${(props) => props.theme.colors.shadows.red};
     padding-top: 0.5rem;
     padding-bottom: 1rem;
     height: 48px;

@@ -6,6 +6,7 @@ import PageNavigation from './PageNavigation';
 import NavBar from './navigation/NavBar';
 import Button from './Button';
 import SplashScreen from './SplashScreen';
+import PoemSkeleton from './PoemSkeleton';
 import Auth from './Auth';
 import { auth, db } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
@@ -72,6 +73,7 @@ function Home() {
   const [currentPoemId, setCurrentPoemId] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [poems, setPoems] = useState([]);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     const fetchPoems = async () => {
@@ -121,11 +123,17 @@ function Home() {
 
   // Helper to fetch poem data from backend
   const fetchPoem = useCallback(
-    async (index) => {
+    async (index, additionalParams = {}) => {
       if (!user) return;
       try {
+        const params = new URLSearchParams({
+          userid: user.uid,
+          index: index,
+          ...additionalParams,
+        });
+
         const res = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/getPoem?userid=${user.uid}&index=${index}`,
+          `${import.meta.env.VITE_BACKEND_URL}/getPoem?${params.toString()}`,
         );
         if (!res.ok) throw new Error('Failed to fetch poem');
         const data = await res.json();
@@ -172,6 +180,53 @@ function Home() {
     },
     [user],
   );
+
+  const handleCapture = async (file) => {
+    if (!user || !file) return;
+    setIsGenerating(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/generate-poem?userid=${user.uid}`,
+        {
+          method: 'POST',
+          body: formData,
+        },
+      );
+
+      if (!res.ok) throw new Error('Failed to generate poem');
+
+      // Refresh the list to find the new poem's position in the default sort
+      const listRes = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/poemList?userid=${user.uid}`,
+      );
+      const listData = await listRes.json();
+
+      if (Array.isArray(listData)) {
+        setPoems(listData);
+        // Find the first non-favorite poem (which should be the new one we just made)
+        const newIndex = listData.findIndex((p) => !p.isFavorite);
+        // Default to 0 if all are favorites or something weird happens
+        const targetIndex = newIndex >= 0 ? newIndex : 0;
+
+        await fetchPoem(targetIndex);
+      } else {
+        // Fallback
+        await fetchPoem(0);
+      }
+
+      // Trigger navbar refresh to ensure sync
+      setRefreshTrigger((prev) => prev + 1);
+    } catch (err) {
+      console.error('Error generating poem:', err);
+      setError('Failed to generate poem. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   // Initial fetch on load
   useEffect(() => {
@@ -354,23 +409,28 @@ function Home() {
       />
       <PrimaryPageContents>
         <TopBar onLogout={handleLogout} handleMenuClick={handleMenuClick} />
-        <Poem
-          title={title}
-          text={currentPoem}
-          colors={colors}
-          dayOfWeek={dayOfWeek}
-          date={date}
-          month={month}
-          year={year}
-          isFavorite={isFavorite}
-          onToggleFavorite={handleToggleFavorite}
-          onDelete={handleDelete}
-        />
+        {isGenerating ? (
+          <PoemSkeleton />
+        ) : (
+          <Poem
+            title={title}
+            text={currentPoem}
+            colors={colors}
+            dayOfWeek={dayOfWeek}
+            date={date}
+            month={month}
+            year={year}
+            isFavorite={isFavorite}
+            onToggleFavorite={handleToggleFavorite}
+            onDelete={handleDelete}
+          />
+        )}
         <PageNavigation
           onNext={handleNext}
           onPrev={handlePrev}
           hasNext={!!nextPoem}
           hasPrev={!!previousPoem}
+          onCapture={handleCapture}
         />
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </PrimaryPageContents>
