@@ -18,7 +18,7 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   width: 75%;
   height: 100vh;
   padding: 1.5rem 0;
@@ -29,8 +29,11 @@ const PoemItelf = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
   flex: 1;
+  
+  width: 100%;
+
+  padding-bottom: ${(props) => props.theme.spacing[3]};
 `;
 
 const PoemHeading = styled.div`
@@ -41,20 +44,12 @@ const PoemHeading = styled.div`
   align-items: flex-start;
   gap: 10px;
   position: relative;
-  margin-bottom: ${(props) => props.theme.spacing[5]};
-
-  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
-    margin-bottom: ${(props) => props.theme.spacing[4]};
-  }
+  margin-bottom: ${(props) => props.theme.spacing[1]};
 `;
 
 const PoemTitle = styled.h2`
-  font-size: ${(props) => props.theme.typography.size.h2};
+  font-size: 28px;
   font-weight: bold;
-
-  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
-    font-size: ${(props) => props.theme.typography.size.h2Mobile};
-  }
 `;
 
 const PoemText = styled.div`
@@ -62,16 +57,12 @@ const PoemText = styled.div`
 `;
 
 const PoemLine = styled.p`
-  font-size: ${(props) => props.theme.typography.size.poemLine};
+  font-size: 20px;
   font-weight: 300;
   text-indent: -1rem;
   padding-left: 1rem;
   margin: 0;
   line-height: 1.4;
-
-  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
-    font-size: ${(props) => props.theme.typography.size.poemLineMobile};
-  }
 `;
 
 const FooterContainer = styled.div`
@@ -93,16 +84,21 @@ const DateStamp = styled.p`
   font-size: 16px;
   font-weight: 600;
   color: ${(props) => props.theme.colors.text.secondary};
-  margin: 0;
+  margin-bottom: ${(props) => props.theme.spacing[3]};
+
+  width: 100%;
 
   @media (max-width: 800px) {
     font-size: 12px;
   }
 `;
 
-const FooterLogo = styled.img`
-  width: 56px;
-  height: 56px;
+const Logo = styled.img`
+  position: absolute;
+  bottom: 24px;
+  right: 36px;
+  width: auto;
+  height: 28px;
   margin: 0;
 `;
 
@@ -115,20 +111,18 @@ const Poem = ({ title, text, dayOfWeek, date, month, year }) => {
         <PoemHeading>
           <PoemTitle>{title}</PoemTitle>
         </PoemHeading>
+        {dayOfWeek && date && month && year && (
+          <DateStamp>
+            {dayOfWeek}, {month} {date}, {year}
+          </DateStamp>
+        )}
         <PoemText>
           {text.split('\n').map((line, i) => (
             <PoemLine key={i}>{line}</PoemLine>
           ))}
         </PoemText>
       </PoemItelf>
-      <FooterContainer>
-        {dayOfWeek && date && month && year && (
-          <DateStamp>
-            {dayOfWeek}, {month} {date}, {year}
-          </DateStamp>
-        )}
-        <FooterLogo src="/logo.svg" alt="Poetry Cam Logo" />
-      </FooterContainer>
+      <Logo src="/wordmark.svg" alt="Poetry Cam Logo" />
     </>
   );
 };
