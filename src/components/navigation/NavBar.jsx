@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import NavItem from './NavItem';
-import { LogOut, Sparkles, Sun, Moon } from 'lucide-react';
+import { LogOut, Sparkles, Sun, Moon, Settings } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
-import IconButton from '../IconButton';
+import IconButton from '../basecomponents/IconButton';
 
 const NavBarContainer = styled.nav`
   position: relative;
@@ -107,22 +107,9 @@ const NavBar = ({
   isMenuOpen,
   setIsMenuOpen,
   poems = [],
+  setIsSettingsOpen,
 }) => {
-  const { themeMode, toggleThemeMode } = useTheme();
-
-  // Determine which icon to show based on mode
-  const getThemeIcon = () => {
-    if (themeMode === 'auto') return Sparkles;
-    if (themeMode === 'dark') return Moon;
-    return Sun;
-  };
-
-  // Determine tooltip text
-  const getTooltipText = () => {
-    if (themeMode === 'auto') return 'Theme: Auto (click for Light)';
-    if (themeMode === 'dark') return 'Theme: Dark (click for Auto)';
-    return 'Theme: Light (click for Dark)';
-  };
+  const { themeMode } = useTheme();
 
   return (
     <>
@@ -148,9 +135,9 @@ const NavBar = ({
           </LogoutButton>
           <ButtonDivider />
           <IconButton
-            icon={getThemeIcon()}
-            onClick={toggleThemeMode}
-            title={getTooltipText()}
+            icon={Settings}
+            onClick={() => setIsSettingsOpen(true)}
+            title="Settings"
             size={20}
           />
         </BottomControls>

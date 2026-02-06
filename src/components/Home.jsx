@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
-import Poem from './Poem';
+import Poem from './poem/Poem';
 import TopBar from './TopBar';
 import PageNavigation from './PageNavigation';
 import NavBar from './navigation/NavBar';
-import Button from './Button';
+import Button from './basecomponents/Button';
 import SplashScreen from './SplashScreen';
-import PoemSkeleton from './PoemSkeleton';
+import PoemSkeleton from './poem/PoemSkeleton';
+import Settings from './Settings';
 import Auth from './Auth';
 import { auth, db } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
@@ -56,6 +57,7 @@ function Home() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentPoem, setCurrentPoem] = useState('');
+  const [penName, setPenName] = useState('');
   /* Pagination State */
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextPoem, setNextPoem] = useState(null); // Newer
@@ -74,6 +76,8 @@ function Home() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [poems, setPoems] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [hasMissingApiKey, setHasMissingApiKey] = useState(false);
 
   useEffect(() => {
     const fetchPoems = async () => {
@@ -120,6 +124,31 @@ function Home() {
 
     return () => unsubscribe();
   }, []);
+
+  // Fetch settings when user is set
+  useEffect(() => {
+    if (user) {
+      fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/get-settings?userid=${user.uid}`,
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.penName) setPenName(data.penName);
+
+          // Check for API Key
+          if (data.hasGeminiApiKey === false) {
+            setError(
+              'Please configure your Gemini API Key in Settings to generate poems.',
+            );
+            setIsSettingsOpen(true);
+            // Pass a specific prop to Settings to highlight the field?
+            // Since I'm not passing a "settingsError" prop directly to Settings in the current render (I need to add it to state),
+            // I will add a new state for it.
+          }
+        })
+        .catch((err) => console.error('Error fetching settings:', err));
+    }
+  }, [user]);
 
   // Helper to fetch poem data from backend
   const fetchPoem = useCallback(
@@ -396,6 +425,11 @@ function Home() {
     );
   }
 
+  const handleSettingsOpen = () => {
+    setIsMenuOpen(false);
+    setIsSettingsOpen(true);
+  };
+
   return (
     <Page>
       <NavBar
@@ -406,6 +440,7 @@ function Home() {
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
         poems={poems}
+        setIsSettingsOpen={handleSettingsOpen}
       />
       <PrimaryPageContents>
         <TopBar onLogout={handleLogout} handleMenuClick={handleMenuClick} />
@@ -423,6 +458,7 @@ function Home() {
             isFavorite={isFavorite}
             onToggleFavorite={handleToggleFavorite}
             onDelete={handleDelete}
+            penName={penName}
           />
         )}
         <PageNavigation
@@ -433,6 +469,14 @@ function Home() {
           onCapture={handleCapture}
         />
         {error && <p style={{ color: 'red' }}>{error}</p>}
+        {isSettingsOpen && (
+          <Settings
+            isOpen={isSettingsOpen}
+            onClose={() => setIsSettingsOpen(false)}
+            title="Settings"
+            missingApiKey={hasMissingApiKey}
+          />
+        )}
       </PrimaryPageContents>
     </Page>
   );

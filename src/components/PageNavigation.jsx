@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import Button from './Button';
+import Button from './basecomponents/Button';
 import { ArrowLeft, ArrowRight, Eye } from 'lucide-react';
 
 const PageNavigationContainer = styled.div`

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
-import Card from './Card';
+import Card from './basecomponents/Card';
 import SplashScreen from './SplashScreen';
 
 const Page = styled.div`
@@ -30,7 +30,7 @@ const PoemItelf = styled.div`
   justify-content: center;
   align-items: center;
   flex: 1;
-  
+
   width: 100%;
 
   padding-bottom: ${(props) => props.theme.spacing[3]};

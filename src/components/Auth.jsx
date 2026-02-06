@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
-import Button from './Button';
+import Button from './basecomponents/Button';
 import { auth } from '../firebase';
 import {
   signInWithPopup,

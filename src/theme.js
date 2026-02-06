@@ -45,6 +45,7 @@ export const lightTheme = {
     secondary: '#f4f2ed',
     secondaryHover: '#f9f7f3',
     background: '#eae7e4',
+    inputBackground: '#f4f2ed',
     paper: '#f4f2ed',
     text: {
       primary: '#333333',
@@ -55,6 +56,7 @@ export const lightTheme = {
       delete: '#ff4d4f',
     },
     border: '#cccccc',
+    borderActive: '#c0c0c0ff',
     shadows: {
       green: 'rgba(0, 221, 99, 0.33)',
       red: 'rgba(247, 0, 78, 0.25)',
@@ -75,6 +77,7 @@ export const darkTheme = {
     secondaryHover: '#3a3a3a',
     background: '#1a1a1a',
     paper: '#2d2d2d',
+    inputBackground: '#2d2d2d',
     text: {
       primary: '#EFDDCC',
       secondary: '#b0b0b0',

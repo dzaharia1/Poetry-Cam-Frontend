@@ -29,11 +29,19 @@ const CardContainer = styled.div`
   }
 `;
 
-const Card = ({ backgroundcolor, children, marginBottom }) => {
+const Card = ({
+  backgroundcolor,
+  children,
+  marginBottom,
+  className,
+  style,
+}) => {
   return (
     <CardContainer
       $backgroundcolor={backgroundcolor}
-      $marginBottom={marginBottom}>
+      $marginBottom={marginBottom}
+      className={className}
+      style={style}>
       {children}
     </CardContainer>
   );

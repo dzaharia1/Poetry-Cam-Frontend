@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import styled from 'styled-components';
 import ColorCollection from './ColorCollection';
-import { useTheme } from '../contexts/ThemeContext';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const ExportWrapper = styled.div`
   position: absolute;
@@ -89,7 +89,7 @@ const FooterLogo = styled.img`
 `;
 
 const PoemExport = forwardRef(
-  ({ title, text, colors, dayOfWeek, date, month, year }, ref) => {
+  ({ title, text, colors, dayOfWeek, date, month, year, penName }, ref) => {
     const { isDarkMode } = useTheme();
     return (
       <ExportWrapper>
@@ -105,6 +105,7 @@ const PoemExport = forwardRef(
           <FooterContainer>
             {dayOfWeek && date && month && year && (
               <DateStamp>
+                {penName && <span>{penName} • </span>}
                 {dayOfWeek}, {month} {date}, {year}
               </DateStamp>
             )}

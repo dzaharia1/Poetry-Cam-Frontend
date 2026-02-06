@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { keyframes, useTheme } from 'styled-components';
-import Card from './Card';
+import Card from '../basecomponents/Card';
 
 const pulse = keyframes`
   0% { opacity: 0.2; }

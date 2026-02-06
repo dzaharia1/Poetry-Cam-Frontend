@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
-import Card from './Card';
+import Card from '../basecomponents/Card';
 import ColorCollection from './ColorCollection';
 import { MoreVertical, Trash2, Download, Star } from 'lucide-react';
 import { toPng } from 'html-to-image';
-import IconButton from './IconButton';
+import IconButton from '../basecomponents/IconButton';
 import PoemExport from './PoemExport';
 
 const PoemHeading = styled.div`
@@ -122,10 +122,6 @@ const DateStamp = styled.p`
   }
 `;
 
-
-
-
-
 const Poem = ({
   title,
   text,
@@ -137,6 +133,7 @@ const Poem = ({
   onDelete,
   isFavorite = false,
   onToggleFavorite,
+  penName,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -179,9 +176,7 @@ const Poem = ({
   const theme = useTheme();
 
   return (
-    <Card
-      backgroundcolor={theme.colors.secondary}
-      marginBottom="4rem" >
+    <Card backgroundcolor={theme.colors.secondary} marginBottom="4rem">
       <PoemHeading ref={menuRef}>
         <PoemTitle>{title}</PoemTitle>
         <PoemControlsContainer>
@@ -228,6 +223,7 @@ const Poem = ({
       <FooterContainer>
         {dayOfWeek && date && month && year && (
           <DateStamp>
+            {penName && penName + ' • '}
             {dayOfWeek}, {month} {date}, {year}
           </DateStamp>
         )}
@@ -243,6 +239,7 @@ const Poem = ({
         date={date}
         month={month}
         year={year}
+        penName={penName}
       />
     </Card>
   );
