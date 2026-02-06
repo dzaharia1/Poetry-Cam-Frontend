@@ -24,6 +24,7 @@ const StyledButton = styled.button`
     box-shadow:
       4px 0px 0px rgba(0, 221, 99, 0.33),
       -4px 0px 0px rgba(247, 0, 78, 0.25);
+    transform: scale(1.015);
   }
 
   ${(props) =>
@@ -36,9 +37,6 @@ const StyledButton = styled.button`
 
       &:hover {
         background: #f9f7f3ff;
-        box-shadow:
-          4px 0px 0px rgba(0, 221, 99, 0.33),
-          -4px 0px 0px rgba(247, 0, 78, 0.25);
       }
     `}
 

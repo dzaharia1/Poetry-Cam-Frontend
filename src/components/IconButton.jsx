@@ -26,6 +26,7 @@ const StyledButton = styled.button`
     box-shadow:
       4px 0px 0px rgba(0, 221, 99, 0.33),
       -4px 0px 0px rgba(247, 0, 78, 0.25);
+    transform: scale(1.03);
   }
 
   @media (max-width: 800px) {

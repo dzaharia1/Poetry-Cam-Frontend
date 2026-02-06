@@ -30,6 +30,16 @@ const PoemTitle = styled.h2`
   }
 `;
 
+const PoemControlsContainer = styled.div`
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+
+  @media (max-width: 800px) {
+    margin-top: 2px;
+  }
+`;
+
 const MenuContainer = styled.div`
   position: absolute;
   top: 50px;
@@ -232,7 +242,7 @@ const Poem = ({
       <PoemHeading ref={menuRef}>
         <PoemTitle>{title}</PoemTitle>
         {!webDisplayPlacement && (
-          <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+          <PoemControlsContainer>
             <IconButton
               icon={Star}
               active={isFavorite}
@@ -243,7 +253,7 @@ const Poem = ({
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               active={isMenuOpen}
             />
-          </div>
+          </PoemControlsContainer>
         )}
         {isMenuOpen && (
           <MenuContainer>
