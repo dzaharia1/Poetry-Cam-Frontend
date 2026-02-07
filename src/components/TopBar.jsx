@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import IconButton from './basecomponents/IconButton';
+import CameraButton from './CameraButton';
 import { PanelLeft } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -56,19 +57,34 @@ const MenuButtonContainer = styled.div`
   align-items: center;
 
   @media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
+    display: none;
     .mobile-menu {
       display: none;
     }
   }
 `;
 
-const TopBar = ({ onLogout, handleMenuClick }) => {
+const CameraButtonContainer = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  align-items: center;
+
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
+    display: none;
+  }
+`;
+
+const TopBar = ({ onLogout, handleMenuClick, onCapture }) => {
   const { isDarkMode } = useTheme();
 
   return (
     <Container>
       <LogoContainer>
         <TopIcon src={isDarkMode ? 'logodark.svg' : 'logo.svg'} />
+        <CameraButtonContainer>
+          <CameraButton onCapture={onCapture} />
+        </CameraButtonContainer>
         <MenuButtonContainer>
           <IconButton
             className="mobile-menu"
