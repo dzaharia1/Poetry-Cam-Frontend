@@ -443,7 +443,11 @@ function Home() {
         setIsSettingsOpen={handleSettingsOpen}
       />
       <PrimaryPageContents>
-        <TopBar onLogout={handleLogout} handleMenuClick={handleMenuClick} />
+        <TopBar
+          onLogout={handleLogout}
+          handleMenuClick={handleMenuClick}
+          onCapture={handleCapture}
+        />
         {isGenerating ? (
           <PoemSkeleton />
         ) : (

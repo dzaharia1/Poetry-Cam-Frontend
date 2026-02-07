@@ -1,8 +1,8 @@
 import React from 'react';
-import { useState } from 'react';
 import styled from 'styled-components';
 import Button from './basecomponents/Button';
-import { ArrowLeft, ArrowRight, Aperture } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import CameraButton from './CameraButton';
 
 const PageNavigationContainer = styled.div`
   display: flex;
@@ -20,67 +20,19 @@ const PageNavigationContainer = styled.div`
   }
 `;
 
-const CameraButton = styled.button`
-  display: flex;
-  align-items: center;
+const CameraButtonContainer = styled.div`
+  display: none;
+  flex-direction: row;
   justify-content: center;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background-color: ${(props) => props.theme.colors.primary};
-  color: ${(props) => props.theme.colors.background};
-  border: none;
-  cursor: pointer;
-  box-shadow:
-    0px 0px 0px ${(props) => props.theme.colors.shadows.green},
-    0px 0px 0px ${(props) => props.theme.colors.shadows.red};
-  transition:
-    transform 0.2s,
-    background-color 0.2s,
-    box-shadow 0.2s;
-  z-index: 10; /* Ensure it's clickable */
-
-  &:hover {
-    transform: scale(1.03);
-    box-shadow:
-      6px 0px 2px ${(props) => props.theme.colors.shadows.green},
-      -6px 0px 2px ${(props) => props.theme.colors.shadows.red};
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
+  align-items: center;
+  flex: 1;
 
   @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
-    box-shadow:
-      6px 0px 2px ${(props) => props.theme.colors.shadows.green},
-      -6px 0px 2px ${(props) => props.theme.colors.shadows.red};
+    display: flex;
   }
-`;
-
-const HiddenInput = styled.input`
-  display: none;
 `;
 
 const PageNavigation = ({ onNext, onPrev, hasNext, hasPrev, onCapture }) => {
-  const fileInputRef = React.useRef(null);
-
-  const handleCameraClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      if (onCapture) {
-        onCapture(e.target.files[0]);
-      }
-      // Reset input so the same file can be selected again if needed
-      e.target.value = '';
-    }
-  };
-
   return (
     <PageNavigationContainer>
       <Button
@@ -91,16 +43,9 @@ const PageNavigation = ({ onNext, onPrev, hasNext, hasPrev, onCapture }) => {
         Previous
       </Button>
 
-      <CameraButton onClick={handleCameraClick} aria-label="Take Photo">
-        <Aperture size={32} />
-      </CameraButton>
-      <HiddenInput
-        type="file"
-        accept="image/*"
-        capture="environment"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-      />
+      <CameraButtonContainer>
+        <CameraButton onCapture={onCapture} />
+      </CameraButtonContainer>
 
       <Button
         variant="secondary"
