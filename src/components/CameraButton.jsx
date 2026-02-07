@@ -25,8 +25,8 @@ const StyledCameraButton = styled.button`
   &:hover {
     transform: scale(1.03);
     box-shadow:
-      6px 0px 2px ${(props) => props.theme.colors.shadows.green},
-      -6px 0px 2px ${(props) => props.theme.colors.shadows.red};
+      6px 0px 1px ${(props) => props.theme.colors.shadows.green},
+      -6px 0px 1px ${(props) => props.theme.colors.shadows.red};
   }
 
   &:active {
@@ -35,8 +35,8 @@ const StyledCameraButton = styled.button`
 
   @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     box-shadow:
-      6px 0px 2px ${(props) => props.theme.colors.shadows.green},
-      -6px 0px 2px ${(props) => props.theme.colors.shadows.red};
+      6px 0px 0px ${(props) => props.theme.colors.shadows.green},
+      -6px 0px 0px ${(props) => props.theme.colors.shadows.red};
   }
 `;
 
