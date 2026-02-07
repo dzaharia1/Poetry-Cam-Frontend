@@ -132,7 +132,7 @@ function Auth() {
           onClick={handleGoogleLogin}
           variant="secondary"
           style={{ width: '100%' }}>
-          Sign in with Google
+          Register or Sign in with Google
         </Button>
       </Form>
       <ToggleText onClick={() => setIsRegistering(!isRegistering)}>
