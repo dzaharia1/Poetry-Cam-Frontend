@@ -57,6 +57,7 @@ const MenuButtonContainer = styled.div`
   align-items: center;
 
   @media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
+    display: none;
     .mobile-menu {
       display: none;
     }
