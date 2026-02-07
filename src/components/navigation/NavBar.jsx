@@ -1,8 +1,6 @@
-import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import NavItem from './NavItem';
-import { LogOut, Sparkles, Sun, Moon, Settings } from 'lucide-react';
-import { useTheme } from '../../contexts/ThemeContext';
+import { LogOut, Settings } from 'lucide-react';
 import IconButton from '../basecomponents/IconButton';
 
 const NavBarContainer = styled.nav`
@@ -102,15 +100,12 @@ const LogoutButton = styled.a`
 const NavBar = ({
   currentIndex,
   handleNavigateToPoem,
-  user,
   onLogout,
   isMenuOpen,
   setIsMenuOpen,
   poems = [],
   setIsSettingsOpen,
 }) => {
-  const { themeMode } = useTheme();
-
   return (
     <>
       {isMenuOpen && <Scrim onClick={() => setIsMenuOpen(false)} />}

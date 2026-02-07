@@ -4,11 +4,11 @@ import Poem from './poem/Poem';
 import TopBar from './TopBar';
 import PageNavigation from './PageNavigation';
 import NavBar from './navigation/NavBar';
-import Button from './basecomponents/Button';
 import SplashScreen from './SplashScreen';
 import PoemSkeleton from './poem/PoemSkeleton';
 import Settings from './Settings';
 import Auth from './Auth';
+import { getBackendUrl } from '../utils/api';
 import { auth, db } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import {
@@ -69,7 +69,7 @@ function Home() {
   const [month, setMonth] = useState('');
   const [year, setYear] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [hasUnreadPoem, setHasUnreadPoem] = useState(false);
+  // const [hasUnreadPoem, setHasUnreadPoem] = useState(false);
   const [error, setError] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentPoemId, setCurrentPoemId] = useState(null);
@@ -84,7 +84,7 @@ function Home() {
       if (!user) return;
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/poemList?userid=${user.uid}`,
+          getBackendUrl('/poemList', { userid: user.uid }),
         );
         const data = await response.json();
         if (Array.isArray(data)) {
@@ -128,22 +128,18 @@ function Home() {
   // Fetch settings when user is set
   useEffect(() => {
     if (user) {
-      fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/get-settings?userid=${user.uid}`,
-      )
+      fetch(getBackendUrl('/get-settings', { userid: user.uid }))
         .then((res) => res.json())
         .then((data) => {
           if (data.penName) setPenName(data.penName);
 
           // Check for API Key
           if (data.hasGeminiApiKey === false) {
+            setHasMissingApiKey(true);
             setError(
               'Please configure your Gemini API Key in Settings to generate poems.',
             );
             setIsSettingsOpen(true);
-            // Pass a specific prop to Settings to highlight the field?
-            // Since I'm not passing a "settingsError" prop directly to Settings in the current render (I need to add it to state),
-            // I will add a new state for it.
           }
         })
         .catch((err) => console.error('Error fetching settings:', err));
@@ -155,14 +151,12 @@ function Home() {
     async (index, additionalParams = {}) => {
       if (!user) return;
       try {
-        const params = new URLSearchParams({
-          userid: user.uid,
-          index: index,
-          ...additionalParams,
-        });
-
         const res = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/getPoem?${params.toString()}`,
+          getBackendUrl('/getPoem', {
+            userid: user.uid,
+            index: index,
+            ...additionalParams,
+          }),
         );
         if (!res.ok) throw new Error('Failed to fetch poem');
         const data = await res.json();
@@ -219,7 +213,7 @@ function Home() {
       formData.append('image', file);
 
       const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/generate-poem?userid=${user.uid}`,
+        getBackendUrl('/generate-poem', { userid: user.uid }),
         {
           method: 'POST',
           body: formData,
@@ -230,7 +224,7 @@ function Home() {
 
       // Refresh the list to find the new poem's position in the default sort
       const listRes = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/poemList?userid=${user.uid}`,
+        getBackendUrl('/poemList', { userid: user.uid }),
       );
       const listData = await listRes.json();
 
@@ -262,6 +256,7 @@ function Home() {
     if (user && currentIndex === 0) {
       fetchPoem(0);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, fetchPoem]);
 
   // Sync with Firestore for latest poem (Index 0) to detect new poems
@@ -285,7 +280,7 @@ function Home() {
             isInitialLoad.current = false;
           } else {
             // A new poem has arrived!
-            setHasUnreadPoem(true);
+            // setHasUnreadPoem(true);
 
             // If we are viewing the latest poem (index 0), update with real-time data from API
             if (currentIndex === 0) {
@@ -361,7 +356,10 @@ function Home() {
     if (!currentPoemId || !user) return;
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/deletePoem?id=${currentPoemId}&userid=${user.uid}`,
+        getBackendUrl('/deletePoem', {
+          id: currentPoemId,
+          userid: user.uid,
+        }),
         { method: 'DELETE' },
       );
       if (!res.ok) throw new Error('Failed to delete poem');
@@ -382,11 +380,9 @@ function Home() {
       const newStatus = !isFavorite;
       setIsFavorite(newStatus);
 
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/toggleFavorite`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+      const res = await fetch(getBackendUrl('/toggleFavorite'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             id: currentPoemId,
             userid: user.uid,

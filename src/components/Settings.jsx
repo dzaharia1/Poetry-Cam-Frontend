@@ -4,6 +4,7 @@ import Modal from './basecomponents/Modal';
 import TextInput from './basecomponents/TextInput';
 import Dropdown from './basecomponents/Dropdown';
 import Button from './basecomponents/Button';
+import { getBackendUrl } from '../utils/api';
 import { useTheme } from '../contexts/ThemeContext';
 import { auth } from '../firebase';
 
@@ -14,15 +15,6 @@ const SettingsContainer = styled.form`
   width: 100%;
 `;
 
-const SectionTitle = styled.h4`
-  width: 100%;
-  text-align: left;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  color: ${(props) => props.theme.colors.text.secondary};
-  border-bottom: 1px solid ${(props) => props.theme.colors.border};
-  padding-bottom: 0.25rem;
-`;
 
 const Link = styled.a`
   font-size: 0.8rem;
@@ -89,7 +81,7 @@ const Settings = ({ isOpen, onClose, missingApiKey }) => {
     if (isOpen && auth.currentUser) {
       setLoading(true);
       fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/get-settings?userid=${auth.currentUser.uid}`,
+        getBackendUrl('/get-settings', { userid: auth.currentUser.uid }),
       )
         .then((res) => res.json())
         .then((data) => {
@@ -108,6 +100,7 @@ const Settings = ({ isOpen, onClose, missingApiKey }) => {
         .catch((err) => console.error(err))
         .finally(() => setLoading(false));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   const handleChange = (e) => {
@@ -142,7 +135,7 @@ const Settings = ({ isOpen, onClose, missingApiKey }) => {
 
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/update-settings`,
+        getBackendUrl('/update-settings'),
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
