@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import styled, { useTheme } from 'styled-components';
-import Card from './basecomponents/Card';
+import styled from 'styled-components';
+import { getBackendUrl } from '../utils/api';
 import SplashScreen from './SplashScreen';
 
 const Page = styled.div`
@@ -65,21 +65,6 @@ const PoemLine = styled.p`
   line-height: 1.4;
 `;
 
-const FooterContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  position: relative;
-  margin-top: 24px;
-
-  @media (max-width: 800px) {
-    margin-top: 16px;
-  }
-`;
-
 const DateStamp = styled.p`
   font-size: 16px;
   font-weight: 600;
@@ -103,8 +88,6 @@ const Logo = styled.img`
 `;
 
 const Poem = ({ title, text, dayOfWeek, date, month, year, penName }) => {
-  const theme = useTheme();
-
   return (
     <>
       <PoemItelf>
@@ -139,12 +122,8 @@ const WebDisplay = () => {
       try {
         // Fetch poem and settings in parallel
         const [poemRes, settingsRes] = await Promise.all([
-          fetch(
-            `${import.meta.env.VITE_BACKEND_URL}/getPoem?userid=${userId}&index=0`,
-          ),
-          fetch(
-            `${import.meta.env.VITE_BACKEND_URL}/get-settings?userid=${userId}`,
-          ),
+          fetch(getBackendUrl('/getPoem', { userid: userId, index: 0 })),
+          fetch(getBackendUrl('/get-settings', { userid: userId })),
         ]);
 
         if (!poemRes.ok) throw new Error('Failed to fetch poem');

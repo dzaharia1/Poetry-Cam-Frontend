@@ -3,6 +3,7 @@ import { lightTheme, darkTheme } from '../theme';
 
 const ThemeContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) {
@@ -86,7 +87,6 @@ export const ThemeContextProvider = ({ children }) => {
       value={{
         theme: currentTheme,
         isDarkMode,
-        themeMode,
         themeMode,
         toggleThemeMode,
         setThemeMode: (mode) => {

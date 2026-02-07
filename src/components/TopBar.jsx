@@ -75,7 +75,7 @@ const CameraButtonContainer = styled.div`
   }
 `;
 
-const TopBar = ({ onLogout, handleMenuClick, onCapture }) => {
+const TopBar = ({ handleMenuClick, onCapture }) => {
   const { isDarkMode } = useTheme();
 
   return (

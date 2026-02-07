@@ -52,20 +52,6 @@ const FooterDummy = styled.div`
   margin-top: 24px;
 `;
 
-const ColorPaletteDummy = styled.div`
-  display: flex;
-  gap: 8px;
-  margin-top: 20px;
-  justify-content: center;
-`;
-
-const CircleDummy = styled(SkeletonBar)`
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  margin-bottom: 0;
-`;
-
 const PoemSkeleton = () => {
   const theme = useTheme();
 
