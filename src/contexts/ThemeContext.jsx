@@ -87,7 +87,6 @@ export const ThemeContextProvider = ({ children }) => {
         theme: currentTheme,
         isDarkMode,
         themeMode,
-        themeMode,
         toggleThemeMode,
         setThemeMode: (mode) => {
           setThemeMode(mode);
