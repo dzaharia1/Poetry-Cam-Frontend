@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import Button from './basecomponents/Button';
 import { auth } from '../firebase';
+import { getFriendlyErrorMessage } from '../utils/firebaseErrorHandling';
 import {
   signInWithPopup,
   GoogleAuthProvider,
@@ -89,7 +90,7 @@ function Auth() {
         await signInWithEmailAndPassword(auth, email, password);
       }
     } catch (err) {
-      setError(err.message);
+      setError(getFriendlyErrorMessage(err));
     }
   };
 
@@ -98,7 +99,7 @@ function Auth() {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
     } catch (err) {
-      setError(err.message);
+      setError(getFriendlyErrorMessage(err));
     }
   };
 
