@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import IconButton from './IconButton';
+import IconButton from './basecomponents/IconButton';
 import { PanelLeft } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 

@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
-import Poem from './Poem';
+import Poem from './poem/Poem';
 import TopBar from './TopBar';
 import PageNavigation from './PageNavigation';
 import NavBar from './navigation/NavBar';
-import Button from './Button';
+import Button from './basecomponents/Button';
 import SplashScreen from './SplashScreen';
+import PoemSkeleton from './poem/PoemSkeleton';
+import Settings from './Settings';
 import Auth from './Auth';
 import { auth, db } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
@@ -55,6 +57,7 @@ function Home() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentPoem, setCurrentPoem] = useState('');
+  const [penName, setPenName] = useState('');
   /* Pagination State */
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextPoem, setNextPoem] = useState(null); // Newer
@@ -72,6 +75,9 @@ function Home() {
   const [currentPoemId, setCurrentPoemId] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [poems, setPoems] = useState([]);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [hasMissingApiKey, setHasMissingApiKey] = useState(false);
 
   useEffect(() => {
     const fetchPoems = async () => {
@@ -119,13 +125,44 @@ function Home() {
     return () => unsubscribe();
   }, []);
 
+  // Fetch settings when user is set
+  useEffect(() => {
+    if (user) {
+      fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/get-settings?userid=${user.uid}`,
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.penName) setPenName(data.penName);
+
+          // Check for API Key
+          if (data.hasGeminiApiKey === false) {
+            setError(
+              'Please configure your Gemini API Key in Settings to generate poems.',
+            );
+            setIsSettingsOpen(true);
+            // Pass a specific prop to Settings to highlight the field?
+            // Since I'm not passing a "settingsError" prop directly to Settings in the current render (I need to add it to state),
+            // I will add a new state for it.
+          }
+        })
+        .catch((err) => console.error('Error fetching settings:', err));
+    }
+  }, [user]);
+
   // Helper to fetch poem data from backend
   const fetchPoem = useCallback(
-    async (index) => {
+    async (index, additionalParams = {}) => {
       if (!user) return;
       try {
+        const params = new URLSearchParams({
+          userid: user.uid,
+          index: index,
+          ...additionalParams,
+        });
+
         const res = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/getPoem?userid=${user.uid}&index=${index}`,
+          `${import.meta.env.VITE_BACKEND_URL}/getPoem?${params.toString()}`,
         );
         if (!res.ok) throw new Error('Failed to fetch poem');
         const data = await res.json();
@@ -172,6 +209,53 @@ function Home() {
     },
     [user],
   );
+
+  const handleCapture = async (file) => {
+    if (!user || !file) return;
+    setIsGenerating(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/generate-poem?userid=${user.uid}`,
+        {
+          method: 'POST',
+          body: formData,
+        },
+      );
+
+      if (!res.ok) throw new Error('Failed to generate poem');
+
+      // Refresh the list to find the new poem's position in the default sort
+      const listRes = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/poemList?userid=${user.uid}`,
+      );
+      const listData = await listRes.json();
+
+      if (Array.isArray(listData)) {
+        setPoems(listData);
+        // Find the first non-favorite poem (which should be the new one we just made)
+        const newIndex = listData.findIndex((p) => !p.isFavorite);
+        // Default to 0 if all are favorites or something weird happens
+        const targetIndex = newIndex >= 0 ? newIndex : 0;
+
+        await fetchPoem(targetIndex);
+      } else {
+        // Fallback
+        await fetchPoem(0);
+      }
+
+      // Trigger navbar refresh to ensure sync
+      setRefreshTrigger((prev) => prev + 1);
+    } catch (err) {
+      console.error('Error generating poem:', err);
+      setError('Failed to generate poem. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   // Initial fetch on load
   useEffect(() => {
@@ -341,6 +425,11 @@ function Home() {
     );
   }
 
+  const handleSettingsOpen = () => {
+    setIsMenuOpen(false);
+    setIsSettingsOpen(true);
+  };
+
   return (
     <Page>
       <NavBar
@@ -351,28 +440,43 @@ function Home() {
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
         poems={poems}
+        setIsSettingsOpen={handleSettingsOpen}
       />
       <PrimaryPageContents>
         <TopBar onLogout={handleLogout} handleMenuClick={handleMenuClick} />
-        <Poem
-          title={title}
-          text={currentPoem}
-          colors={colors}
-          dayOfWeek={dayOfWeek}
-          date={date}
-          month={month}
-          year={year}
-          isFavorite={isFavorite}
-          onToggleFavorite={handleToggleFavorite}
-          onDelete={handleDelete}
-        />
+        {isGenerating ? (
+          <PoemSkeleton />
+        ) : (
+          <Poem
+            title={title}
+            text={currentPoem}
+            colors={colors}
+            dayOfWeek={dayOfWeek}
+            date={date}
+            month={month}
+            year={year}
+            isFavorite={isFavorite}
+            onToggleFavorite={handleToggleFavorite}
+            onDelete={handleDelete}
+            penName={penName}
+          />
+        )}
         <PageNavigation
           onNext={handleNext}
           onPrev={handlePrev}
           hasNext={!!nextPoem}
           hasPrev={!!previousPoem}
+          onCapture={handleCapture}
         />
         {error && <p style={{ color: 'red' }}>{error}</p>}
+        {isSettingsOpen && (
+          <Settings
+            isOpen={isSettingsOpen}
+            onClose={() => setIsSettingsOpen(false)}
+            title="Settings"
+            missingApiKey={hasMissingApiKey}
+          />
+        )}
       </PrimaryPageContents>
     </Page>
   );

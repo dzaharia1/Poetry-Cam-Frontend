@@ -16,17 +16,13 @@ const StyledButton = styled.button`
   border-radius: 50%;
   transition: all 0.2s;
   // color: ${(props) => (props.$active ? '#00dd63' : '#444')};
-  box-shadow: ${(props) =>
-    props.$active
-      ? `4px 0px 0px ${props.theme.colors.shadows.green}, -4px 0px 0px ${props.theme.colors.shadows.red}`
-      : 'none'};
 
   &:hover {
     background-color: ${(props) =>
       props.$active ? props.theme.colors.primary : 'rgba(0, 0, 0, 0.05)'};
     box-shadow:
-      4px 0px 0px ${(props) => props.theme.colors.shadows.green},
-      -4px 0px 0px ${(props) => props.theme.colors.shadows.red};
+      4px 0px 2px ${(props) => props.theme.colors.shadows.green},
+      -4px 0px 2px ${(props) => props.theme.colors.shadows.red};
     transform: scale(1.03);
   }
 
