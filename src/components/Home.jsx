@@ -9,6 +9,7 @@ import PoemSkeleton from './poem/PoemSkeleton';
 import Settings from './Settings';
 import Auth from './Auth';
 import { getBackendUrl } from '../utils/api';
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 import { auth, db } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import {
@@ -87,9 +88,8 @@ function Home() {
     const fetchPoems = async () => {
       if (!user) return;
       try {
-        const response = await fetch(
+        const response = await fetchWithAuth(
           getBackendUrl('/poemList', {
-            userid: user.uid,
             sortByDate: sortMode === 'date' ? 'true' : 'false',
           }),
         );
@@ -135,7 +135,7 @@ function Home() {
   // Fetch settings when user is set
   useEffect(() => {
     if (user) {
-      fetch(getBackendUrl('/get-settings', { userid: user.uid }))
+      fetchWithAuth(getBackendUrl('/get-settings'))
         .then((res) => res.json())
         .then((data) => {
           if (data.penName) setPenName(data.penName);
@@ -158,9 +158,8 @@ function Home() {
     async (index, additionalParams = {}) => {
       if (!user) return;
       try {
-        const res = await fetch(
+        const res = await fetchWithAuth(
           getBackendUrl('/getPoem', {
-            userid: user.uid,
             index: index,
             sortByDate: sortMode === 'date' ? 'true' : 'false',
             ...additionalParams,
@@ -220,8 +219,8 @@ function Home() {
       const formData = new FormData();
       formData.append('image', file);
 
-      const res = await fetch(
-        getBackendUrl('/generate-poem', { userid: user.uid }),
+      const res = await fetchWithAuth(
+        getBackendUrl('/generate-poem', { userid: user.uid }), // Keep userid as fallback for Arduino
         {
           method: 'POST',
           body: formData,
@@ -231,9 +230,8 @@ function Home() {
       if (!res.ok) throw new Error('Failed to generate poem');
 
       // Refresh the list to find the new poem's position in the current sort
-      const listRes = await fetch(
+      const listRes = await fetchWithAuth(
         getBackendUrl('/poemList', {
-          userid: user.uid,
           sortByDate: sortMode === 'date' ? 'true' : 'false',
         }),
       );
@@ -372,10 +370,9 @@ function Home() {
   const handleDelete = async () => {
     if (!currentPoemId || !user) return;
     try {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         getBackendUrl('/deletePoem', {
           id: currentPoemId,
-          userid: user.uid,
         }),
         { method: 'DELETE' },
       );
@@ -397,12 +394,11 @@ function Home() {
       const newStatus = !isFavorite;
       setIsFavorite(newStatus);
 
-      const res = await fetch(getBackendUrl('/toggleFavorite'), {
+      const res = await fetchWithAuth(getBackendUrl('/toggleFavorite'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id: currentPoemId,
-          userid: user.uid,
           status: newStatus,
         }),
       });
