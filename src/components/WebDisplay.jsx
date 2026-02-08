@@ -120,26 +120,16 @@ const WebDisplay = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch poem and settings in parallel
-        const [poemRes, settingsRes] = await Promise.all([
-          fetch(getBackendUrl('/getPoem', { userid: userId, index: 0 })),
-          fetch(getBackendUrl('/get-settings', { userid: userId })),
-        ]);
+        // Fetch poem only - pen name is now stored in the poem document
+        const poemRes = await fetch(
+          getBackendUrl('/public/getPoem', { userid: userId, index: 0 }),
+        );
 
         if (!poemRes.ok) throw new Error('Failed to fetch poem');
         const poemDataJson = await poemRes.json();
 
-        let settings = {};
-        if (settingsRes.ok) {
-          settings = await settingsRes.json();
-        }
-
         if (poemDataJson.currentPoem) {
-          // Merge penName from settings if it's not in the poem data
-          setPoemData({
-            ...poemDataJson.currentPoem,
-            penName: poemDataJson.currentPoem.penName || settings.penName || '',
-          });
+          setPoemData(poemDataJson.currentPoem);
         } else {
           setError('No poems found for this user.');
         }

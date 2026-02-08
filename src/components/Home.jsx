@@ -58,7 +58,7 @@ function Home() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentPoem, setCurrentPoem] = useState('');
-  const [penName, setPenName] = useState('');
+  const [penName, setPenName] = useState(''); // Pen name from current poem
   /* Pagination State */
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextPoem, setNextPoem] = useState(null); // Newer
@@ -138,8 +138,6 @@ function Home() {
       fetchWithAuth(getBackendUrl('/get-settings'))
         .then((res) => res.json())
         .then((data) => {
-          if (data.penName) setPenName(data.penName);
-
           // Check for API Key
           if (data.hasGeminiApiKey === false) {
             setHasMissingApiKey(true);
@@ -179,6 +177,7 @@ function Home() {
           setYear(data.currentPoem.year || null);
           setIsFavorite(data.currentPoem.isFavorite || false);
           setCurrentPoemId(data.currentPoem.id || null);
+          setPenName(data.currentPoem.penName || ''); // Get pen name from poem
           if (data.currentPoem.index !== undefined) {
             setCurrentIndex(data.currentPoem.index);
           }
@@ -195,6 +194,7 @@ function Home() {
             setYear(null);
             setIsFavorite(false);
             setCurrentPoemId(null);
+            setPenName(''); // Clear pen name when no poems
           }
         }
 
