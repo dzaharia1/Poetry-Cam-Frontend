@@ -67,6 +67,35 @@ const NavBarTitle = styled.h3`
   padding: 1.75rem 1rem 1rem 1rem;
 `;
 
+const TabsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-bottom: ${(props) => props.theme.spacing[4]};
+`;
+
+const Tab = styled.button`
+  background: none;
+  border: none;
+
+  flex: 1;
+  padding: 0 0 ${(props) => props.theme.spacing[2]} 0;
+  border-color: ${(props) =>
+    props.$active ? props.theme.colors.primary : 'transparent'};
+  border-bottom-width: ${(props) => props.theme.spacing[1]};
+  border-bottom-style: solid;
+
+  color: ${(props) =>
+    props.$active
+      ? props.theme.colors.text.primary
+      : props.theme.colors.text.secondary};
+  font-size: 0.875rem;
+  font-weight: ${(props) => (props.$active ? '600' : '400')};
+  font-family: ${(props) => props.theme.typography.fontFamily.body};
+  transition: all 0.2s ease;
+
+  cursor: pointer;
+`;
+
 const BottomControls = styled.div`
   display: flex;
   flex-direction: row;
@@ -105,6 +134,8 @@ const NavBar = ({
   setIsMenuOpen,
   poems = [],
   setIsSettingsOpen,
+  sortMode = 'fave',
+  onSortModeChange,
 }) => {
   return (
     <>
@@ -112,6 +143,18 @@ const NavBar = ({
       <NavBarContainer isMenuOpen={isMenuOpen}>
         <ScrollArea>
           <NavBarTitle>Your Poems</NavBarTitle>
+          <TabsContainer>
+            <Tab
+              $active={sortMode === 'date'}
+              onClick={() => onSortModeChange('date')}>
+              By Date
+            </Tab>
+            <Tab
+              $active={sortMode === 'fave'}
+              onClick={() => onSortModeChange('fave')}>
+              By Fave
+            </Tab>
+          </TabsContainer>
           {poems.map((poem, index) => (
             <NavItem
               key={poem.id}

@@ -78,13 +78,20 @@ function Home() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [hasMissingApiKey, setHasMissingApiKey] = useState(false);
+  const [sortMode, setSortMode] = useState(() => {
+    const saved = localStorage.getItem('poemSortMode');
+    return saved || 'date';
+  });
 
   useEffect(() => {
     const fetchPoems = async () => {
       if (!user) return;
       try {
         const response = await fetch(
-          getBackendUrl('/poemList', { userid: user.uid }),
+          getBackendUrl('/poemList', {
+            userid: user.uid,
+            sortByDate: sortMode === 'date' ? 'true' : 'false',
+          }),
         );
         const data = await response.json();
         if (Array.isArray(data)) {
@@ -95,7 +102,7 @@ function Home() {
       }
     };
     fetchPoems();
-  }, [user, refreshTrigger]);
+  }, [user, refreshTrigger, sortMode]);
 
   // Sync currentIndex if the current poem's position in the list changes (e.g., when favorited)
   useEffect(() => {
@@ -155,6 +162,7 @@ function Home() {
           getBackendUrl('/getPoem', {
             userid: user.uid,
             index: index,
+            sortByDate: sortMode === 'date' ? 'true' : 'false',
             ...additionalParams,
           }),
         );
@@ -201,7 +209,7 @@ function Home() {
         );
       }
     },
-    [user],
+    [user, sortMode],
   );
 
   const handleCapture = async (file) => {
@@ -222,18 +230,27 @@ function Home() {
 
       if (!res.ok) throw new Error('Failed to generate poem');
 
-      // Refresh the list to find the new poem's position in the default sort
+      // Refresh the list to find the new poem's position in the current sort
       const listRes = await fetch(
-        getBackendUrl('/poemList', { userid: user.uid }),
+        getBackendUrl('/poemList', {
+          userid: user.uid,
+          sortByDate: sortMode === 'date' ? 'true' : 'false',
+        }),
       );
       const listData = await listRes.json();
 
       if (Array.isArray(listData)) {
         setPoems(listData);
-        // Find the first non-favorite poem (which should be the new one we just made)
-        const newIndex = listData.findIndex((p) => !p.isFavorite);
-        // Default to 0 if all are favorites or something weird happens
-        const targetIndex = newIndex >= 0 ? newIndex : 0;
+
+        let targetIndex = 0;
+        if (sortMode === 'date') {
+          // In date mode, the newest poem is always at index 0
+          targetIndex = 0;
+        } else {
+          // In fave mode, find the first non-favorite poem (which should be the new one)
+          const newIndex = listData.findIndex((p) => !p.isFavorite);
+          targetIndex = newIndex >= 0 ? newIndex : 0;
+        }
 
         await fetchPoem(targetIndex);
       } else {
@@ -383,13 +400,12 @@ function Home() {
       const res = await fetch(getBackendUrl('/toggleFavorite'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            id: currentPoemId,
-            userid: user.uid,
-            status: newStatus,
-          }),
-        },
-      );
+        body: JSON.stringify({
+          id: currentPoemId,
+          userid: user.uid,
+          status: newStatus,
+        }),
+      });
 
       if (!res.ok) {
         // Revert on failure
@@ -407,6 +423,13 @@ function Home() {
 
   const handleMenuClick = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleSortModeChange = (newMode) => {
+    setSortMode(newMode);
+    localStorage.setItem('poemSortMode', newMode);
+    // Refresh poems list with new sort
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   if (loading) {
@@ -437,6 +460,8 @@ function Home() {
         setIsMenuOpen={setIsMenuOpen}
         poems={poems}
         setIsSettingsOpen={handleSettingsOpen}
+        sortMode={sortMode}
+        onSortModeChange={handleSortModeChange}
       />
       <PrimaryPageContents>
         <TopBar
