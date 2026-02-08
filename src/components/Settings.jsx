@@ -5,6 +5,7 @@ import TextInput from './basecomponents/TextInput';
 import Dropdown from './basecomponents/Dropdown';
 import Button from './basecomponents/Button';
 import { getBackendUrl } from '../utils/api';
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 import { useTheme } from '../contexts/ThemeContext';
 import { auth } from '../firebase';
 
@@ -14,7 +15,6 @@ const SettingsContainer = styled.form`
   align-items: center;
   width: 100%;
 `;
-
 
 const Link = styled.a`
   font-size: 0.8rem;
@@ -80,9 +80,7 @@ const Settings = ({ isOpen, onClose, missingApiKey }) => {
   useEffect(() => {
     if (isOpen && auth.currentUser) {
       setLoading(true);
-      fetch(
-        getBackendUrl('/get-settings', { userid: auth.currentUser.uid }),
-      )
+      fetchWithAuth(getBackendUrl('/get-settings'))
         .then((res) => res.json())
         .then((data) => {
           setFormData((prev) => ({
@@ -134,17 +132,13 @@ const Settings = ({ isOpen, onClose, missingApiKey }) => {
     }
 
     try {
-      const res = await fetch(
-        getBackendUrl('/update-settings'),
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userid: auth.currentUser.uid,
-            settings: payload,
-          }),
-        },
-      );
+      const res = await fetchWithAuth(getBackendUrl('/update-settings'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          settings: payload,
+        }),
+      });
 
       if (res.ok) {
         setMsg('Settings saved!');
