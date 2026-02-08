@@ -3,6 +3,7 @@ import styled from 'styled-components';
 const ColorSwatch = styled.div`
   width: 20px;
   flex: 1;
+  background-color: ${(props) => props.$color};
 
   @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     height: 20px;
@@ -40,12 +41,12 @@ const ColorCollection = ({ colors }) => {
     <>
       <ColorSwatchSet>
         {colors.map((color, index) => (
-          <ColorSwatch key={index} style={{ backgroundColor: color }} />
+          <ColorSwatch key={index} $color={color} />
         ))}
       </ColorSwatchSet>
       <ColorSwatchSet placement="right">
         {colors.map((color, index) => (
-          <ColorSwatch key={index} style={{ backgroundColor: color }} />
+          <ColorSwatch key={index} $color={color} />
         ))}
       </ColorSwatchSet>
     </>
