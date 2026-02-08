@@ -16,8 +16,6 @@ const NavBarContainer = styled.nav`
   margin: 0 0 0 1rem;
 
   box-shadow:
-    6px 0px 0px ${(props) => props.theme.colors.shadows.green},
-    -6px 0px 0px ${(props) => props.theme.colors.shadows.red},
     ${(props) => props.theme.colors.shadows.nav1},
     ${(props) => props.theme.colors.shadows.nav2};
   overflow: hidden;
@@ -35,7 +33,6 @@ const NavBarContainer = styled.nav`
     z-index: 1000;
 
     ${(props) => !props.isMenuOpen && `left: calc(0px - (100% + 2rem));`}
-  }
 `;
 
 const Scrim = styled.div`
