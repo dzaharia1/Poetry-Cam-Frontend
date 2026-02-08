@@ -22,8 +22,8 @@ const StyledButton = styled.button`
   &:hover {
     background: ${(props) => props.theme.colors.primaryHover};
     box-shadow:
-      4px 0px 1px ${(props) => props.theme.colors.shadows.green},
-      -4px 0px 1px ${(props) => props.theme.colors.shadows.red};
+      4px 0px 0px ${(props) => props.theme.colors.shadows.green},
+      -4px 0px 0px ${(props) => props.theme.colors.shadows.red};
     transform: scale(1.015);
   }
 
