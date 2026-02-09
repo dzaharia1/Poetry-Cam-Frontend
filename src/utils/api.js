@@ -11,5 +11,6 @@ export const getBackendUrl = (endpoint, params = {}) => {
   });
 
   const queryString = searchParams.toString();
-  return queryString ? `${baseUrl}${endpoint}?${queryString}` : `${baseUrl}${endpoint}`;
+  const separator = endpoint.includes('?') ? '&' : '?';
+  return queryString ? `${baseUrl}${endpoint}${separator}${queryString}` : `${baseUrl}${endpoint}`;
 };

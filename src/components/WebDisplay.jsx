@@ -121,6 +121,7 @@ const WebDisplay = () => {
     const fetchData = async () => {
       try {
         // Fetch poem only - pen name is now stored in the poem document
+        // getBackendUrl handles parameter encoding to prevent injection
         const poemRes = await fetch(
           getBackendUrl('/public/getPoem', { userid: userId, index: 0 }),
         );
