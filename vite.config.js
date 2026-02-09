@@ -10,12 +10,5 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets'
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    env: {
-      VITE_BACKEND_URL: 'http://localhost:3000',
-    },
-  },
+  }
 })
