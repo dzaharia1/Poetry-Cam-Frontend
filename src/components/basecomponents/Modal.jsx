@@ -27,8 +27,8 @@ const StyledModalCard = styled(Card)`
   flex-direction: column;
   overflow: hidden;
   box-shadow:
-    6px 0px 0px ${(props) => props.theme.colors.shadows.green},
-    -6px 0px 0px ${(props) => props.theme.colors.shadows.red};
+    -6px 0px 0px ${(props) => props.theme.colors.shadows.green},
+    6px 0px 0px ${(props) => props.theme.colors.shadows.red};
 
   @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     width: 90%;
