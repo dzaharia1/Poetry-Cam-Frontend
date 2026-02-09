@@ -43,9 +43,9 @@ const PageNavigation = ({ onNext, onPrev, hasNext, hasPrev, onCapture }) => {
         Previous
       </Button>
 
-      <CameraButtonContainer>
+      {/* <CameraButtonContainer>
         <CameraButton onCapture={onCapture} />
-      </CameraButtonContainer>
+      </CameraButtonContainer> */}
 
       <Button
         variant="secondary"
