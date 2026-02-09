@@ -122,7 +122,11 @@ const WebDisplay = () => {
       try {
         // Fetch poem only - pen name is now stored in the poem document
         const poemRes = await fetch(
-          getBackendUrl('/public/getPoem', { userid: userId, index: 0 }),
+          getBackendUrl('/public/getPoem', {
+            userid: userId,
+            index: 0,
+            sortByDate: 'true',
+          }),
         );
 
         if (!poemRes.ok) throw new Error('Failed to fetch poem');
