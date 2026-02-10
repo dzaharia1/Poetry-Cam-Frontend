@@ -53,6 +53,12 @@ npm run dev
 npm run build
 ```
 
+### 6. Testing
+```bash
+npm test
+```
+See [TESTING.md](TESTING.md) for more details.
+
 ## Hardware Compatibility
 This frontend is designed to work with the [Machine Vision Peeper](https://github.com/dzaharia1/Machine-Vision-Peeper) firmware. When the device captures an image, it is processed by the backend and stored in Firestore. This application listens for those changes to provide a seamless, real-time viewing experience.
 
