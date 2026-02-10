@@ -32,7 +32,7 @@ const NavBarContainer = styled.nav`
     max-width: 400px;
     z-index: 1000;
 
-    ${(props) => !props.isMenuOpen && `left: calc(0px - (100% + 2rem));`}
+    ${(props) => !props.$isMenuOpen && `left: calc(0px - (100% + 2rem));`}
 `;
 
 const Scrim = styled.div`
@@ -139,7 +139,7 @@ const NavBar = ({
   return (
     <>
       {isMenuOpen && <Scrim onClick={() => setIsMenuOpen(false)} />}
-      <NavBarContainer isMenuOpen={isMenuOpen}>
+      <NavBarContainer $isMenuOpen={isMenuOpen}>
         <ScrollArea>
           <NavBarTitle>Your Poems</NavBarTitle>
           <TabsContainer>

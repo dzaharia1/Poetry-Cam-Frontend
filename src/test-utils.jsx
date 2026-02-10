@@ -1,13 +1,16 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
+import { ThemeContextProvider } from './contexts/ThemeContext';
 import { lightTheme } from './theme';
 
 const AllTheProviders = ({ children }) => {
   return (
-    <ThemeProvider theme={lightTheme}>
-      {children}
-    </ThemeProvider>
+    <ThemeContextProvider>
+      <ThemeProvider theme={lightTheme}>
+        {children}
+      </ThemeProvider>
+    </ThemeContextProvider>
   );
 };
 
