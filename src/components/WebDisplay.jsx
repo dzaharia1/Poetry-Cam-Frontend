@@ -121,13 +121,12 @@ const WebDisplay = () => {
     const fetchData = async () => {
       try {
         // Fetch poem only - pen name is now stored in the poem document
-        const poemRes = await fetch(
-          getBackendUrl('/public/getPoem', {
-            userid: userId,
-            index: 0,
-            sortByDate: 'true',
-          }),
-        );
+        const url = getBackendUrl('/public/getPoem', {
+          userid: userId,
+          index: 0,
+          sortByDate: 'true',
+        });
+        const poemRes = await fetch(url);
 
         if (!poemRes.ok) throw new Error('Failed to fetch poem');
         const poemDataJson = await poemRes.json();
