@@ -19,7 +19,7 @@ const ContentContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  width: 75%;
+  width: 85%;
   height: 100vh;
   padding: 1.5rem 0;
 `;
@@ -48,7 +48,7 @@ const PoemHeading = styled.div`
 `;
 
 const PoemTitle = styled.h2`
-  font-size: 32px;
+  font-size: 36px;
   font-weight: bold;
 `;
 
@@ -57,7 +57,7 @@ const PoemText = styled.div`
 `;
 
 const PoemLine = styled.p`
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 300;
   text-indent: -1rem;
   padding-left: 1rem;
@@ -74,7 +74,7 @@ const DateStamp = styled.p`
   width: 100%;
 
   @media (max-width: 800px) {
-    font-size: 12px;
+    font-size: 18px;
   }
 `;
 
@@ -124,6 +124,7 @@ const WebDisplay = () => {
         const url = getBackendUrl('/public/getPoem', {
           userid: userId,
           index: 0,
+          sortByDate: 'true',
         });
         const poemRes = await fetch(url);
 
