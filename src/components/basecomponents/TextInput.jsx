@@ -46,7 +46,7 @@ const ErrorText = styled.span`
 const TextInput = ({ label, error, type = 'text', ...props }) => {
   return (
     <Container>
-      {label && <Label>{label}</Label>}
+      {label && <Label htmlFor={props.id}>{label}</Label>}
       <Input type={type} error={error} {...props} />
       {error && <ErrorText>{error}</ErrorText>}
     </Container>

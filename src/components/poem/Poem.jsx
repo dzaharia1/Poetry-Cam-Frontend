@@ -181,11 +181,13 @@ const Poem = ({
         <PoemTitle>{title}</PoemTitle>
         <PoemControlsContainer>
           <IconButton
+            data-testid="favorite-button"
             icon={Star}
             active={isFavorite}
             onClick={() => onToggleFavorite && onToggleFavorite()}
           />
           <IconButton
+            data-testid="menu-button"
             icon={MoreVertical}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             active={isMenuOpen}
