@@ -82,9 +82,9 @@ const TopBar = ({ handleMenuClick, onCapture }) => {
     <Container>
       <LogoContainer>
         <TopIcon src={isDarkMode ? 'logodark.svg' : 'logo.svg'} />
-        {/* <CameraButtonContainer>
+        <CameraButtonContainer>
           <CameraButton onCapture={onCapture} />
-        </CameraButtonContainer> */}
+        </CameraButtonContainer>
         <MenuButtonContainer>
           <IconButton
             className="mobile-menu"
