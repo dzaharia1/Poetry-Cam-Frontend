@@ -33,7 +33,7 @@ describe('Poem', () => {
     expect(screen.getAllByText('Test Poem')).toHaveLength(2);
     expect(screen.getAllByText('Line 1')).toHaveLength(2);
     expect(screen.getAllByText('Line 2')).toHaveLength(2);
-    expect(screen.getAllByText('Poet • Monday, January 1, 2024')).toHaveLength(2);
+    expect(screen.getAllByText('Captured by Poet • Monday, January 1, 2024')).toHaveLength(2);
   });
 
   it('toggles favorite', () => {

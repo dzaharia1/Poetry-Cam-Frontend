@@ -105,7 +105,7 @@ const PoemExport = forwardRef(
           <FooterContainer>
             {dayOfWeek && date && month && year && (
               <DateStamp>
-                {penName && penName + ' • '}
+                {penName && `Captured by ${penName} • `}
                 {dayOfWeek}, {month} {date}, {year}
               </DateStamp>
             )}
