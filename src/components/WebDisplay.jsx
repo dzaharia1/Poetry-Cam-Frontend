@@ -65,16 +65,29 @@ const PoemLine = styled.p`
   line-height: 1.4;
 `;
 
+const FooterContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  margin-top: 24px;
+
+  @media (max-width: 800px) {
+    margin-top: 16px;
+  }
+`;
+
 const DateStamp = styled.p`
   font-size: 16px;
   font-weight: 600;
   color: ${(props) => props.theme.colors.text.secondary};
-  margin-bottom: ${(props) => props.theme.spacing[3]};
-
-  width: 100%;
+  margin: 0;
 
   @media (max-width: 800px) {
-    font-size: 18px;
+    font-size: 12px;
   }
 `;
 
@@ -94,17 +107,19 @@ const Poem = ({ title, text, dayOfWeek, date, month, year, penName }) => {
         <PoemHeading>
           <PoemTitle>{title}</PoemTitle>
         </PoemHeading>
-        {dayOfWeek && date && month && year && (
-          <DateStamp>
-            {penName && penName + ' • '}
-            {dayOfWeek}, {month} {date}, {year}
-          </DateStamp>
-        )}
         <PoemText>
           {text.split('\n').map((line, i) => (
             <PoemLine key={i}>{line}</PoemLine>
           ))}
         </PoemText>
+        <FooterContainer>
+          {dayOfWeek && date && month && year && (
+            <DateStamp>
+              {penName && `Captured by ${penName} • `}
+              {dayOfWeek}, {month} {date}, {year}
+            </DateStamp>
+          )}
+        </FooterContainer>
       </PoemItelf>
       <Logo src="/wordmark.svg" alt="Poetry Cam Logo" />
     </>
