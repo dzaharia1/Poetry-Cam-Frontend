@@ -135,11 +135,12 @@ const WebDisplay = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch poem only - pen name is now stored in the poem document
+        // Fetch latest favorited poem
         const url = getBackendUrl('/public/getPoem', {
           userid: userId,
           index: 0,
           sortByDate: 'true',
+          favoritesOnly: 'true',
         });
         const poemRes = await fetch(url);
 
@@ -149,7 +150,7 @@ const WebDisplay = () => {
         if (poemDataJson.currentPoem) {
           setPoemData(poemDataJson.currentPoem);
         } else {
-          setError('No poems found for this user.');
+          setError('No favorited poems found for this user.');
         }
       } catch (err) {
         console.error(err);
