@@ -131,4 +131,32 @@ describe('Poem', () => {
       expect(htmlToImage.toPng).toHaveBeenCalled();
     });
   });
+
+  it('calls onGenerateSketch when Regenerate Sketch is clicked in the menu', () => {
+    const onGenerateSketch = vi.fn();
+    render(
+      <Poem
+        {...defaultProps}
+        id="poem-123"
+        sketchUrl="http://example.com/sketch.png"
+        onGenerateSketch={onGenerateSketch}
+      />,
+    );
+
+    // Switch to Sketch tab
+    fireEvent.click(screen.getByText('Sketch'));
+
+    // Open menu
+    const menuButton = screen.getByTestId('menu-button');
+    fireEvent.click(menuButton);
+
+    // Click Regenerate Sketch
+    fireEvent.click(screen.getByText('Regenerate Sketch'));
+
+    expect(onGenerateSketch).toHaveBeenCalledWith(
+      'poem-123',
+      defaultProps.title,
+      defaultProps.text,
+    );
+  });
 });

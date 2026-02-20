@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
 import Card from '../basecomponents/Card';
 import ColorCollection from './ColorCollection';
-import { MoreVertical, Trash2, Download, Star } from 'lucide-react';
+import { MoreVertical, Trash2, Download, Star, RefreshCw } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import IconButton from '../basecomponents/IconButton';
 import Tabs from '../basecomponents/Tabs';
@@ -251,6 +251,18 @@ const Poem = ({
               <Download size={18} />
               Download
             </MenuItem>
+            {activeTab === 'Sketch' && sketchUrl && (
+              <MenuItem
+                onClick={() => {
+                  if (onGenerateSketch) {
+                    onGenerateSketch(id, title, text);
+                  }
+                  setIsMenuOpen(false);
+                }}>
+                <RefreshCw size={18} />
+                Regenerate Sketch
+              </MenuItem>
+            )}
             {onDelete && (
               <MenuItem
                 className="delete"

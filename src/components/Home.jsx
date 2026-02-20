@@ -396,7 +396,7 @@ function Home() {
       if (!res.ok) throw new Error('Failed to generate sketch');
       const data = await res.json();
       if (data.sketchUrl) {
-        setSketchUrl(data.sketchUrl);
+        setSketchUrl(data.sketchUrl + '?t=' + Date.now());
       }
     } catch (err) {
       console.error('Error generating sketch:', err);
