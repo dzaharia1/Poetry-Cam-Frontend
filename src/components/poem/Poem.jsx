@@ -86,12 +86,30 @@ const PoemText = styled.div`
 `;
 
 const SketchContainer = styled.div`
+  position: relative;
   width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 200px;
   flex: 1;
+  overflow: hidden;
+  border-radius: 8px;
+
+  &::after {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    pointer-events: none;
+    border-radius: 0px;
+    box-shadow: inset 0 0 20px 40px ${(props) => props.theme.colors.secondary};
+  }
 `;
 
 const SketchImage = styled.img`
@@ -99,6 +117,7 @@ const SketchImage = styled.img`
   max-width: 500px;
   border-radius: 8px;
   object-fit: contain;
+  border: 4px solid ${(props) => props.theme.colors.secondary};
 `;
 
 const LoadingText = styled.p`
