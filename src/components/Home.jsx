@@ -77,6 +77,8 @@ function Home() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [poems, setPoems] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [sketchUrl, setSketchUrl] = useState(null);
+  const [isGeneratingSketch, setIsGeneratingSketch] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [hasMissingApiKey, setHasMissingApiKey] = useState(false);
   const [sortMode, setSortMode] = useState(() => {
@@ -177,6 +179,8 @@ function Home() {
           setYear(data.currentPoem.year || null);
           setIsFavorite(data.currentPoem.isFavorite || false);
           setCurrentPoemId(data.currentPoem.id || null);
+          setSketchUrl(data.currentPoem.sketchUrl || null);
+          setIsGeneratingSketch(false);
           setPenName(data.currentPoem.penName || ''); // Get pen name from poem
           if (data.currentPoem.index !== undefined) {
             setCurrentIndex(data.currentPoem.index);
@@ -194,6 +198,8 @@ function Home() {
             setYear(null);
             setIsFavorite(false);
             setCurrentPoemId(null);
+            setSketchUrl(null);
+            setIsGeneratingSketch(false);
             setPenName(''); // Clear pen name when no poems
           }
         }
@@ -300,6 +306,11 @@ function Home() {
             // If we are viewing the latest poem (index 0), update with real-time data from API
             if (currentIndex === 0) {
               fetchPoem(0);
+            } else if (snapshot.docs[0].id === currentPoemId) {
+              const latestData = snapshot.docs[0].data();
+              if (latestData.sketchUrl && !sketchUrl) {
+                setSketchUrl(latestData.sketchUrl);
+              }
             }
             // Trigger navbar refresh
             setRefreshTrigger((prev) => prev + 1);
@@ -331,6 +342,8 @@ function Home() {
       setYear(nextPoem.year || null);
       setIsFavorite(nextPoem.isFavorite || false);
       setCurrentPoemId(nextPoem.id || null);
+      setSketchUrl(nextPoem.sketchUrl || null);
+      setIsGeneratingSketch(false);
 
       const newIndex = nextPoem.index;
       setCurrentIndex(newIndex);
@@ -350,6 +363,8 @@ function Home() {
       setYear(previousPoem.year || null);
       setIsFavorite(previousPoem.isFavorite || false);
       setCurrentPoemId(previousPoem.id || null);
+      setSketchUrl(previousPoem.sketchUrl || null);
+      setIsGeneratingSketch(false);
 
       const newIndex = previousPoem.index;
       setCurrentIndex(newIndex);
@@ -365,6 +380,30 @@ function Home() {
 
   const handleLogout = async () => {
     await signOut(auth);
+  };
+
+  const handleGenerateSketch = async (id, title, text) => {
+    if (!user || !id) return;
+    setIsGeneratingSketch(true);
+    try {
+      const res = await fetchWithAuth(getBackendUrl('/generate-sketch'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, title, poem: text }),
+      });
+      if (!res.ok) throw new Error('Failed to generate sketch');
+      const data = await res.json();
+      if (data.sketchUrl) {
+        setSketchUrl(data.sketchUrl);
+      }
+    } catch (err) {
+      console.error('Error generating sketch:', err);
+      // Let the user try again later
+    } finally {
+      setIsGeneratingSketch(false);
+    }
   };
 
   const handleDelete = async () => {
@@ -480,6 +519,10 @@ function Home() {
             onToggleFavorite={handleToggleFavorite}
             onDelete={handleDelete}
             penName={penName}
+            id={currentPoemId}
+            sketchUrl={sketchUrl}
+            isGeneratingSketch={isGeneratingSketch}
+            onGenerateSketch={handleGenerateSketch}
           />
         )}
         <PageNavigation

@@ -5,6 +5,7 @@ import ColorCollection from './ColorCollection';
 import { MoreVertical, Trash2, Download, Star } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import IconButton from '../basecomponents/IconButton';
+import Tabs from '../basecomponents/Tabs';
 import PoemExport from './PoemExport';
 
 const PoemHeading = styled.div`
@@ -81,6 +82,28 @@ const MenuItem = styled.button`
 
 const PoemText = styled.div`
   width: 100%;
+  flex: 1;
+`;
+
+const SketchContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  flex: 1;
+`;
+
+const SketchImage = styled.img`
+  width: 100%;
+  max-width: 500px;
+  border-radius: 8px;
+  object-fit: contain;
+`;
+
+const LoadingText = styled.p`
+  color: ${(props) => props.theme.colors.text.secondary};
+  font-style: italic;
 `;
 
 const PoemLine = styled.p`
@@ -134,8 +157,13 @@ const Poem = ({
   isFavorite = false,
   onToggleFavorite,
   penName,
+  id,
+  sketchUrl,
+  isGeneratingSketch,
+  onGenerateSketch,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('Poem');
   const menuRef = useRef(null);
   const exportRef = useRef(null);
 
@@ -172,6 +200,30 @@ const Poem = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isMenuOpen]);
+
+  useEffect(() => {
+    setActiveTab('Poem');
+  }, [id]);
+
+  useEffect(() => {
+    if (
+      activeTab === 'Sketch' &&
+      !sketchUrl &&
+      !isGeneratingSketch &&
+      onGenerateSketch &&
+      id
+    ) {
+      onGenerateSketch(id, title, text);
+    }
+  }, [
+    activeTab,
+    sketchUrl,
+    isGeneratingSketch,
+    onGenerateSketch,
+    id,
+    title,
+    text,
+  ]);
 
   const theme = useTheme();
 
@@ -217,11 +269,32 @@ const Poem = ({
           </MenuContainer>
         )}
       </PoemHeading>
-      <PoemText>
-        {text.split('\n').map((line, i) => (
-          <PoemLine key={i}>{line}</PoemLine>
-        ))}
-      </PoemText>
+      <Tabs
+        tabs={[
+          { id: 'Poem', label: 'Poem' },
+          { id: 'Sketch', label: 'Sketch' },
+        ]}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
+      {activeTab === 'Poem' && (
+        <PoemText>
+          {text.split('\n').map((line, i) => (
+            <PoemLine key={i}>{line}</PoemLine>
+          ))}
+        </PoemText>
+      )}
+      {activeTab === 'Sketch' && (
+        <SketchContainer>
+          {isGeneratingSketch ? (
+            <LoadingText>Drawing sketch...</LoadingText>
+          ) : sketchUrl ? (
+            <SketchImage src={sketchUrl} alt={`Sketch for ${title}`} />
+          ) : (
+            <LoadingText>No sketch available.</LoadingText>
+          )}
+        </SketchContainer>
+      )}
       <FooterContainer>
         {dayOfWeek && date && month && year && (
           <DateStamp>

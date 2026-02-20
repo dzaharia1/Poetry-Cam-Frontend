@@ -33,7 +33,9 @@ describe('Poem', () => {
     expect(screen.getAllByText('Test Poem')).toHaveLength(2);
     expect(screen.getAllByText('Line 1')).toHaveLength(2);
     expect(screen.getAllByText('Line 2')).toHaveLength(2);
-    expect(screen.getAllByText('Captured by Poet • Monday, January 1, 2024')).toHaveLength(2);
+    expect(
+      screen.getAllByText('Captured by Poet • Monday, January 1, 2024'),
+    ).toHaveLength(2);
   });
 
   it('toggles favorite', () => {
@@ -43,6 +45,49 @@ describe('Poem', () => {
     const favButton = screen.getByTestId('favorite-button');
     fireEvent.click(favButton);
     expect(onToggle).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders and switches tabs', () => {
+    const onGenerateSketch = vi.fn();
+    render(
+      <Poem
+        {...defaultProps}
+        id="poem-123"
+        onGenerateSketch={onGenerateSketch}
+      />,
+    );
+
+    // Initial state is Poem tab
+    expect(screen.getAllByText('Line 1')).toHaveLength(2);
+
+    // Click Sketch tab
+    fireEvent.click(screen.getByText('Sketch'));
+
+    // Should call onGenerateSketch because no sketchUrl is provided
+    expect(onGenerateSketch).toHaveBeenCalledWith(
+      'poem-123',
+      defaultProps.title,
+      defaultProps.text,
+    );
+
+    // Should show loading text
+    expect(screen.getByText('No sketch available.')).toBeInTheDocument();
+  });
+
+  it('shows sketch image when sketchUrl is provided', () => {
+    render(
+      <Poem
+        {...defaultProps}
+        id="poem-123"
+        sketchUrl="http://example.com/sketch.png"
+      />,
+    );
+
+    fireEvent.click(screen.getByText('Sketch'));
+
+    const img = screen.getByAltText(`Sketch for ${defaultProps.title}`);
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveAttribute('src', 'http://example.com/sketch.png');
   });
 
   it('opens menu and shows options', () => {
@@ -69,7 +114,9 @@ describe('Poem', () => {
   });
 
   it('handles download', async () => {
-    vi.mocked(htmlToImage.toPng).mockResolvedValue('data:image/png;base64,fake');
+    vi.mocked(htmlToImage.toPng).mockResolvedValue(
+      'data:image/png;base64,fake',
+    );
 
     render(<Poem {...defaultProps} />);
 
