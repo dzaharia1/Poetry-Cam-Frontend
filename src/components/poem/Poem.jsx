@@ -247,59 +247,7 @@ const Poem = ({
   const theme = useTheme();
 
   return (
-    <Card backgroundcolor={theme.colors.secondary} marginBottom="4rem">
-      <PoemHeading ref={menuRef}>
-        <PoemTitle>{title}</PoemTitle>
-        <PoemControlsContainer>
-          <IconButton
-            data-testid="favorite-button"
-            icon={Star}
-            active={isFavorite}
-            onClick={() => onToggleFavorite && onToggleFavorite()}
-          />
-          <IconButton
-            data-testid="menu-button"
-            icon={MoreVertical}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            active={isMenuOpen}
-          />
-        </PoemControlsContainer>
-        {isMenuOpen && (
-          <MenuContainer>
-            <MenuItem onClick={handleDownload}>
-              <Download size={18} />
-              Download
-            </MenuItem>
-            {activeTab === 'Sketch' && sketchUrl && (
-              <MenuItem
-                onClick={() => {
-                  if (onGenerateSketch) {
-                    onGenerateSketch(id, title, text);
-                  }
-                  setIsMenuOpen(false);
-                }}>
-                <RefreshCw size={18} />
-                Regenerate Sketch
-              </MenuItem>
-            )}
-            {onDelete && (
-              <MenuItem
-                className="delete"
-                onClick={() => {
-                  if (
-                    window.confirm('Are you sure you want to delete this poem?')
-                  ) {
-                    onDelete();
-                  }
-                  setIsMenuOpen(false);
-                }}>
-                <Trash2 size={18} />
-                Delete
-              </MenuItem>
-            )}
-          </MenuContainer>
-        )}
-      </PoemHeading>
+    <>
       <Tabs
         tabs={[
           { id: 'Poem', label: 'Poem' },
@@ -308,46 +256,100 @@ const Poem = ({
         activeTab={activeTab}
         onTabChange={setActiveTab}
       />
-      {activeTab === 'Poem' && (
-        <PoemText>
-          {text.split('\n').map((line, i) => (
-            <PoemLine key={i}>{line}</PoemLine>
-          ))}
-        </PoemText>
-      )}
-      {activeTab === 'Sketch' && (
-        <SketchContainer>
-          {isGeneratingSketch ? (
-            <LoadingText>Drawing sketch...</LoadingText>
-          ) : sketchUrl ? (
-            <SketchImage src={sketchUrl} alt={`Sketch for ${title}`} />
-          ) : (
-            <LoadingText>No sketch available.</LoadingText>
+      <Card backgroundcolor={theme.colors.secondary} marginBottom="4rem">
+        <PoemHeading ref={menuRef}>
+          <PoemTitle>{title}</PoemTitle>
+          <PoemControlsContainer>
+            <IconButton
+              data-testid="favorite-button"
+              icon={Star}
+              active={isFavorite}
+              onClick={() => onToggleFavorite && onToggleFavorite()}
+            />
+            <IconButton
+              data-testid="menu-button"
+              icon={MoreVertical}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              active={isMenuOpen}
+            />
+          </PoemControlsContainer>
+          {isMenuOpen && (
+            <MenuContainer>
+              <MenuItem onClick={handleDownload}>
+                <Download size={18} />
+                Download
+              </MenuItem>
+              {activeTab === 'Sketch' && sketchUrl && (
+                <MenuItem
+                  onClick={() => {
+                    if (onGenerateSketch) {
+                      onGenerateSketch(id, title, text);
+                    }
+                    setIsMenuOpen(false);
+                  }}>
+                  <RefreshCw size={18} />
+                  Regenerate Sketch
+                </MenuItem>
+              )}
+              {onDelete && (
+                <MenuItem
+                  className="delete"
+                  onClick={() => {
+                    if (
+                      window.confirm('Are you sure you want to delete this poem?')
+                    ) {
+                      onDelete();
+                    }
+                    setIsMenuOpen(false);
+                  }}>
+                  <Trash2 size={18} />
+                  Delete
+                </MenuItem>
+              )}
+            </MenuContainer>
           )}
-        </SketchContainer>
-      )}
-      <FooterContainer>
-        {dayOfWeek && date && month && year && (
-          <DateStamp>
-            {penName && `Captured by ${penName} • `}
-            {dayOfWeek}, {month} {date}, {year}
-          </DateStamp>
+        </PoemHeading>
+        {activeTab === 'Poem' && (
+          <PoemText>
+            {text.split('\n').map((line, i) => (
+              <PoemLine key={i}>{line}</PoemLine>
+            ))}
+          </PoemText>
         )}
-      </FooterContainer>
-      <ColorCollection colors={colors} />
+        {activeTab === 'Sketch' && (
+          <SketchContainer>
+            {isGeneratingSketch ? (
+              <LoadingText>Drawing sketch...</LoadingText>
+            ) : sketchUrl ? (
+              <SketchImage src={sketchUrl} alt={`Sketch for ${title}`} />
+            ) : (
+              <LoadingText>No sketch available.</LoadingText>
+            )}
+          </SketchContainer>
+        )}
+        <FooterContainer>
+          {dayOfWeek && date && month && year && (
+            <DateStamp>
+              {penName && `Captured by ${penName} • `}
+              {dayOfWeek}, {month} {date}, {year}
+            </DateStamp>
+          )}
+        </FooterContainer>
+        <ColorCollection colors={colors} />
 
-      <PoemExport
-        ref={exportRef}
-        title={title}
-        text={text}
-        colors={colors}
-        dayOfWeek={dayOfWeek}
-        date={date}
-        month={month}
-        year={year}
-        penName={penName}
-      />
-    </Card>
+        <PoemExport
+          ref={exportRef}
+          title={title}
+          text={text}
+          colors={colors}
+          dayOfWeek={dayOfWeek}
+          date={date}
+          month={month}
+          year={year}
+          penName={penName}
+        />
+      </Card>
+    </>
   );
 };
 
