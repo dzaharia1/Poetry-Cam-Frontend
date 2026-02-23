@@ -185,6 +185,7 @@ const Poem = ({
   const [activeTab, setActiveTab] = useState('Poem');
   const menuRef = useRef(null);
   const exportRef = useRef(null);
+  const isNavigatingRef = useRef(false);
 
   const handleDownload = async () => {
     if (!exportRef.current) return;
@@ -221,10 +222,15 @@ const Poem = ({
   }, [isMenuOpen]);
 
   useEffect(() => {
+    isNavigatingRef.current = true;
     setActiveTab('Poem');
   }, [id]);
 
   useEffect(() => {
+    if (isNavigatingRef.current) {
+      isNavigatingRef.current = false;
+      return;
+    }
     if (
       activeTab === 'Sketch' &&
       !sketchUrl &&
