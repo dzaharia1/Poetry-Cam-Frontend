@@ -257,7 +257,7 @@ const Poem = ({
       <Tabs
         tabs={[
           { id: 'Poem', label: 'Poem' },
-          { id: 'Sketch', label: 'Imagine' },
+          { id: 'Sketch', label: 'Sketch' },
         ]}
         activeTab={activeTab}
         onTabChange={setActiveTab}
