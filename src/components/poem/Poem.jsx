@@ -325,7 +325,7 @@ const Poem = ({
         {activeTab === 'Sketch' && (
           <SketchContainer>
             {isGeneratingSketch ? (
-              <LoadingText>Drawing sketch...</LoadingText>
+              <LoadingText>Sketching...</LoadingText>
             ) : sketchUrl ? (
               <SketchImage src={sketchUrl} alt={`Sketch for ${title}`} />
             ) : (
