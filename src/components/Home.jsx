@@ -81,6 +81,8 @@ function Home() {
   const [isGeneratingSketch, setIsGeneratingSketch] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [hasMissingApiKey, setHasMissingApiKey] = useState(false);
+  const [isWebDisplayUser, setIsWebDisplayUser] = useState(false);
+  const [webDisplayPoemId, setWebDisplayPoemId] = useState(null);
   const [sortMode, setSortMode] = useState(() => {
     const saved = localStorage.getItem('poemSortMode');
     return saved || 'date';
@@ -148,8 +150,16 @@ function Home() {
             );
             setIsSettingsOpen(true);
           }
+          if (data.webDisplayPoem) {
+            setWebDisplayPoemId(data.webDisplayPoem);
+          }
         })
         .catch((err) => console.error('Error fetching settings:', err));
+
+      fetchWithAuth(getBackendUrl('/uses-web-display'))
+        .then((res) => res.json())
+        .then((data) => setIsWebDisplayUser(data.usesWebDisplay === true))
+        .catch((err) => console.error('Error checking web display:', err));
     }
   }, [user]);
 
@@ -456,6 +466,20 @@ function Home() {
     }
   };
 
+  const handleSetWebDisplayPoem = async (id) => {
+    const newPoemId = id === webDisplayPoemId ? null : id;
+    try {
+      await fetchWithAuth(getBackendUrl('/set-web-display-poem'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ poemId: newPoemId }),
+      });
+      setWebDisplayPoemId(newPoemId);
+    } catch (err) {
+      console.error('Error setting web display poem:', err);
+    }
+  };
+
   const handleMenuClick = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -497,6 +521,7 @@ function Home() {
         setIsSettingsOpen={handleSettingsOpen}
         sortMode={sortMode}
         onSortModeChange={handleSortModeChange}
+        webDisplayPoemId={webDisplayPoemId}
       />
       <PrimaryPageContents>
         <TopBar
@@ -523,6 +548,9 @@ function Home() {
             sketchUrl={sketchUrl}
             isGeneratingSketch={isGeneratingSketch}
             onGenerateSketch={handleGenerateSketch}
+            isWebDisplayUser={isWebDisplayUser}
+            onSetWebDisplayPoem={handleSetWebDisplayPoem}
+            webDisplayPoemId={webDisplayPoemId}
           />
         )}
         <PageNavigation

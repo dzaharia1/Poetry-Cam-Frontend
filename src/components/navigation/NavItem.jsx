@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
-import { Star } from 'lucide-react';
+import { Star, Monitor } from 'lucide-react';
 
 const NavItemItself = styled.button`
   position: relative;
@@ -36,6 +36,10 @@ const NavItemItself = styled.button`
 `;
 
 const NavItemTitle = styled.p`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow: hidden;
   width: 100%;
   padding: 0;
   margin: 0;
@@ -45,12 +49,7 @@ const NavItemTitle = styled.p`
   font-size: 1.125rem;
   letter-spacing: unset;
   text-align: left;
-
   color: ${(props) => props.theme.colors.text.headings};
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  overflow: hidden;
 `;
 
 const TitleText = styled.span`
@@ -81,7 +80,14 @@ const NavItemColor = styled.div`
   height: 10px;
 `;
 
-const NavItem = ({ title, active, colors, onClick, isFavorite = false }) => {
+const NavItem = ({
+  title,
+  active,
+  colors,
+  onClick,
+  isFavorite = false,
+  isWebDisplay = false,
+}) => {
   const [hovered, setHovered] = React.useState('false');
   const theme = useTheme();
 
@@ -93,6 +99,14 @@ const NavItem = ({ title, active, colors, onClick, isFavorite = false }) => {
       active={hovered === 'true' || active}>
       <NavItemTitle>
         <TitleText>{title}</TitleText>
+        {isWebDisplay && (
+          <Monitor
+            size={14}
+            stroke={theme.colors.text.headings}
+            fill={theme.colors.primary}
+            style={{ flexShrink: 0 }}
+          />
+        )}
         {isFavorite && (
           <Star
             size={14}

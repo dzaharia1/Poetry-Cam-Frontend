@@ -11,8 +11,12 @@ vi.mock('lucide-react', () => ({
 
 // Mock NavItem
 vi.mock('./NavItem', () => ({
-  default: ({ title, onClick, active }) => (
-    <button data-testid={`nav-item-${title}`} onClick={onClick} data-active={active}>
+  default: ({ title, onClick, active, isWebDisplay }) => (
+    <button
+      data-testid={`nav-item-${title}`}
+      onClick={onClick}
+      data-active={active}
+      data-is-web-display={isWebDisplay}>
       {title}
     </button>
   ),
@@ -80,5 +84,17 @@ describe('NavBar', () => {
     const logoutBtn = screen.getByText('Log out');
     fireEvent.click(logoutBtn);
     expect(onLogout).toHaveBeenCalled();
+  });
+
+  it('marks the web display poem with isWebDisplay prop', () => {
+    render(<NavBar {...defaultProps} webDisplayPoemId="2" />);
+    expect(screen.getByTestId('nav-item-Poem 1')).toHaveAttribute('data-is-web-display', 'false');
+    expect(screen.getByTestId('nav-item-Poem 2')).toHaveAttribute('data-is-web-display', 'true');
+  });
+
+  it('passes isWebDisplay as false when webDisplayPoemId is not set', () => {
+    render(<NavBar {...defaultProps} />);
+    expect(screen.getByTestId('nav-item-Poem 1')).toHaveAttribute('data-is-web-display', 'false');
+    expect(screen.getByTestId('nav-item-Poem 2')).toHaveAttribute('data-is-web-display', 'false');
   });
 });

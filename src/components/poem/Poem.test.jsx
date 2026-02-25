@@ -132,6 +132,35 @@ describe('Poem', () => {
     });
   });
 
+  it('does not render web display button by default', () => {
+    render(<Poem {...defaultProps} id="poem-123" />);
+    expect(screen.queryByTestId('web-display-button')).not.toBeInTheDocument();
+  });
+
+  it('renders web display button when isWebDisplayUser is true', () => {
+    render(<Poem {...defaultProps} id="poem-123" isWebDisplayUser={true} />);
+    expect(screen.getByTestId('web-display-button')).toBeInTheDocument();
+  });
+
+  it('does not render web display button when id is missing', () => {
+    render(<Poem {...defaultProps} isWebDisplayUser={true} />);
+    expect(screen.queryByTestId('web-display-button')).not.toBeInTheDocument();
+  });
+
+  it('calls onSetWebDisplayPoem with poem id when web display button is clicked', () => {
+    const onSetWebDisplayPoem = vi.fn();
+    render(
+      <Poem
+        {...defaultProps}
+        id="poem-123"
+        isWebDisplayUser={true}
+        onSetWebDisplayPoem={onSetWebDisplayPoem}
+      />,
+    );
+    fireEvent.click(screen.getByTestId('web-display-button'));
+    expect(onSetWebDisplayPoem).toHaveBeenCalledWith('poem-123');
+  });
+
   it('calls onGenerateSketch when Regenerate Sketch is clicked in the menu', () => {
     const onGenerateSketch = vi.fn();
     render(

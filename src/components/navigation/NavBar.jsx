@@ -107,6 +107,7 @@ const NavBar = ({
   setIsSettingsOpen,
   sortMode = 'fave',
   onSortModeChange,
+  webDisplayPoemId,
 }) => {
   return (
     <>
@@ -130,6 +131,7 @@ const NavBar = ({
               colors={poem.palette}
               active={index === currentIndex}
               isFavorite={poem.isFavorite}
+              isWebDisplay={poem.id === webDisplayPoemId}
             />
           ))}
         </ScrollArea>

@@ -2,11 +2,23 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
 import Card from '../basecomponents/Card';
 import ColorCollection from './ColorCollection';
-import { MoreVertical, Trash2, Download, Star, RefreshCw } from 'lucide-react';
+import {
+  MoreVertical,
+  Trash2,
+  Download,
+  Star,
+  RefreshCw,
+  Monitor,
+} from 'lucide-react';
 import { toPng } from 'html-to-image';
 import IconButton from '../basecomponents/IconButton';
 import Tabs from '../basecomponents/Tabs';
 import PoemExport from './PoemExport';
+
+const TabContainer = styled.div`
+  width: 100%;
+  max-width: 800px;
+`;
 
 const PoemHeading = styled.div`
   width: 100%;
@@ -180,6 +192,9 @@ const Poem = ({
   sketchUrl,
   isGeneratingSketch,
   onGenerateSketch,
+  isWebDisplayUser = false,
+  onSetWebDisplayPoem,
+  webDisplayPoemId,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('Poem');
@@ -254,14 +269,16 @@ const Poem = ({
 
   return (
     <>
-      <Tabs
-        tabs={[
-          { id: 'Poem', label: 'Poem' },
-          { id: 'Sketch', label: 'Sketch' },
-        ]}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-      />
+      <TabContainer>
+        <Tabs
+          tabs={[
+            { id: 'Poem', label: 'Poem' },
+            { id: 'Sketch', label: 'Sketch' },
+          ]}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
+      </TabContainer>
       <Card backgroundcolor={theme.colors.secondary} marginBottom="4rem">
         <PoemHeading ref={menuRef}>
           <PoemTitle>{title}</PoemTitle>
@@ -272,6 +289,14 @@ const Poem = ({
               active={isFavorite}
               onClick={() => onToggleFavorite && onToggleFavorite()}
             />
+            {isWebDisplayUser && id && (
+              <IconButton
+                data-testid="web-display-button"
+                icon={Monitor}
+                active={id === webDisplayPoemId}
+                onClick={() => onSetWebDisplayPoem && onSetWebDisplayPoem(id)}
+              />
+            )}
             <IconButton
               data-testid="menu-button"
               icon={MoreVertical}
@@ -302,7 +327,9 @@ const Poem = ({
                   className="delete"
                   onClick={() => {
                     if (
-                      window.confirm('Are you sure you want to delete this poem?')
+                      window.confirm(
+                        'Are you sure you want to delete this poem?',
+                      )
                     ) {
                       onDelete();
                     }

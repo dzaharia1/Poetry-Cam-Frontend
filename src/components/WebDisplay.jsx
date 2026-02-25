@@ -135,13 +135,7 @@ const WebDisplay = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch latest favorited poem
-        const url = getBackendUrl('/public/getPoem', {
-          userid: userId,
-          index: 0,
-          sortByDate: 'true',
-          favoritesOnly: 'true',
-        });
+        const url = getBackendUrl('/public/getWebDisplayPoem', { userid: userId });
         const poemRes = await fetch(url);
 
         if (!poemRes.ok) throw new Error('Failed to fetch poem');
@@ -150,7 +144,7 @@ const WebDisplay = () => {
         if (poemDataJson.currentPoem) {
           setPoemData(poemDataJson.currentPoem);
         } else {
-          setError('No favorited poems found for this user.');
+          setError('No web display poem set for this user.');
         }
       } catch (err) {
         console.error(err);
