@@ -5,6 +5,8 @@
 ## Overview
 **Poetry Cam** is a visual-to-text translator device. This frontend application is the companion web gallery where users can view, manage, and share the AI-generated poems captured by their Poetry Cam hardware.
 
+You can play with it at [https://poetrycam.danmade.app](https://poetrycam.danmade.app/)
+
 ## Key Features
 - **User Authentication**: Secure login via Google or Email/Password (Firebase Auth).
 - **Poem Gallery**: Browse through your collection of captured poems with an elegant, responsive interface.
@@ -25,6 +27,7 @@
 ### 1. Prerequisites
 - Node.js (v18+)
 - A Firebase project
+- [Poetry Cam Backend](https://github.com/dzaharia1/poetry-cam-backend)
 
 ### 2. Environment Setup
 Create a `.env` file in the root directory and add your credentials (see `.env.example` for the required keys):
