@@ -26,7 +26,7 @@ const Page = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  // padding: 0 0 2rem 0;
+
   width: 100%;
   height: 100vh;
 `;
@@ -36,9 +36,10 @@ const PrimaryPageContents = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  gap: ${(props) => props.theme.spacing[4]};
+
   height: 100vh;
   width: 75%;
-  // max-width: 900px;
 
   padding: 2rem 0 3rem 0;
 

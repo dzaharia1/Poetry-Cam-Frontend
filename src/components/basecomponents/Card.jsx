@@ -7,12 +7,14 @@ const CardContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
 
-  width: 80%;
+  width: 100%;
   max-width: 800px;
+  flex: 1; // grow vertically to fill parent column flexbox
+
   padding: 2.25rem 2rem 3rem 2rem;
   border: 1px solid ${(props) => props.theme.colors.border};
   border-radius: 24px;
-  margin-bottom: ${(props) => props.$marginBottom || '0'};
+  // margin-bottom: ${(props) => props.$marginBottom || '0'};
 
   background-color: ${(props) =>
     props.$backgroundcolor || props.theme.colors.paper};

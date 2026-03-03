@@ -12,12 +12,20 @@ const Container = styled.div`
 
   width: 80%;
   max-width: 800px;
-  margin-bottom: 50px;
+  // margin-bottom: 50px;
 
   @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     width: 90%;
     max-width: unset;
   }
+`;
+
+const TopIconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // width: 124px;
+  height: 80px;
 `;
 
 const TopIcon = styled.img`
@@ -81,7 +89,9 @@ const TopBar = ({ handleMenuClick, onCapture }) => {
   return (
     <Container>
       <LogoContainer>
-        <TopIcon src={isDarkMode ? 'logodark.svg' : 'logo.svg'} />
+        <TopIconContainer>
+          <TopIcon src={isDarkMode ? 'logodark.svg' : 'logo.svg'} />
+        </TopIconContainer>
         <CameraButtonContainer>
           <CameraButton onCapture={onCapture} />
         </CameraButtonContainer>

@@ -17,9 +17,29 @@ import IconButton from '../basecomponents/IconButton';
 import Tabs from '../basecomponents/Tabs';
 import PoemExport from './PoemExport';
 
+const PoemContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: ${(props) => props.theme.spacing[4]};
+
+  width: 100%;
+  flex: 1;
+
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
+    flex-direction: column-reverse;
+  }
+`;
+
 const TabContainer = styled.div`
   width: 100%;
   max-width: 800px;
+  padding: 0 24px;
+
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
+    padding: 0 48px;
+  }
 `;
 
 const PoemHeading = styled.div`
@@ -108,9 +128,14 @@ const SketchContainer = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 200px;
+  max-height: 500px;
   flex: 1;
   overflow: hidden;
   border-radius: 8px;
+
+  @media (min-width: ${(props) => props.theme.breakpoints.mobile}) {
+    max-height: calc(100vh - 420px);
+  }
 
   &::after {
     content: '';
@@ -122,13 +147,15 @@ const SketchContainer = styled.div`
     bottom: 0px;
     pointer-events: none;
     border-radius: 0px;
-    box-shadow: inset 0 0 20px 40px ${(props) => props.theme.colors.secondary};
+    box-shadow: inset 0 0 15px 20px ${(props) => props.theme.colors.secondary};
   }
 `;
 
 const SketchImage = styled.img`
-  width: 100%;
-  max-width: 500px;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   border-radius: 8px;
   object-fit: contain;
   border: 4px solid ${(props) => props.theme.colors.secondary};
@@ -167,7 +194,9 @@ const SketchNavButton = styled.button`
   border-radius: 50%;
   color: ${(props) => props.theme.colors.text.secondary};
   flex-shrink: 0;
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 
   &:hover:not(:disabled) {
     background: ${(props) => props.theme.colors.secondaryHover};
@@ -204,7 +233,9 @@ const SketchDot = styled.button`
       ? props.theme.colors.text.primary
       : props.theme.colors.text.secondary};
   opacity: ${(props) => (props.$active ? 1 : 0.35)};
-  transition: opacity 0.2s, background 0.2s;
+  transition:
+    opacity 0.2s,
+    background 0.2s;
   flex-shrink: 0;
 `;
 
@@ -369,7 +400,7 @@ const Poem = ({
     sketches.length > 0 ? sketches[currentSketchIndex] : sketchUrl;
 
   return (
-    <>
+    <PoemContainer>
       <TabContainer>
         <Tabs
           tabs={[
@@ -420,7 +451,7 @@ const Poem = ({
                     setIsMenuOpen(false);
                   }}>
                   <RefreshCw size={18} />
-                  Regenerate Sketch
+                  Sketch another
                 </MenuItem>
               )}
               {onDelete && (
@@ -507,7 +538,7 @@ const Poem = ({
         <FooterContainer>
           {dayOfWeek && date && month && year && (
             <DateStamp>
-              {penName && `Captured by ${penName} • `}
+              {penName && `Drafted for ${penName} • `}
               {dayOfWeek}, {month} {date}, {year}
             </DateStamp>
           )}
@@ -526,7 +557,7 @@ const Poem = ({
           penName={penName}
         />
       </Card>
-    </>
+    </PoemContainer>
   );
 };
 

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const TabsContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-bottom: ${(props) => props.theme.spacing[4]};
+  // margin-bottom: ${(props) => props.theme.spacing[4]};
   width: 100%;
 `;
 
