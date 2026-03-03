@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styled, { useTheme } from 'styled-components';
 import Card from '../basecomponents/Card';
 import ColorCollection from './ColorCollection';
@@ -9,6 +9,8 @@ import {
   Star,
   RefreshCw,
   Monitor,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import IconButton from '../basecomponents/IconButton';
@@ -137,6 +139,75 @@ const LoadingText = styled.p`
   font-style: italic;
 `;
 
+const SketchSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+`;
+
+const SketchNavigationWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  flex: 1;
+  gap: 4px;
+`;
+
+const SketchNavButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  color: ${(props) => props.theme.colors.text.secondary};
+  flex-shrink: 0;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover:not(:disabled) {
+    background: ${(props) => props.theme.colors.secondaryHover};
+    color: ${(props) => props.theme.colors.text.primary};
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
+    display: none;
+  }
+`;
+
+const SketchDotsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+`;
+
+const SketchDot = styled.button`
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background: ${(props) =>
+    props.$active
+      ? props.theme.colors.text.primary
+      : props.theme.colors.text.secondary};
+  opacity: ${(props) => (props.$active ? 1 : 0.35)};
+  transition: opacity 0.2s, background 0.2s;
+  flex-shrink: 0;
+`;
+
 const PoemLine = styled.p`
   font-size: ${(props) => props.theme.typography.size.poemLine};
   font-weight: 300;
@@ -190,6 +261,7 @@ const Poem = ({
   penName,
   id,
   sketchUrl,
+  sketches = [],
   isGeneratingSketch,
   onGenerateSketch,
   isWebDisplayUser = false,
@@ -198,9 +270,11 @@ const Poem = ({
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('Poem');
+  const [currentSketchIndex, setCurrentSketchIndex] = useState(0);
   const menuRef = useRef(null);
   const exportRef = useRef(null);
   const isNavigatingRef = useRef(false);
+  const touchStartX = useRef(null);
 
   const handleDownload = async () => {
     if (!exportRef.current) return;
@@ -241,6 +315,31 @@ const Poem = ({
     setActiveTab('Poem');
   }, [id]);
 
+  // Default to most recent sketch when poem or sketches change
+  useEffect(() => {
+    setCurrentSketchIndex(Math.max(0, sketches.length - 1));
+  }, [id, sketches]);
+
+  const handleTouchStart = useCallback((e) => {
+    touchStartX.current = e.touches[0].clientX;
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e) => {
+      if (touchStartX.current === null || sketches.length <= 1) return;
+      const delta = e.changedTouches[0].clientX - touchStartX.current;
+      if (Math.abs(delta) > 40) {
+        if (delta > 0) {
+          setCurrentSketchIndex((i) => Math.max(0, i - 1));
+        } else {
+          setCurrentSketchIndex((i) => Math.min(sketches.length - 1, i + 1));
+        }
+      }
+      touchStartX.current = null;
+    },
+    [sketches.length],
+  );
+
   useEffect(() => {
     if (isNavigatingRef.current) {
       isNavigatingRef.current = false;
@@ -266,6 +365,8 @@ const Poem = ({
   ]);
 
   const theme = useTheme();
+  const displayedSketchUrl =
+    sketches.length > 0 ? sketches[currentSketchIndex] : sketchUrl;
 
   return (
     <>
@@ -350,15 +451,58 @@ const Poem = ({
           </PoemText>
         )}
         {activeTab === 'Sketch' && (
-          <SketchContainer>
-            {isGeneratingSketch ? (
-              <LoadingText>Imagining a sketch...</LoadingText>
-            ) : sketchUrl ? (
-              <SketchImage src={sketchUrl} alt={`Sketch for ${title}`} />
-            ) : (
-              <LoadingText>No sketch available.</LoadingText>
+          <SketchSection>
+            <SketchNavigationWrapper
+              onTouchStart={sketches.length > 1 ? handleTouchStart : undefined}
+              onTouchEnd={sketches.length > 1 ? handleTouchEnd : undefined}>
+              {sketches.length > 1 && (
+                <SketchNavButton
+                  onClick={() =>
+                    setCurrentSketchIndex((i) => Math.max(0, i - 1))
+                  }
+                  disabled={currentSketchIndex <= 0}
+                  aria-label="Previous sketch">
+                  <ChevronLeft size={22} />
+                </SketchNavButton>
+              )}
+              <SketchContainer>
+                {isGeneratingSketch ? (
+                  <LoadingText>Imagining a sketch...</LoadingText>
+                ) : displayedSketchUrl ? (
+                  <SketchImage
+                    src={displayedSketchUrl}
+                    alt={`Sketch for ${title}`}
+                  />
+                ) : (
+                  <LoadingText>No sketch available.</LoadingText>
+                )}
+              </SketchContainer>
+              {sketches.length > 1 && (
+                <SketchNavButton
+                  onClick={() =>
+                    setCurrentSketchIndex((i) =>
+                      Math.min(sketches.length - 1, i + 1),
+                    )
+                  }
+                  disabled={currentSketchIndex >= sketches.length - 1}
+                  aria-label="Next sketch">
+                  <ChevronRight size={22} />
+                </SketchNavButton>
+              )}
+            </SketchNavigationWrapper>
+            {sketches.length > 1 && (
+              <SketchDotsContainer>
+                {sketches.map((_, i) => (
+                  <SketchDot
+                    key={i}
+                    $active={i === currentSketchIndex}
+                    onClick={() => setCurrentSketchIndex(i)}
+                    aria-label={`Sketch ${i + 1}`}
+                  />
+                ))}
+              </SketchDotsContainer>
             )}
-          </SketchContainer>
+          </SketchSection>
         )}
         <FooterContainer>
           {dayOfWeek && date && month && year && (
