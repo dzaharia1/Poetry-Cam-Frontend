@@ -26,7 +26,7 @@ const Page = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  // padding: 0 0 2rem 0;
+
   width: 100%;
   height: 100vh;
 `;
@@ -36,9 +36,10 @@ const PrimaryPageContents = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  gap: ${(props) => props.theme.spacing[4]};
+
   height: 100vh;
   width: 75%;
-  // max-width: 900px;
 
   padding: 2rem 0 3rem 0;
 
@@ -78,6 +79,7 @@ function Home() {
   const [poems, setPoems] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [sketchUrl, setSketchUrl] = useState(null);
+  const [sketches, setSketches] = useState([]);
   const [isGeneratingSketch, setIsGeneratingSketch] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [hasMissingApiKey, setHasMissingApiKey] = useState(false);
@@ -190,6 +192,10 @@ function Home() {
           setIsFavorite(data.currentPoem.isFavorite || false);
           setCurrentPoemId(data.currentPoem.id || null);
           setSketchUrl(data.currentPoem.sketchUrl || null);
+          setSketches(
+            data.currentPoem.sketches ||
+              (data.currentPoem.sketchUrl ? [data.currentPoem.sketchUrl] : []),
+          );
           setIsGeneratingSketch(false);
           setPenName(data.currentPoem.penName || ''); // Get pen name from poem
           if (data.currentPoem.index !== undefined) {
@@ -209,6 +215,7 @@ function Home() {
             setIsFavorite(false);
             setCurrentPoemId(null);
             setSketchUrl(null);
+            setSketches([]);
             setIsGeneratingSketch(false);
             setPenName(''); // Clear pen name when no poems
           }
@@ -353,6 +360,9 @@ function Home() {
       setIsFavorite(nextPoem.isFavorite || false);
       setCurrentPoemId(nextPoem.id || null);
       setSketchUrl(nextPoem.sketchUrl || null);
+      setSketches(
+        nextPoem.sketches || (nextPoem.sketchUrl ? [nextPoem.sketchUrl] : []),
+      );
       setIsGeneratingSketch(false);
 
       const newIndex = nextPoem.index;
@@ -374,6 +384,10 @@ function Home() {
       setIsFavorite(previousPoem.isFavorite || false);
       setCurrentPoemId(previousPoem.id || null);
       setSketchUrl(previousPoem.sketchUrl || null);
+      setSketches(
+        previousPoem.sketches ||
+          (previousPoem.sketchUrl ? [previousPoem.sketchUrl] : []),
+      );
       setIsGeneratingSketch(false);
 
       const newIndex = previousPoem.index;
@@ -407,6 +421,11 @@ function Home() {
       const data = await res.json();
       if (data.sketchUrl) {
         setSketchUrl(data.sketchUrl + '?t=' + Date.now());
+        if (data.sketches) {
+          setSketches(data.sketches);
+        } else {
+          setSketches((prev) => [...prev, data.sketchUrl]);
+        }
       }
     } catch (err) {
       console.error('Error generating sketch:', err);
@@ -546,6 +565,7 @@ function Home() {
             penName={penName}
             id={currentPoemId}
             sketchUrl={sketchUrl}
+            sketches={sketches}
             isGeneratingSketch={isGeneratingSketch}
             onGenerateSketch={handleGenerateSketch}
             isWebDisplayUser={isWebDisplayUser}

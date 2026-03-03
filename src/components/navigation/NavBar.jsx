@@ -13,7 +13,7 @@ const NavBarContainer = styled.nav`
   background-color: ${(props) => props.theme.colors.secondary};
   border: 1px solid ${(props) => props.theme.colors.border};
   border-radius: 24px;
-  // padding-bottom: 12rem;
+  padding-top: 1.5rem;
   margin: 0 0 0 1rem;
 
   box-shadow:
@@ -28,9 +28,11 @@ const NavBarContainer = styled.nav`
     position: absolute;
     top: 1rem;
     left: 1rem;
-    bottom: 1rem;
+    height: calc(100vh - 4rem);
     width: calc(100% - 4rem);
     max-width: 400px;
+
+
     z-index: 1000;
 
     ${(props) => !props.$isMenuOpen && `left: calc(0px - (100% + 2rem));`}
@@ -54,17 +56,31 @@ const Scrim = styled.div`
   }
 `;
 
-const ScrollArea = styled.div`
+const ResponsiveArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${(props) => props.theme.spacing[1]};
   flex: 1;
+  width: 100%;
+  padding: 0;
+  overflow-y: auto;
+
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
+    flex-direction: column-reverse;
+  }
+`;
+
+const PoemList = styled.div`
+  flex: 1;
+  width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  // overscroll-behavior: contain;
-  width: 100%;
+  padding: 0;
 `;
 
 const NavBarTitle = styled.h3`
   letter-spacing: 1px;
-  padding: 1.75rem 1rem 1rem 1rem;
+  padding: 0 1rem 1rem 1rem;
 `;
 
 const BottomControls = styled.div`
@@ -113,8 +129,8 @@ const NavBar = ({
     <>
       {isMenuOpen && <Scrim onClick={() => setIsMenuOpen(false)} />}
       <NavBarContainer $isMenuOpen={isMenuOpen}>
-        <ScrollArea>
-          <NavBarTitle>Your Poems</NavBarTitle>
+        <NavBarTitle>Your Poems</NavBarTitle>
+        <ResponsiveArea>
           <Tabs
             tabs={[
               { id: 'date', label: 'By Date' },
@@ -123,18 +139,21 @@ const NavBar = ({
             activeTab={sortMode}
             onTabChange={onSortModeChange}
           />
-          {poems.map((poem, index) => (
-            <NavItem
-              key={poem.id}
-              onClick={() => handleNavigateToPoem(index)}
-              title={poem.title}
-              colors={poem.palette}
-              active={index === currentIndex}
-              isFavorite={poem.isFavorite}
-              isWebDisplay={poem.id === webDisplayPoemId}
-            />
-          ))}
-        </ScrollArea>
+          <PoemList>
+            {/* <NavBarTitle>Your Poems</NavBarTitle> */}
+            {poems.map((poem, index) => (
+              <NavItem
+                key={poem.id}
+                onClick={() => handleNavigateToPoem(index)}
+                title={poem.title}
+                colors={poem.palette}
+                active={index === currentIndex}
+                isFavorite={poem.isFavorite}
+                isWebDisplay={poem.id === webDisplayPoemId}
+              />
+            ))}
+          </PoemList>
+        </ResponsiveArea>
         <BottomControls>
           <LogoutButton href="" onClick={onLogout}>
             <LogOut size={18} />
