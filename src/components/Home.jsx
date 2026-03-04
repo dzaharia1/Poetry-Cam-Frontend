@@ -145,7 +145,7 @@ function Home() {
         .then((res) => res.json())
         .then((data) => {
           // Check for API Key
-          if (data.hasGeminiApiKey === false) {
+          if (!data.hasGeminiApiKey) {
             setHasMissingApiKey(true);
             setError(
               'Please configure your Gemini API Key in Settings to generate poems.',
