@@ -327,7 +327,10 @@ const Poem = ({
       const file = new File([blob], fileName, { type: 'image/png' });
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: title });
+        await navigator.share({
+          files: [file],
+          title: `Check out this poem I generated with Poetry Cam called ${title}. https://poetrycam.adanmade.app`,
+        });
       } else {
         const link = document.createElement('a');
         link.download = fileName;
@@ -480,7 +483,9 @@ const Poem = ({
                     setIsMenuOpen(false);
                   }}>
                   <Monitor size={18} />
-                  {id === webDisplayPoemId ? 'Unset web display' : 'Set as web display'}
+                  {id === webDisplayPoemId
+                    ? 'Unset web display'
+                    : 'Set as web display'}
                 </MenuItem>
               )}
               {activeTab === 'Sketch' && sketchUrl && (
