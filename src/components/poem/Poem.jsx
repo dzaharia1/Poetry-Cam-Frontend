@@ -7,6 +7,7 @@ import {
   Trash2,
   Download,
   Star,
+  Share2,
   RefreshCw,
   Monitor,
   ChevronLeft,
@@ -307,6 +308,35 @@ const Poem = ({
   const isNavigatingRef = useRef(false);
   const touchStartX = useRef(null);
 
+  const handleShare = async () => {
+    if (!exportRef.current) return;
+
+    try {
+      const dataUrl = await toPng(exportRef.current, {
+        width: 1080,
+        height: 1080,
+        cacheBust: true,
+      });
+      const fileName = `poem-${title.toLowerCase().replace(/\s+/g, '-')}.png`;
+      const res = await fetch(dataUrl);
+      const blob = await res.blob();
+      const file = new File([blob], fileName, { type: 'image/png' });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: title });
+      } else {
+        const link = document.createElement('a');
+        link.download = fileName;
+        link.href = dataUrl;
+        link.click();
+      }
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        console.error('Failed to share poem image', err);
+      }
+    }
+  };
+
   const handleDownload = async () => {
     if (!exportRef.current) return;
     setIsMenuOpen(false);
@@ -420,6 +450,11 @@ const Poem = ({
               icon={Star}
               active={isFavorite}
               onClick={() => onToggleFavorite && onToggleFavorite()}
+            />
+            <IconButton
+              data-testid="share-button"
+              icon={Share2}
+              onClick={handleShare}
             />
             {isWebDisplayUser && id && (
               <IconButton
