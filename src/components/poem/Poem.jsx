@@ -318,8 +318,12 @@ const Poem = ({
         cacheBust: true,
       });
       const fileName = `poem-${title.toLowerCase().replace(/\s+/g, '-')}.png`;
-      const res = await fetch(dataUrl);
-      const blob = await res.blob();
+      const arr = dataUrl.split(',');
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      const u8arr = new Uint8Array(bstr.length);
+      for (let i = 0; i < bstr.length; i++) u8arr[i] = bstr.charCodeAt(i);
+      const blob = new Blob([u8arr], { type: mime });
       const file = new File([blob], fileName, { type: 'image/png' });
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
