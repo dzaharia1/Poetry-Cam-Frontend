@@ -9,6 +9,7 @@ const CardContainer = styled.div`
 
   width: 100%;
   max-width: 800px;
+  max-height: 800px;
   flex: 1; // grow vertically to fill parent column flexbox
 
   padding: 2.25rem 2rem 3rem 2rem;
@@ -28,6 +29,7 @@ const CardContainer = styled.div`
     width: 90%;
     height: 90%;
     max-width: unset;
+    max-height: unset;
     padding: 1.5rem 1.5rem 2.5rem 1.5rem;
   }
 `;

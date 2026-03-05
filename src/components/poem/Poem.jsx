@@ -21,7 +21,7 @@ import PoemExport from './PoemExport';
 const PoemContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   gap: ${(props) => props.theme.spacing[4]};
 

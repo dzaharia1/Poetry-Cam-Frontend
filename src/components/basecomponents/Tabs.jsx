@@ -13,7 +13,7 @@ const TabButton = styled.button`
   border: none;
 
   flex: 1;
-  padding: 0 0 ${(props) => props.theme.spacing[3]} 0;
+  padding: ${(props) => props.theme.spacing[2]} 0 ${(props) => props.theme.spacing[3]} 0;
   border-color: ${(props) =>
     props.$active ? props.theme.colors.primary : 'transparent'};
   border-bottom-width: ${(props) => props.theme.spacing[1]};
