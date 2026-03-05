@@ -456,14 +456,6 @@ const Poem = ({
               icon={Share2}
               onClick={handleShare}
             />
-            {isWebDisplayUser && id && (
-              <IconButton
-                data-testid="web-display-button"
-                icon={Monitor}
-                active={id === webDisplayPoemId}
-                onClick={() => onSetWebDisplayPoem && onSetWebDisplayPoem(id)}
-              />
-            )}
             <IconButton
               data-testid="menu-button"
               icon={MoreVertical}
@@ -477,6 +469,16 @@ const Poem = ({
                 <Download size={18} />
                 Download
               </MenuItem>
+              {isWebDisplayUser && id && (
+                <MenuItem
+                  onClick={() => {
+                    onSetWebDisplayPoem && onSetWebDisplayPoem(id);
+                    setIsMenuOpen(false);
+                  }}>
+                  <Monitor size={18} />
+                  {id === webDisplayPoemId ? 'Unset web display' : 'Set as web display'}
+                </MenuItem>
+              )}
               {activeTab === 'Sketch' && sketchUrl && (
                 <MenuItem
                   onClick={() => {
