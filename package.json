@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "deploy": "git push origin main && sleep 6 && gh run watch $(gh run list --limit 1 --json databaseId --jq '.[0].databaseId')"
   },
   "dependencies": {
     "firebase": "^12.7.0",
