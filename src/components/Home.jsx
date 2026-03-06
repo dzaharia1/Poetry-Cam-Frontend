@@ -297,6 +297,13 @@ function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, fetchPoem]);
 
+  // Refs to read latest values inside the onSnapshot callback without
+  // recreating the listener on every navigation.
+  const currentIndexRef = useRef(currentIndex);
+  const currentPoemIdRef = useRef(currentPoemId);
+  useEffect(() => { currentIndexRef.current = currentIndex; }, [currentIndex]);
+  useEffect(() => { currentPoemIdRef.current = currentPoemId; }, [currentPoemId]);
+
   // Sync with Firestore for latest poem (Index 0) to detect new poems
   const isInitialLoad = useRef(true);
   useEffect(() => {
@@ -318,12 +325,10 @@ function Home() {
             isInitialLoad.current = false;
           } else {
             // A new poem has arrived!
-            // setHasUnreadPoem(true);
-
             // If we are viewing the latest poem (index 0), update with real-time data from API
-            if (currentIndex === 0) {
+            if (currentIndexRef.current === 0) {
               fetchPoem(0);
-            } else if (snapshot.docs[0].id === currentPoemId) {
+            } else if (snapshot.docs[0].id === currentPoemIdRef.current) {
               const latestData = snapshot.docs[0].data();
               if (latestData.sketchUrl && !sketchUrl) {
                 setSketchUrl(latestData.sketchUrl);
@@ -345,7 +350,8 @@ function Home() {
     );
 
     return () => unsubscribe();
-  }, [user, currentIndex, fetchPoem]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, fetchPoem]);
 
   const handleNext = () => {
     // Going to Newer (lower index)
