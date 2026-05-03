@@ -71,7 +71,7 @@ const CameraButton = ({ onCapture }) => {
       <HiddenInput
         type="file"
         accept="image/*"
-ref={fileInputRef}
+        ref={fileInputRef}
         onChange={handleFileChange}
       />
     </>
